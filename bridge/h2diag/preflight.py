@@ -48,7 +48,9 @@ def _report(snap, seen, ticks, elapsed):
         b = snap.get("battery")
         if b:
             summary["battery"] = f"{b['soc']}%  {b['voltage']} V  spread {b['cell_spread_mv']} mV"
-        summary["topics"] = {t: f"{s['hz']} Hz" for t, s in snap["topics"].items()}
+        summary["topics"] = {
+            t: "no data" if s["hz"] is None else f"{s['hz']} Hz" for t, s in snap["topics"].items()
+        }
     return {
         "verdict": verdict,
         "elapsed_s": round(elapsed, 1),

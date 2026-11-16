@@ -6,6 +6,7 @@ from collections import deque
 from . import layout
 
 RATE_WINDOW_S = 2.0
+RATE_MIN_SPAN_S = 0.5  # report no rate until a topic has been watched this long
 
 
 def num(x, nd=4):
@@ -26,10 +27,13 @@ class TopicStats:
         self._lock = threading.Lock()
         self._times = deque()
         self.count = 0
+        self.first = None
         self.last = None
 
     def hit(self, t):
         with self._lock:
+            if self.first is None:
+                self.first = t
             self.count += 1
             self.last = t
             self._times.append(t)
@@ -40,9 +44,12 @@ class TopicStats:
         with self._lock:
             while self._times and now - self._times[0] > RATE_WINDOW_S:
                 self._times.popleft()
-            hz = len(self._times) / RATE_WINDOW_S
+            # Divide by the time actually observed: right after startup the window
+            # isn't full yet, and dividing by the full window halves the rate.
+            span = 0.0 if self.first is None else min(RATE_WINDOW_S, now - self.first)
+            hz = round(len(self._times) / span, 1) if span >= RATE_MIN_SPAN_S else None
             age = None if self.last is None else max(0.0, now - self.last)
-            return {"hz": round(hz, 1), "age_s": num(age, 3), "count": self.count}
+            return {"hz": hz, "age_s": num(age, 3), "count": self.count}
 
 
 class RobotState:

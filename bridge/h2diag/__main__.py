@@ -128,7 +128,8 @@ def _record(source, args):
             if elapsed - last_print >= 5:
                 last_print = elapsed
                 rates = "  ".join(f"{t.split('/')[-2] if t.endswith('/state') else t.split('/')[-1]}"
-                                  f" {s['hz']:.0f}Hz" for t, s in snap["topics"].items())
+                                  f" {'-' if s['hz'] is None else round(s['hz'])}Hz"
+                                  for t, s in snap["topics"].items())
                 print(f"  {elapsed:5.0f}s  {rates}")
     except KeyboardInterrupt:
         pass

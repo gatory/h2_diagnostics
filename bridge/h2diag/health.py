@@ -75,7 +75,7 @@ def _topics(snap, live, out):
         if st["age_s"] is not None and st["age_s"] > LIMITS["stale_s"]:
             _w(out, "error", f"stale:{topic}", "comms", f"{topic} silent for {st['age_s']:.1f} s")
         expected = layout.LIVE_TOPICS.get(topic, (None, None))[1]
-        if live and expected and st["count"] and st["hz"] < LIMITS["rate_frac"] * expected:
+        if live and expected and st["hz"] is not None and st["hz"] < LIMITS["rate_frac"] * expected:
             _w(out, "warn", f"rate:{topic}", "comms",
                f"{topic} at {st['hz']:.0f} Hz (expected {expected:.0f})")
 
