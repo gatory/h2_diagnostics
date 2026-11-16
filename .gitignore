@@ -1,7 +1,6 @@
 /build/
 /results/
 compile_commands.json
-CLAUDE.md
 /.venv/
 __pycache__/
 *.egg-info/
