@@ -1,0 +1,24 @@
+[project]
+name = "h2diag"
+version = "0.1.0"
+description = "Read-only diagnostics bridge for the Unitree H2 EDU"
+requires-python = ">=3.10"
+dependencies = ["websockets>=13"]
+
+[project.optional-dependencies]
+# Needed for --live only. Installed separately on the Thor (see README):
+# CYCLONEDDS_HOME=~/cyclonedds/install uv pip install -e ~/dev/unitree_sdk2_python
+test = ["pytest>=7"]
+
+[project.scripts]
+h2diag = "h2diag.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["h2diag*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
