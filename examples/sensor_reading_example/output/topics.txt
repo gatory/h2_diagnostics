@@ -1,0 +1,121 @@
+topic                                    type                                                 Hz writers decoded
+ros_discovery_info                       rmw_dds_common.msg.dds_.ParticipantEntitiesInfo_         -       6 unknown
+rr/QtServer/describe_parametersReply     rcl_interfaces.srv.dds_.DescribeParameters_Response_         -       1 unknown
+rr/QtServer/get_parameter_typesReply     rcl_interfaces.srv.dds_.GetParameterTypes_Response_         -       1 unknown
+rr/QtServer/get_parametersReply          rcl_interfaces.srv.dds_.GetParameters_Response_         -       1 unknown
+rr/QtServer/list_parametersReply         rcl_interfaces.srv.dds_.ListParameters_Response_         -       1 unknown
+rr/QtServer/set_parametersReply          rcl_interfaces.srv.dds_.SetParameters_Response_         -       1 unknown
+rr/QtServer/set_parameters_atomicallyReply rcl_interfaces.srv.dds_.SetParametersAtomically_Response_         -       1 unknown
+rr/bms_ctr_node/describe_parametersReply rcl_interfaces.srv.dds_.DescribeParameters_Response_         -       1 unknown
+rr/bms_ctr_node/get_parameter_typesReply rcl_interfaces.srv.dds_.GetParameterTypes_Response_         -       1 unknown
+rr/bms_ctr_node/get_parametersReply      rcl_interfaces.srv.dds_.GetParameters_Response_         -       1 unknown
+rr/bms_ctr_node/list_parametersReply     rcl_interfaces.srv.dds_.ListParameters_Response_         -       1 unknown
+rr/bms_ctr_node/set_parametersReply      rcl_interfaces.srv.dds_.SetParameters_Response_         -       1 unknown
+rr/bms_ctr_node/set_parameters_atomicallyReply rcl_interfaces.srv.dds_.SetParametersAtomically_Response_         -       1 unknown
+rr/dog_control_pub/describe_parametersReply rcl_interfaces.srv.dds_.DescribeParameters_Response_         -       1 unknown
+rr/dog_control_pub/get_parameter_typesReply rcl_interfaces.srv.dds_.GetParameterTypes_Response_         -       1 unknown
+rr/dog_control_pub/get_parametersReply   rcl_interfaces.srv.dds_.GetParameters_Response_         -       1 unknown
+rr/dog_control_pub/list_parametersReply  rcl_interfaces.srv.dds_.ListParameters_Response_         -       1 unknown
+rr/dog_control_pub/set_parametersReply   rcl_interfaces.srv.dds_.SetParameters_Response_         -       1 unknown
+rr/dog_control_pub/set_parameters_atomicallyReply rcl_interfaces.srv.dds_.SetParametersAtomically_Response_         -       1 unknown
+rr/rsLidarCheak/describe_parametersReply rcl_interfaces.srv.dds_.DescribeParameters_Response_         -       1 unknown
+rr/rsLidarCheak/get_parameter_typesReply rcl_interfaces.srv.dds_.GetParameterTypes_Response_         -       1 unknown
+rr/rsLidarCheak/get_parametersReply      rcl_interfaces.srv.dds_.GetParameters_Response_         -       1 unknown
+rr/rsLidarCheak/list_parametersReply     rcl_interfaces.srv.dds_.ListParameters_Response_         -       1 unknown
+rr/rsLidarCheak/set_parametersReply      rcl_interfaces.srv.dds_.SetParameters_Response_         -       1 unknown
+rr/rsLidarCheak/set_parameters_atomicallyReply rcl_interfaces.srv.dds_.SetParametersAtomically_Response_         -       1 unknown
+rr/switch_node/describe_parametersReply  rcl_interfaces.srv.dds_.DescribeParameters_Response_         -       1 unknown
+rr/switch_node/get_parameter_typesReply  rcl_interfaces.srv.dds_.GetParameterTypes_Response_         -       1 unknown
+rr/switch_node/get_parametersReply       rcl_interfaces.srv.dds_.GetParameters_Response_         -       1 unknown
+rr/switch_node/list_parametersReply      rcl_interfaces.srv.dds_.ListParameters_Response_         -       1 unknown
+rr/switch_node/set_parametersReply       rcl_interfaces.srv.dds_.SetParameters_Response_         -       1 unknown
+rr/switch_node/set_parameters_atomicallyReply rcl_interfaces.srv.dds_.SetParametersAtomically_Response_         -       1 unknown
+rt/SymState                              unitree_go.msg.dds_.SymState_                         -       1 unknown
+rt/all_edge                              unitree_interfaces.msg.dds_.QtEdge_                   -       1 unknown
+rt/all_node                              unitree_interfaces.msg.dds_.QtNode_                   -       1 unknown
+rt/api/arm/request                       unitree_api.msg.dds_.Request_                 0 (silent)       2 yes
+rt/api/arm/response                      unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/audiohub/request                  unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/bashrunner/request                unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/bashrunner/response               unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/basic_demarcate/request           unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/basic_demarcate/response          unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/basic_demarcate_lease/response    unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/config/request                    unitree_api.msg.dds_.Request_                 0 (silent)       6 yes
+rt/api/config/response                   unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/dex3_msg_controller/request       unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/gesture/request                   unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/gpt/request                       unitree_api.msg.dds_.Request_                 0 (silent)       2 yes
+rt/api/gpt/response                      unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/loco/request                      unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/motion_switcher/request           unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/motion_switcher/response          unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/rm_con/request                    unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/robot_state/request               unitree_api.msg.dds_.Request_                       1.9       2 yes
+rt/api/robot_state/response              unitree_api.msg.dds_.Response_                      1.9       1 yes
+rt/api/robot_type_service/request        unitree_api.msg.dds_.Request_                 0 (silent)       1 yes
+rt/api/robot_type_service/response       unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/slam_operate/request              unitree_api.msg.dds_.Request_                 0 (silent)       2 yes
+rt/api/sport/request                     unitree_api.msg.dds_.Request_                       1.9       4 yes
+rt/api/videohub/request                  unitree_api.msg.dds_.Request_                 0 (silent)       2 yes
+rt/api/voice/request                     unitree_api.msg.dds_.Request_                 0 (silent)       2 yes
+rt/api/voice/response                    unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/api/vui/response                      unitree_api.msg.dds_.Response_                0 (silent)       1 yes
+rt/arm/action/state                      std_msgs.msg.dds_.String_                           9.9       1 yes
+rt/arm_sdk                               unitree_hg.msg.dds_.LowCmd_                   0 (silent)       1 yes
+rt/audio_msg                             std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/bmsstate                              unitree_interfaces.msg.dds_.BmsState_                 -       1 unknown
+rt/config_change_status                  unitree_go.msg.dds_.ConfigChangeStatus_               -       1 unknown
+rt/dex5/left/state                       unitree_hg.msg.dds_.HandState_                    100.0       1 yes
+rt/dex5/right/state                      unitree_hg.msg.dds_.HandState_                    100.0       1 yes
+rt/dog_imu_raw                           sensor_msgs.msg.dds_.Imu_                             -       1 unknown
+rt/dog_odom                              nav_msgs.msg.dds_.Odometry_                       500.0       1 yes
+rt/goal                                  graph_msg.msg.dds_.Node_                              -       1 unknown
+rt/goal_single                           graph_msg.msg.dds_.Node_                              -       1 unknown
+rt/gpt_cmd                               std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/gpt_state                             std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/gptflowfeedback                       std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/initialpose                           geometry_msgs.msg.dds_.PoseWithCovarianceStamped_ 0 (silent)       1 yes
+rt/lf/bmsstate                           unitree_hg.msg.dds_.BmsState_                      20.2       1 yes
+rt/lf/lowstate                           unitree_hg.msg.dds_.LowState_                      20.2       1 yes
+rt/lf/mainboardstate                     unitree_hg.msg.dds_.MainBoardState_                20.2       1 yes
+rt/lf/secondary_bmsstate                 unitree_hg.msg.dds_.BmsState_                 0 (silent)       1 yes
+rt/lf/secondary_imu                      unitree_hg.msg.dds_.IMUState_                      20.2       1 yes
+rt/lio_sam_ros2/savepcd/savepcd_flag     std_msgs.msg.dds_.Bool_                               -       1 unknown
+rt/log_system_inbound                    std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/log_system_outbound                   std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/lowstate                              unitree_hg.msg.dds_.LowState_                    1050.9       1 yes
+rt/lowstate_raw                          unitree_hg.msg.dds_.LowState_                 0 (silent)       1 yes
+rt/mission_points_command                graph_msg.msg.dds_.Node_                              -       1 unknown
+rt/multiplestate                         std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/node_control                          std_msgs.msg.dds_.String_                     0 (silent)       2 yes
+rt/odommodestate                         unitree_go.msg.dds_.SportModeState_               499.9       1 yes
+rt/original_graph                        graph_msg.msg.dds_.Graph_                             -       1 unknown
+rt/parameter_events                      rcl_interfaces.msg.dds_.ParameterEvent_               -       6 unknown
+rt/pcd_id_set                            std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/pctoimage_local                       unitree_interfaces.msg.dds_.PcToImage_                -       2 unknown
+rt/point_in_map                          sensor_msgs.msg.dds_.PointCloud2_             0 (silent)       1 yes
+rt/public_network_status                 std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/qt_notice                             std_msgs.msg.dds_.String_                     0 (silent)       2 yes
+rt/query_result_edge                     unitree_interfaces.msg.dds_.QtEdge_                   -       1 unknown
+rt/query_result_floor                    unitree_interfaces.msg.dds_.QtCommand_                -       1 unknown
+rt/query_result_node                     unitree_interfaces.msg.dds_.QtNode_                   -       1 unknown
+rt/query_result_pcd                      unitree_interfaces.msg.dds_.QtCommand_                -       1 unknown
+rt/query_result_topo                     unitree_interfaces.msg.dds_.QtCommand_                -       1 unknown
+rt/ros_sport_mode_cmd                    unitree_go.msg.dds_.SportModeCmd_                     -       1 unknown
+rt/rosgaitcmd                            unitree_interfaces.msg.dds_.GaitCmd_                  -       1 unknown
+rt/rosout                                rcl_interfaces.msg.dds_.Log_                          -       6 unknown
+rt/rtc/state                             std_msgs.msg.dds_.String_                           1.0       1 yes
+rt/rtc_status                            std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/secondary_imu                         unitree_hg.msg.dds_.IMUState_                    1051.0       1 yes
+rt/selftest                              std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/servicestate                          std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/servicestateactivate                  std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/tf                                    tf2_msgs.msg.dds_.TFMessage_                          -       1 unknown
+rt/unitree_command                       graph_msg.msg.dds_.UnitreeCommond_                    -       1 unknown
+rt/videohub/inner                        std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/webrtcreq                             std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/webrtcres                             std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/wirelesscontroller                    unitree_go.msg.dds_.WirelessController_       0 (silent)       2 yes
+rt/xfk_webrtcreq                         std_msgs.msg.dds_.String_                     0 (silent)       1 yes
+rt/xfk_webrtcres                         std_msgs.msg.dds_.String_                     0 (silent)       1 yes

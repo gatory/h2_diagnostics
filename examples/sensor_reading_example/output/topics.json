@@ -1,0 +1,5636 @@
+{
+  "meta": {
+    "generated": "2026-11-13T15:47:26",
+    "iface": "enp0s31f6",
+    "domain": 0,
+    "discover_secs": 5.0,
+    "sample_secs": 3.0
+  },
+  "topics": [
+    {
+      "topic": "ros_discovery_info",
+      "type": "rmw_dds_common.msg.dds_.ParticipantEntitiesInfo_",
+      "decoded": false,
+      "writers": 6,
+      "participants": 6,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/describe_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.DescribeParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/get_parameter_typesReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameterTypes_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/get_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/list_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.ListParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/set_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.SetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/QtServer/set_parameters_atomicallyReply",
+      "type": "rcl_interfaces.srv.dds_.SetParametersAtomically_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/describe_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.DescribeParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/get_parameter_typesReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameterTypes_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/get_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/list_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.ListParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/set_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.SetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/bms_ctr_node/set_parameters_atomicallyReply",
+      "type": "rcl_interfaces.srv.dds_.SetParametersAtomically_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/describe_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.DescribeParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/get_parameter_typesReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameterTypes_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/get_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/list_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.ListParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/set_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.SetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/dog_control_pub/set_parameters_atomicallyReply",
+      "type": "rcl_interfaces.srv.dds_.SetParametersAtomically_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/describe_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.DescribeParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/get_parameter_typesReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameterTypes_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/get_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/list_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.ListParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/set_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.SetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/rsLidarCheak/set_parameters_atomicallyReply",
+      "type": "rcl_interfaces.srv.dds_.SetParametersAtomically_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/describe_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.DescribeParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/get_parameter_typesReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameterTypes_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/get_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.GetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/list_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.ListParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/set_parametersReply",
+      "type": "rcl_interfaces.srv.dds_.SetParameters_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rr/switch_node/set_parameters_atomicallyReply",
+      "type": "rcl_interfaces.srv.dds_.SetParametersAtomically_Response_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/SymState",
+      "type": "unitree_go.msg.dds_.SymState_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/all_edge",
+      "type": "unitree_interfaces.msg.dds_.QtEdge_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/all_node",
+      "type": "unitree_interfaces.msg.dds_.QtNode_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/arm/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/arm/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/audiohub/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/bashrunner/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/bashrunner/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/basic_demarcate/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/basic_demarcate/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/basic_demarcate_lease/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/config/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 6,
+      "participants": 3,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/config/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/dex3_msg_controller/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/gesture/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/gpt/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/gpt/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/loco/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/motion_switcher/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/motion_switcher/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/rm_con/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/robot_state/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 6,
+      "hz": 1.94,
+      "error": null,
+      "sample": {
+        "header": {
+          "identity": {
+            "id": 1082753955255,
+            "api_id": 1003
+          },
+          "lease": {
+            "id": 0
+          },
+          "policy": {
+            "priority": 0,
+            "noreply": false
+          }
+        },
+        "parameter": "",
+        "binary": []
+      }
+    },
+    {
+      "topic": "rt/api/robot_state/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 6,
+      "hz": 1.94,
+      "error": null,
+      "sample": {
+        "header": {
+          "identity": {
+            "id": 1082753955255,
+            "api_id": 1003
+          },
+          "status": {
+            "code": 0
+          }
+        },
+        "data": "[{\"name\":\"ai_sport\",\"protect\":0,\"status\":1},{\"name\":\"auto_test_arm\",\"protect\":0,\"status\":1},{\"name\":\"auto_test_low\",\"protect\":0,\"status\":1},{\"name\":\"bashrunner\",\"protect\":0,\"status\":0},{\"name\":\"basic_service\",\"protect\":1,\"status\":0},{\"name\":\"chat_go\",\"protect\":0,\"status\":0},{\"name\":\"dex5_service\",\"protect\":0,\"status\":0},{\"name\":\"g1_arm_example\",\"protect\":0,\"status\":0},{\"name\":\"log_system\",\"protect\":0,\"status\":0},{\"name\":\"motion_switcher\",\"protect\":0,\"status\":0},{\"name\":\"net_switcher\",\"protect\":0,\"status\":0},{\"name\":\"ota_box\",\"protect\":0,\"status\":1},{\"name\":\"ota_pipe\",\"protect\":0,\"status\":0},{\"name\":\"powerhub_ota_helper\",\"protect\":0,\"status\":0},{\"name\":\"powerhub_service\",\"protect\":0,\"status\":0},{\"name\":\"robot_state\",\"protect\":1,\"status\":0},{\"name\":\"robot_type_service\",\"protect\":0,\"status\":0},{\"name\":\"shoujuan_service\",\"protect\":0,\"status\":1},{\"name\":\"slam_nav\",\"protect\":0,\"status\":0},{\"name\":\"state_estimator\",\"protect\":0,\"status\":0},{\"name\":\"system_journal\",\"protect\":0,\"status\":0},{\"name\":\"video_hub\",\"protect\":0,\"status\":0},{\"name\":\"vui_service\",\"protect\":0,\"status\":0},{\"name\":\"web_service\",\"protect\":0,\"status\":0},{\"name\":\"webrtc_bridge\",\"protect\":1,\"status\":0},{\"name\":\"webrtc_multicast_responder\",\"protect\":0,\"status\":0},{\"name\":\"webrtc_signal_server\",\"protect\":1,\"status\":0}]",
+        "binary": []
+      }
+    },
+    {
+      "topic": "rt/api/robot_type_service/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/robot_type_service/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/slam_operate/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/sport/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 4,
+      "participants": 4,
+      "messages_in_window": 6,
+      "hz": 1.94,
+      "error": null,
+      "sample": {
+        "header": {
+          "identity": {
+            "id": 1794610079252,
+            "api_id": 7001
+          },
+          "lease": {
+            "id": 0
+          },
+          "policy": {
+            "priority": 0,
+            "noreply": false
+          }
+        },
+        "parameter": "",
+        "binary": []
+      }
+    },
+    {
+      "topic": "rt/api/videohub/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/voice/request",
+      "type": "unitree_api.msg.dds_.Request_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/voice/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/api/vui/response",
+      "type": "unitree_api.msg.dds_.Response_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/arm/action/state",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 30,
+      "hz": 9.95,
+      "error": null,
+      "sample": {
+        "data": "{\"holding\": false, \"id\": 0, \"name\": \"\"}"
+      }
+    },
+    {
+      "topic": "rt/arm_sdk",
+      "type": "unitree_hg.msg.dds_.LowCmd_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/audio_msg",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/bmsstate",
+      "type": "unitree_interfaces.msg.dds_.BmsState_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/config_change_status",
+      "type": "unitree_go.msg.dds_.ConfigChangeStatus_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/dex5/left/state",
+      "type": "unitree_hg.msg.dds_.HandState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 300,
+      "hz": 99.97,
+      "error": null,
+      "sample": {
+        "motor_state": [
+          {
+            "mode": 1,
+            "q": 5.309474727255292e-05,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              63,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0006896688719280064,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 1.5625000742147677e-05,
+            "temperature": [
+              61,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0490836538374424,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -1.1718750101863407e-05,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.013359388336539268,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              62,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0028463874477893114,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 1.1718750101863407e-05,
+            "temperature": [
+              61,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0012776489602401853,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              59,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.06200388818979263,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -1.1718750101863407e-05,
+            "temperature": [
+              58,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.01721801422536373,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 1.1718750101863407e-05,
+            "temperature": [
+              58,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.00021663360530510545,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              53,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0003706879506353289,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              58,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.13632003962993622,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -4.2968749767169356e-05,
+            "temperature": [
+              58,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.042056888341903687,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 1.5625000742147677e-05,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.003891971427947283,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 4.064029113237666e-08,
+            "temperature": [
+              41,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.00244601396843791,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -4.064029113237666e-08,
+            "temperature": [
+              46,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 1.4099162817001343,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 4.064029113237666e-08,
+            "temperature": [
+              41,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 1.1708152294158936,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -4.064029113237666e-08,
+            "temperature": [
+              43,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.5867581367492676,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -1.1407257318496704,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.03413558378815651,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.04940245300531387,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "press_sensor_state": [
+          {
+            "pressure": [
+              5.0,
+              -3.0,
+              -8.0,
+              7.0,
+              -10.0,
+              -3.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              3.0,
+              1.0,
+              6.0,
+              -2.0,
+              -3.0,
+              8.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -2.0,
+              9.0,
+              6.0,
+              -1.0,
+              4.0,
+              13.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              13.0,
+              -7.0,
+              0.0,
+              -1.0,
+              7.0,
+              -3.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              0.0,
+              -14.0,
+              -6.0,
+              0.0,
+              -1.0,
+              -24.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -1.0,
+              6.0,
+              -13.0,
+              14.0,
+              -7.0,
+              34.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              5.0,
+              3.0,
+              -3.0,
+              4.0,
+              -6.0,
+              11.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -7.0,
+              -12.0,
+              -3.0,
+              0.0,
+              -2.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              0.0,
+              3.0,
+              8.0,
+              -1.0,
+              0.0,
+              14.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              16.0,
+              -9.0,
+              0.0,
+              5.0,
+              7.0,
+              12.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -4.0,
+              -18.0,
+              5.0,
+              -11.0,
+              -11.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              0.0,
+              1.0,
+              -10.0,
+              4.0,
+              18.0,
+              4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              27.0,
+              12.0,
+              -5.0,
+              -1.0,
+              -28.0,
+              -45.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              14.0,
+              -20.0,
+              -2.0,
+              45.0,
+              27.0,
+              8.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              23.0,
+              5.0,
+              -11.0,
+              -8.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -5.0,
+              -1.0,
+              -4.0,
+              6.0,
+              -3.0,
+              13.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          }
+        ],
+        "imu_state": {
+          "quaternion": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gyroscope": [
+            0.18000000715255737,
+            0.11999999731779099,
+            0.47999998927116394
+          ],
+          "accelerometer": [
+            1.340000033378601,
+            -9.739999771118164,
+            -0.09000000357627869
+          ],
+          "rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "temperature": 6502
+        },
+        "power_v": 2.388000011444092,
+        "power_a": 0.035999998450279236,
+        "system_v": 2.388000011444092,
+        "device_v": 2.388000011444092,
+        "error": [
+          0,
+          0
+        ],
+        "reserve": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "topic": "rt/dex5/right/state",
+      "type": "unitree_hg.msg.dds_.HandState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 300,
+      "hz": 99.96,
+      "error": null,
+      "sample": {
+        "motor_state": [
+          {
+            "mode": 1,
+            "q": -0.0017689542146399617,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -1.1718750101863407e-05,
+            "temperature": [
+              59,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0010607062140479684,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 1.5625000742147677e-05,
+            "temperature": [
+              56,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0746932178735733,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              55,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.02114241011440754,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.5156248486600816e-05,
+            "temperature": [
+              60,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": -0.00306250830180943,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -1.9531249563442543e-05,
+            "temperature": [
+              59,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.0019147559069097042,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              55,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.08169092237949371,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.023363105952739716,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": -0.00035513547481969,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              56,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.00018445466412231326,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.06148651987314224,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": -1.1718750101863407e-05,
+            "temperature": [
+              57,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.01706083118915558,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 3.906250185536919e-06,
+            "temperature": [
+              56,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": -0.0001756641431711614,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -4.064029113237666e-08,
+            "temperature": [
+              40,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.00020329795370344073,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -4.064029113237666e-08,
+            "temperature": [
+              48,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.06278380751609802,
+            "dq": -0.0,
+            "ddq": 0.0,
+            "tau_est": 4.064029113237666e-08,
+            "temperature": [
+              51,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 1,
+            "q": 0.017455384135246277,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -2.709352919794128e-08,
+            "temperature": [
+              42,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.5867581367492676,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 1.1587731838226318,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.05991074815392494,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.050685860216617584,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "press_sensor_state": [
+          {
+            "pressure": [
+              3.0,
+              6.0,
+              2.0,
+              3.0,
+              8.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -14.0,
+              -2.0,
+              -4.0,
+              -11.0,
+              -8.0,
+              -3.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              9.0,
+              9.0,
+              6.0,
+              1.0,
+              18.0,
+              7.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -10.0,
+              -5.0,
+              40.0,
+              -7.0,
+              3.0,
+              -2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              3.0,
+              -5.0,
+              -8.0,
+              -3.0,
+              -6.0,
+              -6.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              9.0,
+              9.0,
+              14.0,
+              18.0,
+              14.0,
+              12.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              2.0,
+              2.0,
+              8.0,
+              7.0,
+              2.0,
+              7.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              16.0,
+              5.0,
+              9.0,
+              1.0,
+              3.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              5.0,
+              8.0,
+              35.0,
+              3.0,
+              8.0,
+              19.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              29.0,
+              1.0,
+              4.0,
+              19.0,
+              11.0,
+              7.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              10.0,
+              -8.0,
+              -5.0,
+              10.0,
+              0.0,
+              -4.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -15.0,
+              -1.0,
+              -7.0,
+              1.0,
+              -9.0,
+              3.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -8.0,
+              -11.0,
+              11.0,
+              -18.0,
+              -27.0,
+              -2.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              -15.0,
+              -1.0,
+              -20.0,
+              -23.0,
+              -9.0,
+              -10.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              20.0,
+              17.0,
+              15.0,
+              -9.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          },
+          {
+            "pressure": [
+              15.0,
+              26.0,
+              23.0,
+              14.0,
+              9.0,
+              1.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "temperature": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "lost": 0,
+            "reserve": 0
+          }
+        ],
+        "imu_state": {
+          "quaternion": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gyroscope": [
+            0.11999999731779099,
+            1.2799999713897705,
+            -0.18000000715255737
+          ],
+          "accelerometer": [
+            -1.149999976158142,
+            -9.739999771118164,
+            0.25999999046325684
+          ],
+          "rpy": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "temperature": 6500
+        },
+        "power_v": 2.4210000038146973,
+        "power_a": 0.028999999165534973,
+        "system_v": 2.4210000038146973,
+        "device_v": 2.4210000038146973,
+        "error": [
+          0,
+          0
+        ],
+        "reserve": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "topic": "rt/dog_imu_raw",
+      "type": "sensor_msgs.msg.dds_.Imu_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/dog_odom",
+      "type": "nav_msgs.msg.dds_.Odometry_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 1521,
+      "hz": 500.0,
+      "error": null,
+      "sample": {
+        "header": {
+          "stamp": {
+            "sec": 1794610078,
+            "nanosec": 850106093
+          },
+          "frame_id": "odom"
+        },
+        "child_frame_id": "robot_center",
+        "pose": {
+          "pose": {
+            "position": {
+              "x": 2.957526206970215,
+              "y": -2.302370309829712,
+              "z": 0.9878984689712524
+            },
+            "orientation": {
+              "x": 0.0026476504281163216,
+              "y": 0.011755146086215973,
+              "z": -0.013945340178906918,
+              "w": 0.9998302459716797
+            }
+          },
+          "covariance": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "twist": {
+          "twist": {
+            "linear": {
+              "x": 0.004612185060977936,
+              "y": -0.003389785997569561,
+              "z": 0.0011519634863361716
+            },
+            "angular": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": -0.004261057358235121
+            }
+          },
+          "covariance": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "topic": "rt/goal",
+      "type": "graph_msg.msg.dds_.Node_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/goal_single",
+      "type": "graph_msg.msg.dds_.Node_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/gpt_cmd",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/gpt_state",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/gptflowfeedback",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/initialpose",
+      "type": "geometry_msgs.msg.dds_.PoseWithCovarianceStamped_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/lf/bmsstate",
+      "type": "unitree_hg.msg.dds_.BmsState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 61,
+      "hz": 20.24,
+      "error": null,
+      "sample": {
+        "version_high": 1,
+        "version_low": 12,
+        "fn": 120,
+        "cell_vol": [
+          3602,
+          3601,
+          3607,
+          3598,
+          3606,
+          3603,
+          3604,
+          3601,
+          3597,
+          3596,
+          3597,
+          3592,
+          3597,
+          3597,
+          3598,
+          3600,
+          3604,
+          3603,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "bmsvoltage": [
+          64810,
+          64800,
+          0
+        ],
+        "current": -2537,
+        "soc": 46,
+        "soh": 100,
+        "temperature": [
+          32,
+          25,
+          25,
+          29,
+          29,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "cycle": 5,
+        "manufacturer_date": 0,
+        "bmsstate": [
+          577,
+          0,
+          0,
+          0,
+          18
+        ],
+        "reserve": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "topic": "rt/lf/lowstate",
+      "type": "unitree_hg.msg.dds_.LowState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 61,
+      "hz": 20.24,
+      "error": null,
+      "sample": {
+        "version": [
+          0,
+          0
+        ],
+        "mode_pr": 0,
+        "mode_machine": 1,
+        "tick": 1105407,
+        "imu_state": {
+          "quaternion": [
+            0.9998292326927185,
+            0.0026510758325457573,
+            0.011770177632570267,
+            -0.014003327116370201
+          ],
+          "gyroscope": [
+            -0.0010652643395587802,
+            0.0031957929022610188,
+            0.0021305286791175604
+          ],
+          "accelerometer": [
+            -0.28371289372444153,
+            0.22714988887310028,
+            9.820416450500488
+          ],
+          "rpy": [
+            0.00497300922870636,
+            0.023612776771187782,
+            -0.027950892224907875
+          ],
+          "temperature": 79
+        },
+        "motor_state": [
+          {
+            "mode": 0,
+            "q": -0.0013901758939027786,
+            "dq": -0.0055442010052502155,
+            "ddq": 0.0,
+            "tau_est": 0.5195639729499817,
+            "temperature": [
+              26,
+              27
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.00144985131919384,
+            "dq": 0.0005094766966067255,
+            "ddq": 0.0,
+            "tau_est": -3.5013580322265625,
+            "temperature": [
+              25,
+              26
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0017897691577672958,
+            "dq": -0.0005337881739251316,
+            "ddq": 0.0,
+            "tau_est": -0.06799949705600739,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0020558806136250496,
+            "dq": -0.0017746197991073132,
+            "ddq": 0.0,
+            "tau_est": -0.8881450891494751,
+            "temperature": [
+              23,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.042567964643239975,
+            "dq": 0.02265571616590023,
+            "ddq": 0.0,
+            "tau_est": 0.038138940930366516,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              1,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.028875337913632393,
+            "dq": -0.00012497826537583023,
+            "ddq": 0.0,
+            "tau_est": 0.16303299367427826,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              127,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.006759008392691612,
+            "dq": 0.0061639598570764065,
+            "ddq": 0.0,
+            "tau_est": -1.7134559154510498,
+            "temperature": [
+              26,
+              27
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.06357385218143463,
+            "dq": -0.0017495648935437202,
+            "ddq": 0.0,
+            "tau_est": 12.836675643920898,
+            "temperature": [
+              25,
+              28
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0006231851875782013,
+            "dq": -0.0004039136692881584,
+            "ddq": 0.0,
+            "tau_est": -0.14681068062782288,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0027677305042743683,
+            "dq": -0.002601590706035495,
+            "ddq": 0.0,
+            "tau_est": -0.526134729385376,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.08975999802350998,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -0.02708333358168602,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              1,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.014113680459558964,
+            "dq": 0.0028181332163512707,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              25,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              126,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.01098500657826662,
+            "dq": -0.00872664712369442,
+            "ddq": 0.0,
+            "tau_est": 0.087890625,
+            "temperature": [
+              44,
+              44
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.04507002979516983,
+            "dq": 0.013691265136003494,
+            "ddq": 0.0,
+            "tau_est": -0.6097939610481262,
+            "temperature": [
+              41,
+              41
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.00488806888461113,
+            "dq": -0.004330579191446304,
+            "ddq": 0.0,
+            "tau_est": -0.2453346997499466,
+            "temperature": [
+              42,
+              42
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.055649418383836746,
+            "dq": 0.01745329424738884,
+            "ddq": 0.0,
+            "tau_est": -0.263671875,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.01994774304330349,
+            "dq": 0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": -0.21250000596046448,
+            "temperature": [
+              36,
+              26
+            ],
+            "vol": 64.5,
+            "sensor": [
+              189,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.010923621244728565,
+            "dq": 0.012271846644580364,
+            "ddq": 0.0,
+            "tau_est": 0.26249998807907104,
+            "temperature": [
+              31,
+              25
+            ],
+            "vol": 65.0,
+            "sensor": [
+              188,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 1.0619221925735474,
+            "dq": -0.015339808538556099,
+            "ddq": 0.0,
+            "tau_est": 0.0625,
+            "temperature": [
+              32,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              189,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1144,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0057524279691278934,
+            "dq": -0.003067961661145091,
+            "ddq": 0.0,
+            "tau_est": -0.0625,
+            "temperature": [
+              33,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              187,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.2881007790565491,
+            "dq": -0.0015339808305725455,
+            "ddq": 0.0,
+            "tau_est": 0.125,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0003954794374294579,
+            "dq": 0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              47,
+              47
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.04722104221582413,
+            "dq": 0.002181661780923605,
+            "ddq": 0.0,
+            "tau_est": 0.263671875,
+            "temperature": [
+              44,
+              44
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.006537395063787699,
+            "dq": -0.00920388475060463,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              28,
+              27
+            ],
+            "vol": 65.0,
+            "sensor": [
+              190,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.005920207127928734,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              32,
+              26
+            ],
+            "vol": 64.5,
+            "sensor": [
+              190,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 1.0803838968276978,
+            "dq": -0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": -0.0625,
+            "temperature": [
+              33,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              188,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1144,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.003091930178925395,
+            "dq": -0.003067961661145091,
+            "ddq": 0.0,
+            "tau_est": -0.0625,
+            "temperature": [
+              32,
+              30
+            ],
+            "vol": 64.5,
+            "sensor": [
+              188,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.32140493392944336,
+            "dq": 0.0015339808305725455,
+            "ddq": 0.0,
+            "tau_est": 0.0625,
+            "temperature": [
+              45,
+              45
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.006040049716830254,
+            "dq": -0.004601942375302315,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.001528934808447957,
+            "dq": 0.007750639691948891,
+            "ddq": 0.0,
+            "tau_est": -0.02968749962747097,
+            "temperature": [
+              31,
+              27
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.005979497451335192,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -0.08411458879709244,
+            "temperature": [
+              30,
+              27
+            ],
+            "vol": 64.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "wireless_remote": [
+          85,
+          81,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "reserve": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "crc": 4176865500
+      }
+    },
+    {
+      "topic": "rt/lf/mainboardstate",
+      "type": "unitree_hg.msg.dds_.MainBoardState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 61,
+      "hz": 20.24,
+      "error": null,
+      "sample": {
+        "fan_state": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "temperature": [
+          48,
+          56,
+          54,
+          30,
+          0,
+          0
+        ],
+        "value": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "state": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "topic": "rt/lf/secondary_bmsstate",
+      "type": "unitree_hg.msg.dds_.BmsState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/lf/secondary_imu",
+      "type": "unitree_hg.msg.dds_.IMUState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 61,
+      "hz": 20.24,
+      "error": null,
+      "sample": {
+        "quaternion": [
+          -0.9989266395568848,
+          0.019841182976961136,
+          -0.011625262908637524,
+          0.040209125727415085
+        ],
+        "gyroscope": [
+          -0.0031957929022610188,
+          -0.004261057358235121,
+          0.0053263213485479355
+        ],
+        "accelerometer": [
+          -0.035913024097681046,
+          -0.41120412945747375,
+          9.675867080688477
+        ],
+        "rpy": [
+          -0.04059530049562454,
+          0.021631663665175438,
+          -0.08090037852525711
+        ],
+        "temperature": 79
+      }
+    },
+    {
+      "topic": "rt/lio_sam_ros2/savepcd/savepcd_flag",
+      "type": "std_msgs.msg.dds_.Bool_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/log_system_inbound",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/log_system_outbound",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/lowstate",
+      "type": "unitree_hg.msg.dds_.LowState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 3183,
+      "hz": 1050.93,
+      "error": null,
+      "sample": {
+        "version": [
+          0,
+          0
+        ],
+        "mode_pr": 0,
+        "mode_machine": 1,
+        "tick": 1105386,
+        "imu_state": {
+          "quaternion": [
+            0.9998300075531006,
+            0.0026375697925686836,
+            0.011752940714359283,
+            -0.013966577127575874
+          ],
+          "gyroscope": [
+            -0.0053263213485479355,
+            -0.0,
+            -0.0031957929022610188
+          ],
+          "accelerometer": [
+            -0.21098902821540833,
+            0.14275427162647247,
+            9.780014991760254
+          ],
+          "rpy": [
+            0.004947340115904808,
+            0.023577746003866196,
+            -0.027877766638994217
+          ],
+          "temperature": 79
+        },
+        "motor_state": [
+          {
+            "mode": 0,
+            "q": -0.0013741981238126755,
+            "dq": 0.0012219224590808153,
+            "ddq": 0.0,
+            "tau_est": 0.5195639729499817,
+            "temperature": [
+              26,
+              27
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.00144985131919384,
+            "dq": 0.0003692592727020383,
+            "ddq": 0.0,
+            "tau_est": -3.5013580322265625,
+            "temperature": [
+              25,
+              26
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0017897691577672958,
+            "dq": -0.00025750024360604584,
+            "ddq": 0.0,
+            "tau_est": -0.06799949705600739,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0020718597806990147,
+            "dq": 0.00448145205155015,
+            "ddq": 0.0,
+            "tau_est": -0.8881450891494751,
+            "temperature": [
+              23,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.04259008914232254,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.038138940930366516,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              1,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.02886970527470112,
+            "dq": 0.0028227062430232763,
+            "ddq": 0.0,
+            "tau_est": 0.16303299367427826,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              127,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0067270491272211075,
+            "dq": -0.0037342607975006104,
+            "ddq": 0.0,
+            "tau_est": -1.7134559154510498,
+            "temperature": [
+              26,
+              27
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.06355786323547363,
+            "dq": 0.0038153829518705606,
+            "ddq": 0.0,
+            "tau_est": 12.836675643920898,
+            "temperature": [
+              25,
+              28
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.0006231851875782013,
+            "dq": 0.0027453347574919462,
+            "ddq": 0.0,
+            "tau_est": -0.14681068062782288,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0027837082743644714,
+            "dq": 0.00019044925284106284,
+            "ddq": 0.0,
+            "tau_est": -0.526134729385376,
+            "temperature": [
+              24,
+              25
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              6,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.08975999802350998,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -0.02708333358168602,
+            "temperature": [
+              24,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              1,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.014119185507297516,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -0.0,
+            "temperature": [
+              25,
+              24
+            ],
+            "vol": 64.5,
+            "sensor": [
+              126,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.01098500657826662,
+            "dq": -0.006544985342770815,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              44,
+              44
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.04506517946720123,
+            "dq": -0.009372726082801819,
+            "ddq": 0.0,
+            "tau_est": -0.6097939610481262,
+            "temperature": [
+              41,
+              41
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.004885168746113777,
+            "dq": -0.0021047405898571014,
+            "ddq": 0.0,
+            "tau_est": -0.2453346997499466,
+            "temperature": [
+              42,
+              42
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.055632371455430984,
+            "dq": 0.005454154219478369,
+            "ddq": 0.0,
+            "tau_est": -0.3515625,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.019935758784413338,
+            "dq": 0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": -0.21250000596046448,
+            "temperature": [
+              36,
+              26
+            ],
+            "vol": 64.5,
+            "sensor": [
+              189,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.010905644856393337,
+            "dq": -0.012271846644580364,
+            "ddq": 0.0,
+            "tau_est": 0.26249998807907104,
+            "temperature": [
+              30,
+              25
+            ],
+            "vol": 65.0,
+            "sensor": [
+              188,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 1.0619221925735474,
+            "dq": -0.012271846644580364,
+            "ddq": 0.0,
+            "tau_est": 0.0625,
+            "temperature": [
+              32,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              189,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1144,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.005746436305344105,
+            "dq": -0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": -0.0625,
+            "temperature": [
+              33,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              187,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.2880887985229492,
+            "dq": -0.016873789951205254,
+            "ddq": 0.0,
+            "tau_est": 0.125,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.00041944789700210094,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0625,
+            "temperature": [
+              47,
+              47
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.047203999012708664,
+            "dq": 0.0010908308904618025,
+            "ddq": 0.0,
+            "tau_est": 0.263671875,
+            "temperature": [
+              44,
+              44
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.006525410804897547,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.05000000074505806,
+            "temperature": [
+              28,
+              27
+            ],
+            "vol": 65.0,
+            "sensor": [
+              190,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.005914214998483658,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              33,
+              26
+            ],
+            "vol": 64.5,
+            "sensor": [
+              190,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 1.0803838968276978,
+            "dq": -0.003067961661145091,
+            "ddq": 0.0,
+            "tau_est": -0.0625,
+            "temperature": [
+              33,
+              29
+            ],
+            "vol": 64.5,
+            "sensor": [
+              188,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1144,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.003085938049480319,
+            "dq": -0.006135923322290182,
+            "ddq": 0.0,
+            "tau_est": -0.11249999701976776,
+            "temperature": [
+              32,
+              30
+            ],
+            "vol": 64.5,
+            "sensor": [
+              189,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.32140493392944336,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.125,
+            "temperature": [
+              45,
+              45
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": -0.006040049716830254,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              43,
+              43
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0015137968584895134,
+            "dq": -0.007750639691948891,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              31,
+              27
+            ],
+            "vol": 64.5,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.005979497451335192,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": -0.10885417461395264,
+            "temperature": [
+              30,
+              27
+            ],
+            "vol": 64.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              1143,
+              5,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "mode": 0,
+            "q": 0.0,
+            "dq": 0.0,
+            "ddq": 0.0,
+            "tau_est": 0.0,
+            "temperature": [
+              0,
+              0
+            ],
+            "vol": 0.0,
+            "sensor": [
+              0,
+              0
+            ],
+            "motorstate": 0,
+            "reserve": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        ],
+        "wireless_remote": [
+          85,
+          81,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "reserve": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "crc": 561893109
+      }
+    },
+    {
+      "topic": "rt/lowstate_raw",
+      "type": "unitree_hg.msg.dds_.LowState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/mission_points_command",
+      "type": "graph_msg.msg.dds_.Node_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/multiplestate",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/node_control",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/odommodestate",
+      "type": "unitree_go.msg.dds_.SportModeState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 1508,
+      "hz": 499.92,
+      "error": null,
+      "sample": {
+        "stamp": {
+          "sec": 0,
+          "nanosec": 0
+        },
+        "error_code": 0,
+        "imu_state": {
+          "quaternion": [
+            0.9998297095298767,
+            0.0026474709156900644,
+            0.01175934262573719,
+            -0.013973246328532696
+          ],
+          "gyroscope": [
+            0.004261057358235121,
+            0.0063915858045220375,
+            -0.0031957929022610188
+          ],
+          "accelerometer": [
+            -0.19303251802921295,
+            0.2522889971733093,
+            9.849146842956543
+          ],
+          "rpy": [
+            0.004966810345649719,
+            0.023590857163071632,
+            -0.027890846133232117
+          ],
+          "temperature": 79
+        },
+        "mode": 0,
+        "progress": 0.0,
+        "gait_type": 0,
+        "foot_raise_height": 0.0,
+        "position": [
+          2.95761775970459,
+          -2.302414894104004,
+          0.987898588180542
+        ],
+        "body_height": 0.987898588180542,
+        "velocity": [
+          0.00473578367382288,
+          -0.003233786439523101,
+          0.0011741158086806536
+        ],
+        "yaw_speed": -0.0031957929022610188,
+        "range_obstacle": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "foot_force": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "foot_position_body": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "foot_speed_body": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "path_point": [
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          },
+          {
+            "t_from_start": 0.0,
+            "x": 0.0,
+            "y": 0.0,
+            "yaw": 0.0,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vyaw": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "topic": "rt/original_graph",
+      "type": "graph_msg.msg.dds_.Graph_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/parameter_events",
+      "type": "rcl_interfaces.msg.dds_.ParameterEvent_",
+      "decoded": false,
+      "writers": 6,
+      "participants": 6,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/pcd_id_set",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/pctoimage_local",
+      "type": "unitree_interfaces.msg.dds_.PcToImage_",
+      "decoded": false,
+      "writers": 2,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/point_in_map",
+      "type": "sensor_msgs.msg.dds_.PointCloud2_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/public_network_status",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/qt_notice",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 1,
+      "hz": null,
+      "error": null,
+      "sample": {
+        "data": "index:10002;lidarState:-1;notice:Lidar disconnected.Please check the lidar IP setting and network connection.;"
+      }
+    },
+    {
+      "topic": "rt/query_result_edge",
+      "type": "unitree_interfaces.msg.dds_.QtEdge_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/query_result_floor",
+      "type": "unitree_interfaces.msg.dds_.QtCommand_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/query_result_node",
+      "type": "unitree_interfaces.msg.dds_.QtNode_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/query_result_pcd",
+      "type": "unitree_interfaces.msg.dds_.QtCommand_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/query_result_topo",
+      "type": "unitree_interfaces.msg.dds_.QtCommand_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/ros_sport_mode_cmd",
+      "type": "unitree_go.msg.dds_.SportModeCmd_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/rosgaitcmd",
+      "type": "unitree_interfaces.msg.dds_.GaitCmd_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/rosout",
+      "type": "rcl_interfaces.msg.dds_.Log_",
+      "decoded": false,
+      "writers": 6,
+      "participants": 6,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/rtc/state",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 3,
+      "hz": 1.0,
+      "error": null,
+      "sample": {
+        "data": "{\"connection_state\":\"not_connected\"}"
+      }
+    },
+    {
+      "topic": "rt/rtc_status",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/secondary_imu",
+      "type": "unitree_hg.msg.dds_.IMUState_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 3178,
+      "hz": 1050.96,
+      "error": null,
+      "sample": {
+        "quaternion": [
+          -0.9989266395568848,
+          0.019835393875837326,
+          -0.011614158749580383,
+          0.04021638631820679
+        ],
+        "gyroscope": [
+          0.015978964045643806,
+          0.0,
+          0.009587379172444344
+        ],
+        "accelerometer": [
+          0.03321954980492592,
+          -0.43095630407333374,
+          9.622895240783691
+        ],
+        "rpy": [
+          -0.04058296978473663,
+          0.021609652787446976,
+          -0.08091432601213455
+        ],
+        "temperature": 79
+      }
+    },
+    {
+      "topic": "rt/selftest",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/servicestate",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/servicestateactivate",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/tf",
+      "type": "tf2_msgs.msg.dds_.TFMessage_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/unitree_command",
+      "type": "graph_msg.msg.dds_.UnitreeCommond_",
+      "decoded": false,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": null,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/videohub/inner",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/webrtcreq",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/webrtcres",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/wirelesscontroller",
+      "type": "unitree_go.msg.dds_.WirelessController_",
+      "decoded": true,
+      "writers": 2,
+      "participants": 2,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/xfk_webrtcreq",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    },
+    {
+      "topic": "rt/xfk_webrtcres",
+      "type": "std_msgs.msg.dds_.String_",
+      "decoded": true,
+      "writers": 1,
+      "participants": 1,
+      "messages_in_window": 0,
+      "hz": null,
+      "error": null,
+      "sample": null
+    }
+  ]
+}
