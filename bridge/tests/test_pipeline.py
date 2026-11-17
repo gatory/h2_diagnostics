@@ -5,16 +5,17 @@ from pathlib import Path
 
 from websockets.asyncio.client import connect
 
-from h2diag import layout, server
-from h2diag.core import Bridge
-from h2diag.recorder import Recorder
-from h2diag.sources import ReplaySource
+from h2diag import layout
+from h2diag.data.replay import ReplaySource
+from h2diag.output import server
+from h2diag.output.recorder import Recorder
+from h2diag.processing.core import H2Diagnostics
 
 PKG = Path(__file__).resolve().parents[1] / "h2diag"
 
 
 def test_snapshot_shape(recording):
-    snap = Bridge(ReplaySource(recording)).tick(1.0)
+    snap = H2Diagnostics(ReplaySource(recording)).tick(1.0)
     assert len(snap["body"]["joints"]) == layout.NUM_BODY == 31
     assert snap["body"]["spare_slots_active"] is False
     assert len(snap["battery"]["cells"]) == 18
@@ -28,7 +29,7 @@ def test_snapshot_shape(recording):
 
 def test_record_then_replay_roundtrip(recording, tmp_path):
     rec = Recorder(tmp_path)
-    bridge = Bridge(ReplaySource(recording), rec)
+    bridge = H2Diagnostics(ReplaySource(recording), rec)
     path = rec.start("trial one", {"notes": "x"})
     for _ in range(60):
         bridge.tick(0.02)
@@ -52,7 +53,7 @@ def test_replay_loops(recording):
 
 def test_server_streams_and_records(recording, tmp_path):
     async def scenario():
-        bridge = Bridge(ReplaySource(recording, loop=True), Recorder(tmp_path))
+        bridge = H2Diagnostics(ReplaySource(recording, loop=True), Recorder(tmp_path))
         task = asyncio.create_task(server.run(bridge, "127.0.0.1", 8799, tick_hz=50, send_hz=25))
         await asyncio.sleep(0.3)
         try:
@@ -80,5 +81,7 @@ def test_server_streams_and_records(recording, tmp_path):
 def test_bridge_never_writes_to_robot():
     """Read-only guarantee until the Movement phase."""
     forbidden = re.compile(r"ChannelPublisher|CreateSendChannel|SetWriter|DataWriter|\bLowCmd_|HandCmd_|BmsCmd_")
-    for py in PKG.glob("*.py"):
-        assert not forbidden.search(py.read_text()), f"{py.name} references a DDS writer/command"
+    files = list(PKG.rglob("*.py"))  # rglob: every subfolder, not just the top level
+    assert len(files) > 15, "guard found too few files; did the package move?"
+    for py in files:
+        assert not forbidden.search(py.read_text()), f"{py.relative_to(PKG)} references a DDS writer/command"

@@ -1,5 +1,6 @@
-"""Session recorder. Writes the same .jsonl format stream_sensors.py uses, so
-ReplaySource can play back old and new recordings alike:
+"""③ Session recorder: writes recordings to disk (data/sessions.py reads them back).
+
+Same .jsonl format stream_sensors.py used, so ReplaySource plays old and new alike:
 
     {"meta": {...}}                                  first line
     {"t": 1.234, "topic": "rt/lf/lowstate", "data": {...}}

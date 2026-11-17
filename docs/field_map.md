@@ -2,8 +2,8 @@
 
 What each telemetry field means, how sure we are, and how to confirm the rest.
 
-- **Sources:** the SDK message definitions (`unitree_sdk2py/idl/unitree_hg`), the Unitree H2 examples, and two recordings in `examples/sensor_reading_example/output/`:
-  - `topics.json`: a single sample per topic
+- **Sources:** the SDK message definitions (`unitree_sdk2py/idl/unitree_hg`), the Unitree H2 examples, and two files now in `bridge/tests/data/`:
+  - `topics_20261113.json`: a single sample per topic
   - `sensors_20261112_150110.jsonl`: 2 s of a robot standing still
 - **Confidence:**
   - ✅ confirmed from data
@@ -24,26 +24,33 @@ A topic existing doesn't mean it carries meaningful data. **The bridge only uses
 | Topic | Type | Rate (measured on the Thor) |
 |---|---|---|
 | `rt/lf/lowstate` | `LowState_` | 20 Hz |
-| `rt/lf/secondary_imu` | `IMUState_` | 20 Hz |
+| `rt/lf/secondary_imu` | `IMUState_` (**in the torso**, above the waist; T1) | 20 Hz |
 | `rt/lf/bmsstate` | `BmsState_` | 20 Hz |
 | `rt/lf/mainboardstate` | `MainBoardState_` | 20 Hz |
 | `rt/dex5/left/state`, `rt/dex5/right/state` | `HandState_` | 100 Hz |
 | `rt/lf/sportmodestate` | `unitree_hg SportModeState_` | ❓ The SDK has no message definition for it; we need to write one. It probably carries the robot's mode and gait. |
-| `rt/lowcmd` | `LowCmd_` | 1 kHz. Commanded position for tracking error. Too fast for Python; see PLAN risks. |
+| `rt/lowcmd` | `LowCmd_` | 1 kHz. Commanded position for tracking error. Too fast for Python; see PLAN risks. Was publishing during the 2026-11-17 discovery (634 Hz measured under full-discovery load), so a controller was active. |
 
 `rt/lf/secondary_bmsstate` exists but is silent (a second battery that isn't fitted?).
+
+**2026-11-17 discovery (`h2diag topics`, 124 topics; saved on the Thor in `results/discovery/topics_20261117_134607.*`).** Candidates worth a look, not used yet:
+- `rt/arm/action/state` (`std_msgs String`, 4.3 Hz) and `rt/rtc/state` (String, 1 Hz): readable text, possibly the robot's mode/action state. That could stand in for the undecodable `sportmodestate` on the status strip.
+- `rt/api/sport/*` and `rt/api/robot_state/*` request/response pairs at ~1.9 Hz: something on the robot polls these services.
+- `rt/arm_sdk` (`LowCmd_`) exists but was silent.
+
+Note: discovery samples every topic at once, which overloads Python, so its rates read low (`rt/lf/*` showed 10 Hz). Use `h2diag rates` for true rates (`rt/lf/*` 20.3 Hz).
 
 ## Body: `LowState_`
 
 | Field | Meaning | Confidence |
 |---|---|---|
-| `motor_state[0..30]` | The 31 joints, in the order below | ✅ count / 🟡 order |
+| `motor_state[0..30]` | The 31 joints, in the order below | ✅ count / ✅ order for 12–14, 19, 21, 26, 28 (T1) / 🟡 slots 20 and 27 not yet seen moving |
 | `motor_state[31..34]` | Unused: always zero | ✅ |
 | `mode_machine` | Robot type or control mode; it was 1 in both recordings | ❓ |
 | `mode_pr` | Ankle and waist control mode: 0 = pitch/roll (series), 1 = A/B (parallel), per the C++ example | 🟡 |
 | `tick` | Counter from the robot's controller, useful for spotting dropped messages | 🟡 |
 | `crc` | CRC32 over the message; the C++ example has the algorithm | ✅ |
-| `imu_state.*` | Main IMU: quaternion, gyro (rad/s), accel (m/s², ≈9.87 at rest ✅), rpy (rad) | ✅ |
+| `imu_state.*` | Main IMU, **in the pelvis** (below the waist; T1, see below): quaternion (w, x, y, z), gyro (rad/s), accel (m/s², ≈9.87 at rest ✅), rpy (rad) | ✅ |
 | `imu_state.temperature` | Constant 79 | ❓ Is it °C? It's suspiciously high and never changes. |
 | `wireless_remote[40]` | Raw bytes from the handheld remote | 🟡 |
 
@@ -54,7 +61,26 @@ A topic existing doesn't mean it carries meaningful data. **The bridge only uses
 | 12 / 13 / 14 | waist **yaw** / roll / pitch | waist **roll** / pitch / yaw |
 | 19 / 20 / 21 (L), 26 / 27 / 28 (R) | wrist **roll** / pitch / yaw | wrist **yaw** / pitch / roll |
 
-Indices 0–11 (legs), 15–18 and 22–25 (shoulders, elbows), and 29–30 (head pitch, yaw) agree everywhere. **Test T1 decides this.** Until then, `common.py`'s labels for 12–14 and the wrists may be wrong.
+Indices 0–11 (legs), 15–18 and 22–25 (shoulders, elbows), and 29–30 (head pitch, yaw) agree everywhere. `common.py`'s labels for 12–14 and the wrists are wrong.
+
+### T1 result (2026-11-17, `20261117_135149_t1_joints.jsonl.gz`)
+
+The majority order (left column above, `layout.py`) is right where it could be checked. Markers in this recording were typed *after* each movement, so each burst of motion belongs to the marker that follows it.
+
+| Slot | Name in `layout.py` | Evidence | Status |
+|---|---|---|---|
+| 12 | waist_yaw | Moved alone during the waist-yaw movement. It tracks the yaw between the two IMUs with a 2° residual. | ✅ |
+| 13 | waist_roll | Tracks the roll between the IMUs: correlation 0.95, slope 1.06 (10° IMU vs 11° joint) | ✅ |
+| 14 | waist_pitch | Tracks the pitch between the IMUs: correlation 0.93, slope 0.86 (27° vs 27°) | ✅ |
+| 19 / 26 | L / R wrist_roll | Moved alone during wrist roll; slot 19 reached its −2.62 limit | ✅ |
+| 21 / 28 | L / R wrist_yaw | Moved alone (~1.8 rad, reaching the +1.22 limit) when the hand was **bent toward the palm / back of the hand** | ✅ slot, see note |
+| 20 / 27 | L / R wrist_pitch | Never moved more than 0.4 rad. The "wrist yaw" attempt twisted the forearm and mostly moved shoulder yaw (17 / 24). | 🟡 not yet seen |
+
+**Waist roll and pitch were too stiff to move cleanly by hand,** so they were checked a different way. The main IMU and `secondary_imu` sit on opposite sides of the waist, so the rotation between them *is* the waist rotation. The relative rotation (main → secondary) is computed from the quaternions, waist yaw (slot 12) is removed, and the remaining roll/pitch is compared with slots 13/14. Only "main IMU = pelvis, secondary = torso" fits: the reverse leaves a 50° yaw residual. Naive Euler-angle subtraction gives a misleading answer (it suggested 13/14 were swapped), because roll and pitch mix once the waist is yawed.
+
+**Wrist naming:** the hand bending toward the palm / back of the hand (what a person calls wrist pitch) is slot 21/28, which Unitree's table names **wrist_yaw**. Each slot's limits fit the motion that slot made: 21/28 have the wide ±1.22 range, and 20/27 the narrow ±0.58 range, which fits side-to-side bending. So we keep Unitree's names (the URDF will use them) and note the physical motion. Still to do: see slot 20/27 move (bend the hand thumb-ward / pinky-ward without twisting the forearm).
+
+**Waist yaw goes past its listed limit:** slot 12 reached −2.22 … +2.45 rad by hand, while Unitree's table gives ±1.75. The IMUs confirm the waist really turned that far, so ±1.75 is probably a software limit rather than a mechanical stop. Until that's settled, the health check will raise waist_yaw limit errors whenever the waist is turned that far by hand.
 
 ### Per motor: `MotorState_`
 
@@ -105,8 +131,9 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 
 | Field | Meaning | Confidence |
 |---|---|---|
-| `motor_state[0..15]` | 16 active motors (`mode` 1) | ✅ count / ❓ which finger joint is which (T2) |
-| `motor_state[16..19]` | `mode` 0, temperature 0, but `q` is non-zero. Passive or coupled joints reported as estimates? | ❓ |
+| `motor_state[0..15]` | 16 active motors (`mode` 1): four per finger, **index 0–3, middle 4–7, ring 8–11, pinky 12–15** | ✅ (T2, both hands) |
+| `motor_state[16..19]` | **The thumb** (4 joints). `mode` 0 and temperature 0, but `q` follows the thumb. So the thumb reports position only, with no temperature or status. | ✅ left hand (T2) / 🟡 right thumb not recorded |
+| within a finger | Curling moves the 3rd and 4th slot most (~1.6 and ~1.4 rad, ratio ≈ 0.86 every time, so possibly mechanically coupled); the 1st and 2nd move 0.2–0.8 rad. Which of those is base bend and which is sideways spread isn't known yet. | 🟡 |
 | motor `temperature[0]` | **42–66 °C at rest**, which is warm. `[1]` is always 0. | 🟡 |
 | `press_sensor_state[0..15]` | 16 pads, 6 of 12 values used per pad. Raw, signed, noisy around 0 (−57…+63 at rest), so it needs zero-offset calibration. Units unknown. | 🟡 |
 | pad `temperature`, `lost` | Always 0. `lost` is probably a dropped-packet count. | ❓ / 🟡 |
@@ -120,17 +147,21 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 Run these on the gantry, robot powered, in damping or zero-torque mode so the joints can be moved by hand. Record each one with:
 
 ```
-python stream_sensors.py --iface eth10 --log --duration 30
+python -m h2diag live --iface eth10 --record t1_waist   # type a note + Enter at each action
 ```
 
-Write down the timestamp of each action.
+Drop a marker at each action (type what you did + Enter); markers are saved in the recording.
 
-| # | Action | Settles |
-|---|---|---|
-| T1 | Move one joint at a time by hand: waist yaw, waist roll, waist pitch, then each wrist (roll, pitch, yaw), left then right | Joint order for 12–14, 19–21 and 26–28 |
-| T2 | Curl each finger of each hand one at a time | Which hand motor slot is which finger joint; what slots 16–19 do |
-| T3 | Record 10 min at rest, then 10 min holding a pose (or walking, if allowed) | Whether `temperature[0]` vs `[1]` behave like winding vs. housing; whether the hot group comes from holding the pose |
-| T4 | Record the battery while idle, then while charging | The sign and units of `current` |
-| T5 | Press each fingertip and palm area firmly | Pad layout and pressure scale |
-| T6 | Switch robot modes with the remote (damping → stand → ...) while recording | `mode_machine`, `mode_pr`, the mode topics |
-| T7 | Short slow walk or squat if safe; otherwise skip | `tau_est` scale and the `lowcmd` vs. `lowstate` relationship |
+**Tip:** type the marker *before* each movement. It makes the analysis simpler, and the 2026-11-17 recordings had them after.
+
+| # | Action | Settles | Status |
+|---|---|---|---|
+| T1 | Move one joint at a time by hand: waist yaw, waist roll, waist pitch, then each wrist (roll, pitch, yaw), left then right | Joint order for 12–14, 19–21 and 26–28 | **Mostly done 2026-11-17.** Left: see slot 20/27 move by bending the hand side to side. |
+| T2 | Curl each finger of each hand one at a time | Which hand motor slot is which finger joint; what slots 16–19 do | **Done 2026-11-17** except the right thumb. Left: right thumb; separate base bend from spread (fingers 1st/2nd slot). |
+| T3 | Record 10 min at rest, then 10 min holding a pose (or walking, if allowed) | Whether `temperature[0]` vs `[1]` behave like winding vs. housing; whether the hot group comes from holding the pose | |
+| T4 | Record the battery while idle, then while charging | The sign and units of `current` | |
+| T5 | Press each fingertip and palm area firmly | Pad layout and pressure scale | |
+| T6 | Switch robot modes with the remote (damping → stand → ...) while recording | `mode_machine`, `mode_pr`, the mode topics (also watch `rt/arm/action/state`, `rt/rtc/state`) | |
+| T7 | Short slow walk or squat if safe; otherwise skip | `tau_est` scale and the `lowcmd` vs. `lowstate` relationship | |
+
+**Joints too stiff to move by hand:** use the two-IMU method from T1 (the relative rotation between pelvis and torso IMU) for the waist. Another read-only option is to record while the robot performs one of its own built-in actions from the remote/app. Our software only listens.

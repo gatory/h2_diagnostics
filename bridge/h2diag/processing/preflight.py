@@ -1,7 +1,9 @@
-"""Preflight: watch the robot (or a recording) for a few seconds, report pass/warn/fail."""
+"""② Preflight: watch the robot (or a recording) for a few seconds -> pass/warn/fail.
+
+Returns a report dict; views/report.py turns it into text."""
 import time
 
-from .core import Bridge
+from .core import H2Diagnostics
 
 WARMUP_S = 1.0  # ignore the first second while subscriptions connect
 LEVELS = {"info": 0, "warn": 1, "error": 2}
@@ -9,7 +11,7 @@ LEVELS = {"info": 0, "warn": 1, "error": 2}
 
 def run(source, seconds=10.0, hz=50.0, realtime=True):
     """Returns a report dict. realtime=False runs a replay as fast as possible."""
-    bridge = Bridge(source)
+    bridge = H2Diagnostics(source)
     dt = 1.0 / hz
     seen = {}  # warning id -> {"level", "msg", "ticks"}
     ticks = 0
@@ -58,20 +60,3 @@ def _report(snap, seen, ticks, elapsed):
         "findings": sorted(seen.values(), key=lambda w: -LEVELS[w["level"]]),
         "summary": summary,
     }
-
-
-def format_report(rep):
-    lines = [f"PREFLIGHT: {rep['verdict']}   ({rep['elapsed_s']} s observed)", ""]
-    s = rep["summary"]
-    for key in ("hottest_joint", "hand_left_max_temp", "hand_right_max_temp", "battery"):
-        if key in s:
-            lines.append(f"  {key:20} {s[key]}")
-    for topic, hz in s.get("topics", {}).items():
-        lines.append(f"  {topic:20} {hz}")
-    lines.append("")
-    if not rep["findings"]:
-        lines.append("  no findings")
-    for w in rep["findings"]:
-        pct = 100 * w["ticks"] / max(rep["ticks"], 1)
-        lines.append(f"  [{w['level'].upper():5}] {w['msg']}   ({pct:.0f}% of the time)")
-    return "\n".join(lines)

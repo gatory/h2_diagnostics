@@ -4,8 +4,9 @@ from pathlib import Path
 
 import pytest
 
-REPO = Path(__file__).resolve().parents[2]
-RECORDING = REPO / "examples/sensor_reading_example/output/sensors_20261112_150110.jsonl"
+DATA = Path(__file__).resolve().parent / "data"
+RECORDING = DATA / "sensors_20261112_150110.jsonl"  # real robot, 2026-11-12, at rest
+TOPICS = DATA / "topics_20261113.json"  # real discovery output, 120 topics
 
 
 def load_recording():

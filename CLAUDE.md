@@ -22,7 +22,7 @@ Progression: **read → collect → dashboard → test suite → movement.**
 
 | Phase | Dates | State |
 |---|---|---|
-| Read | Nov 16–22 | mostly done; robot tests T1–T7 pending |
+| Read | Nov 16–22 | mostly done; T1 mostly done, T2 done (2026-11-17); T3–T7 pending |
 | Collect | Nov 23 – Dec 6 | bridge built early; works live |
 | Dashboard | Dec 7–20 | not started |
 | Test suite | Dec 21–31 | not started |
@@ -62,19 +62,29 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 - **Sessions are recorded on the robot side** so Wi-Fi dropouts don't leave gaps.
 - **Fallback:** run the bridge on the workstation over the Ethernet cable.
 
-**Bridge layout** (`bridge/h2diag/`): one module, one job; sources are swappable adapters.
+**Repo layout (reorganized 2026-11-17):** `bridge/` runs on the Thor; `dashboard/` (not started, README only) runs on any computer and talks only to the bridge's WebSocket. `examples/` is being retired: `bridge/MIGRATION.md` is the checklist, delete it once the Thor checks pass.
 
-| File | Job |
-|---|---|
-| `layout.py` | Robot facts: joint names, topics, counts |
-| `sources.py` | `LiveSource` (DDS) / `ReplaySource` (`.jsonl`), same interface |
-| `state.py` | `TopicStats` (rates) + `RobotState` → snapshot |
-| `health.py` | Snapshot → warnings. `LIMITS` are **provisional guesses.** |
-| `recorder.py` | Sessions in the same `.jsonl` format as `stream_sensors.py`, with markers |
-| `core.py` | `Bridge.tick()` at 50 Hz |
-| `server.py` | WebSocket on :8765 |
-| `preflight.py` | Pass/warn/fail report |
-| `__main__.py` | CLI |
+**Bridge layout** (`bridge/h2diag/`): four layers, one job per module. Dependencies point one way, `data ← processing ← output, views`, and `tests/test_layers.py` enforces it.
+
+| Where | File | Job |
+|---|---|---|
+| root | `layout.py` | Robot facts: joint names + limits, `PR_LINKAGE_JOINTS`, topics, expected rates |
+| root | `__main__.py` | CLI only: parse args, wire layers |
+| ① `data/` (in) | `live.py` / `replay.py` | `LiveSource` (DDS) / `ReplaySource` (`.jsonl`, `.gz`), same interface |
+| | `stats.py` | `TopicStats`: arrival counts, rate, age |
+| | `sessions.py` | List/inspect recordings (header + tail only) |
+| | `dds.py`, `convert.py` | DDS init + type registry; `to_dict`, `num` |
+| | `probe.py` | Topic discovery + rate probe (from the examples) |
+| ② `processing/` | `state.py` | `RobotState` → snapshot |
+| | `health.py` | Snapshot → warnings, with hysteresis. `LIMITS` are **provisional guesses.** |
+| | `preflight.py` | Pass/warn/fail verdict (dict) |
+| | `core.py` | `Bridge.tick()` at 50 Hz |
+| ③ `output/` (out) | `server.py` | WebSocket on :8765 |
+| | `recorder.py` | Writes sessions (`.jsonl` + markers) |
+| ④ `views/` | `sensors.py` | `live` / `replay` full-screen view (rich) |
+| | `report.py`, `tables.py` | Preflight text; sessions/topics/rates/summary tables |
+
+Test data (`bridge/tests/data/`): the 2026-11-12 robot recording (2.2 s at rest) and the 2026-11-13 topic discovery (120 topics).
 
 DDS callbacks only store the newest message and count it; all decoding happens on the main tick, because Python decode throughput is the bottleneck.
 
@@ -85,9 +95,15 @@ DDS callbacks only store the newest message and count it; all decoding happens o
 python -m h2diag preflight --live --iface eth10
 python -m h2diag record    --live --name t1_joints    # type note + Enter = marker; Ctrl-C stops
 python -m h2diag serve     --live --iface eth10       # ws://172.16.68.113:8765
+python -m h2diag live      --iface eth10              # full-screen sensor view, red LIVE banner; Δ° column for T1/T2 (Enter resets)
+python -m h2diag live      --iface eth10 --record t1  # view + record; note + Enter = marker
+python -m h2diag topics    --iface eth10              # discover all topics -> results/discovery/
+python -m h2diag rates     --iface eth10 --set bridge # rates + gaps (bridge | lowstate | all_fast)
 # Anywhere
-python -m h2diag preflight --replay examples/sensor_reading_example/output/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 19 tests
+python -m h2diag replay                              # list recordings (results/sessions + bridge/tests/data), newest first
+python -m h2diag replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
+python -m h2diag preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
+cd bridge && python -m pytest                          # 44 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -95,7 +111,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 
 ## Key findings so far
 
-- **Rates on the Thor** (`rate_probe.py`):
+- **Rates on the Thor** (`rate_probe.py`, now `h2diag rates`):
   - `rt/lowstate` ~1052 Hz, `rt/lf/*` 20 Hz, hands 100 Hz, `rt/lowcmd` ~1 kHz (only when a controller is active)
   - The bridge's set (~280 msg/s) is clean.
   - All the fast topics together (~3300 msg/s) keep their rates but show gaps up to 22 ms. **Python handles only the light set.** 1 kHz work (e.g. tracking error from `rt/lowcmd`) would need a C++ sidecar.
@@ -110,8 +126,12 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   head pitch/yaw (29-30)
   ```
   - This matches the SDK2 C++ `H2JointIndex` the user confirmed, and it's what `bridge/h2diag/layout.py` uses.
-  - Unitree's Python `ankle_swing` example, and `examples/.../common.py` which copied it, have **waist and wrists scrambled**.
-  - `JOINT_ORDER_VERIFIED = False` until robot test T1.
+  - Unitree's Python `ankle_swing` example, and `examples/.../common.py` which copied it, have **waist and wrists scrambled**. Unitree's H2 joint table (with joint limits, now in `layout.JOINT_LIMITS`) agrees with `layout.py`.
+  - **T1 (2026-11-17) confirmed** 12/13/14 waist yaw/roll/pitch and 19/21, 26/28 wrist slots (details in `docs/field_map.md`).
+    - The waist was too stiff to move by hand, so it was checked from the relative rotation between the two IMUs: the **main IMU is in the pelvis, `secondary_imu` in the torso**.
+    - Slot 21/28 (Unitree name "wrist_yaw") is the hand bending toward the palm / back of the hand. We keep Unitree's names.
+    - Slots 20/27 haven't been seen moving yet, so `JOINT_ORDER_VERIFIED` stays `False` until they have.
+    - Waist yaw reached ±2.4 rad by hand, past the table's ±1.75 (probably a software limit).
 - **`LowState_` has 35 motor slots;** 31–34 are unused (zero).
 - **`mode_pr` describes the parallel-linkage joints** (ankles 4/5 and 10/11, waist 13/14: two motors via rods):
   - 0 = PR: slots hold pitch/roll joint angles. This is the default, and both recordings used it.
@@ -120,30 +140,34 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 - **Two motor families:** leg motors 0–3 and 6–9 have `mode` 10 and `vol` always 0, which is normal. The others have `mode` 1 and `vol` ≈ pack voltage.
 - **Battery:** 18 cells in mV that sum to `bmsvoltage[0]` (mV). `current` is probably mA, negative = discharge (unconfirmed).
 - **Hands (Dex5):**
-  - 20 motor slots, 16 active; 16–19 report `q` only
+  - 20 motor slots, four per finger (T2, 2026-11-17): index 0–3, middle 4–7, ring 8–11, pinky 12–15, **thumb 16–19**
+  - The thumb reports `q` only (no temperature or status), so `layout.HAND_ACTIVE_MOTORS = 16` currently leaves it out of the display and checks. Todo.
   - 16 pressure pads, 6 of 12 values used, raw values noisy around 0, so calibration is needed
   - Hand motors run warm: 42–66 °C at rest
 - **Temperatures:** the waist (especially waist_yaw) is consistently the hottest body joint (48–53 °C). Body IMU temperature is a constant 79 (meaning unknown).
 - **Not decodable:** `rt/sportmodestate` / `rt/lf/sportmodestate` (`unitree_hg::SportModeState_`) have no message definition in the SDK. They probably carry the robot's mode/gait; we'd need to write the definition by hand.
 - **No H2 URDF found locally yet.** Fallback for the 3D view: a capsule figure.
 
-## Status (2026-11-16) and next steps
+## Status (2026-11-17) and next steps
 
-- **Live preflight on the Thor works:**
-  - every topic at its exact expected rate
-  - battery 75%, 70.7 V, 6 mV spread
-  - waist_yaw 48 °C; hands 54/51 °C
-  - The false "half rate" startup warnings were a rate-window bug, fixed in `state.py` with `tests/test_rates.py`. **That fix may still need committing and pushing.**
+- **The reorganized bridge runs on the Thor:**
+  - 44 tests pass on aarch64
+  - every `bridge/MIGRATION.md` check passed
+  - `rates --set all_fast` without `rt/lowcmd`: max gap 5 ms (the 22 ms gaps came from decoding `rt/lowcmd`)
+- **T1 and T2 recorded** (`results/sessions/20261117_*_t1_joints` / `_t2_fingers.jsonl.gz`, copied to the workstation). Results are in `docs/field_map.md`.
+- **Bug: `live --record` drops messages.** The recorder saves the newest message per topic once per tick, and the screen redraw slows the tick. T1 kept 66% of `rt/lf/*` and 22% of hand messages. Fix: record every message when it arrives.
 - **Next:**
-  1. Re-run preflight on the Thor (expect PASS).
-  2. Robot tests from `docs/field_map.md`, using `h2diag record`:
-     - **T1 joint order** and **T2 finger mapping** first (both needed for the 3D model)
-     - then T5 pressure, T6 modes, T3 thermal (10 min rest/hold), T4 charging
-  3. Make `ReplaySource` read `.gz`.
-  4. Fix `common.py` joint labels.
-  5. Add the `mode_pr` PR/AB flag to the snapshot.
-  6. Find the H2 URDF.
-  7. Start the dashboard app.
+  1. Fix the recorder data loss (above).
+  2. Code follow-ups from T1/T2: finger names + thumb (slots 16–19) in `layout.py`; reconsider the waist_yaw limit.
+  3. Short robot session:
+     - see slots 20/27 move (bend the hand side to side, no forearm twist), then set `JOINT_ORDER_VERIFIED = True`
+     - record the right thumb
+     - type markers *before* each movement
+  4. Then T5 pressure, T6 modes (also watch `rt/arm/action/state`, `rt/rtc/state` as a mode source), T3 thermal, T4 charging.
+  5. Decide whether `rates` may read `rt/lowcmd` (the last open item in `bridge/MIGRATION.md`), then delete `examples/`.
+  6. Add the `mode_pr` PR/AB flag to the snapshot. (Health and the terminal view already respect it.)
+  7. Find the H2 URDF.
+  8. Start the dashboard app.
 - **Open question:** the user asked to "move a finger on the left hand in a fresh test". It's unresolved whether that means moving it by hand while recording (read-only; fine now) or commanding it from software (the first write to the robot, which needs the Movement-phase safety approach and research on the Dex5 command format). Ask before writing any command code.
 - **Safety for hand tests:** never force fingers against powered hand motors. Use an unpowered/damped mode or the remote/app gestures.
 

@@ -3,7 +3,7 @@ name = "h2-diagnostics"
 version = "0.1.0"
 description = "Read-only diagnostics bridge for the Unitree H2 EDU"
 requires-python = ">=3.10"
-dependencies = ["websockets>=13"]
+dependencies = ["websockets>=13", "rich>=13"]
 
 [project.optional-dependencies]
 # Needed for --live only. Installed separately on the Thor (see README):

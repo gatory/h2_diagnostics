@@ -1,6 +1,6 @@
 """Rate reporting, including the startup case that caused false warnings live."""
-from h2diag import health
-from h2diag.state import TopicStats
+from h2diag.data.stats import TopicStats
+from h2diag.processing import health
 
 
 def feed(stats, hz, until, start=0.0):

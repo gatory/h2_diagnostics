@@ -1,4 +1,4 @@
-"""WebSocket server: streams snapshots to the dashboard app, takes recorder commands.
+"""③ WebSocket server: streams snapshots to the dashboard app, takes recorder commands.
 
 Server -> app:   {"type": "snapshot", ...snapshot}      at send_hz
                  {"type": "ack", "cmd": ..., ...}        after each command
@@ -15,7 +15,7 @@ import time
 
 from websockets.asyncio.server import broadcast, serve
 
-from . import layout
+from .. import layout
 
 log = logging.getLogger("h2diag.server")
 
