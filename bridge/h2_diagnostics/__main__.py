@@ -1,22 +1,22 @@
 """h2diag command line. Only parses arguments and wires the layers together;
-the work happens in data/, processing/, output/ and views/.
+the work happens in sources/, processing/, output/ and views/.
 
 On the Thor (live, read-only):
-    python -m h2diag live      --iface eth10                # full-screen sensor view
-    python -m h2diag live      --iface eth10 --record t1    # ...and record it (note + Enter = marker)
-    python -m h2diag record    --live --name t1_waist       # record without the screen
-    python -m h2diag preflight --live --iface eth10         # 10 s check -> PASS / WARN / FAIL
-    python -m h2diag serve     --live --iface eth10         # WebSocket for the dashboard
-    python -m h2diag topics    --iface eth10                # discover every topic (rates, samples)
-    python -m h2diag rates     --iface eth10 --set bridge   # receive rates of a few topics
+    python -m h2_diagnostics live      --iface eth10                # full-screen sensor view
+    python -m h2_diagnostics live      --iface eth10 --record t1    # ...and record it (note + Enter = marker)
+    python -m h2_diagnostics record    --live --name t1_waist       # record without the screen
+    python -m h2_diagnostics preflight --live --iface eth10         # 10 s check -> PASS / WARN / FAIL
+    python -m h2_diagnostics serve     --live --iface eth10         # WebSocket for the dashboard
+    python -m h2_diagnostics topics    --iface eth10                # discover every topic (rates, samples)
+    python -m h2_diagnostics rates     --iface eth10 --set bridge   # receive rates of a few topics
 
 Anywhere (recordings):
-    python -m h2diag replay                                 # list recordings, newest first
-    python -m h2diag replay 1                               # play #1 (or give a path; .gz ok)
-    python -m h2diag preflight --replay FILE.jsonl
-    python -m h2diag serve     --replay FILE.jsonl
-    python -m h2diag snapshot  --replay FILE.jsonl          # print one snapshot as JSON
-    python -m h2diag topics    --show FILE.json             # show a saved topic discovery
+    python -m h2_diagnostics replay                                 # list recordings, newest first
+    python -m h2_diagnostics replay 1                               # play #1 (or give a path; .gz ok)
+    python -m h2_diagnostics preflight --replay FILE.jsonl
+    python -m h2_diagnostics serve     --replay FILE.jsonl
+    python -m h2_diagnostics snapshot  --replay FILE.jsonl          # print one snapshot as JSON
+    python -m h2_diagnostics topics    --show FILE.json             # show a saved topic discovery
 """
 import argparse
 import asyncio
@@ -29,11 +29,11 @@ from datetime import datetime
 from pathlib import Path
 
 from . import layout
-from .data.live import LiveSource
-from .data.probe import PROBE_TYPES, RATE_SETS
-from .data.replay import ReplaySource
+from .sources.live import LiveSource
+from .sources.probe import PROBE_TYPES, RATE_SETS
+from .sources.replay import ReplaySource
 from .output.recorder import Recorder
-from .processing.core import H2Diagnostics
+from .processing.pipeline import H2Diagnostics
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS = REPO_ROOT / "results"  # gitignored: recordings and discovery output stay local
@@ -204,7 +204,7 @@ def _record(source, args):
 def _view(args):
     from rich.console import Console
 
-    from .data.sessions import list_sessions
+    from .sources.sessions import list_sessions
     from .views import sensors
     from .views.tables import sessions_table
 
@@ -223,7 +223,7 @@ def _view(args):
                 console.print(f"no recordings found in {', '.join(map(str, dirs))}")
                 return 0
             console.print(sessions_table(sessions))
-            console.print("play one with:  python -m h2diag replay <#>")
+            console.print("play one with:  python -m h2_diagnostics replay <#>")
             return 0
         if args.recording.isdigit():
             k = int(args.recording)
@@ -257,7 +257,7 @@ def _topics(args):
                                    f"{meta.get('generated', '?')} via {meta.get('iface', '?')}"))
         return 0
 
-    from .data import dds, probe
+    from .sources import dds, probe
 
     console.print(f"[bold]H2 topic discovery[/] iface=[cyan]{args.iface}[/] "
                   f"domain={args.domain} (read-only)")
@@ -290,7 +290,7 @@ def _topics(args):
 def _rates(args):
     from rich.console import Console
 
-    from .data import dds, probe
+    from .sources import dds, probe
     from .views.tables import rates_table
 
     topics = args.topics or RATE_SETS[args.set]

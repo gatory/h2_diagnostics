@@ -54,7 +54,7 @@ Progression: **read → collect → dashboard → test suite → movement.**
 ROBOT (Thor)                                         WORKSTATION
 robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
   └─► h2diag bridge (read-only, Python)  Wi-Fi WS     TypeScript + Vite + three.js
-       LiveSource/ReplaySource → Bridge.tick()  ───►  + urdf-loader, own window)
+       LiveSource/ReplaySource → H2Diagnostics.tick()  ───►  + urdf-loader, own window)
        → snapshot + health warnings + Recorder  ◄───  recorder commands only
 ```
 
@@ -64,21 +64,22 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 
 **Repo layout (reorganized 2026-11-17):** `bridge/` runs on the Thor; `dashboard/` (not started, README only) runs on any computer and talks only to the bridge's WebSocket. `examples/` is being retired: `bridge/MIGRATION.md` is the checklist, delete it once the Thor checks pass.
 
-**Bridge layout** (`bridge/h2diag/`): four layers, one job per module. Dependencies point one way, `data ← processing ← output, views`, and `tests/test_layers.py` enforces it.
+**Bridge layout** (`bridge/h2_diagnostics/`, renamed from `h2diag/` 2026-11-17; the CLI command is still `h2diag`): layers built bottom-up, one job per module. Dependencies point one way, `layout ← sources ← processing ← output, views ← __main__`, and `tests/test_layers.py` enforces it. Classes for things that hold state over time; plain functions/constants otherwise.
 
 | Where | File | Job |
 |---|---|---|
-| root | `layout.py` | Robot facts: joint names + limits, `PR_LINKAGE_JOINTS`, topics, expected rates |
-| root | `__main__.py` | CLI only: parse args, wire layers |
-| ① `data/` (in) | `live.py` / `replay.py` | `LiveSource` (DDS) / `ReplaySource` (`.jsonl`, `.gz`), same interface |
+| ⓪ root | `layout.py` | Robot facts: joint names + limits, `PR_LINKAGE_JOINTS`, topics, expected rates. Imports nothing (tested). |
+| ⑤ root | `__main__.py` | CLI only: parse args, wire layers |
+| ① `sources/` (in) | `base.py` | `Source` ABC: `live`, `done`, `topics`, `stats`, `start()`, `now()`, `poll(dt)`, `close()` |
+| | `live.py` / `replay.py` | `LiveSource` (DDS) / `ReplaySource` (`.jsonl`, `.gz`), both subclass `Source` |
 | | `stats.py` | `TopicStats`: arrival counts, rate, age |
 | | `sessions.py` | List/inspect recordings (header + tail only) |
 | | `dds.py`, `convert.py` | DDS init + type registry; `to_dict`, `num` |
 | | `probe.py` | Topic discovery + rate probe (from the examples) |
 | ② `processing/` | `state.py` | `RobotState` → snapshot |
-| | `health.py` | Snapshot → warnings, with hysteresis. `LIMITS` are **provisional guesses.** |
+| | `health.py` | `HealthMonitor` (holds hysteresis memory) wrapping stateless `evaluate()`. `LIMITS` are **provisional guesses.** |
 | | `preflight.py` | Pass/warn/fail verdict (dict) |
-| | `core.py` | `Bridge.tick()` at 50 Hz |
+| | `pipeline.py` | `H2Diagnostics.tick()` at 50 Hz: source → state → health (+ recorder) |
 | ③ `output/` (out) | `server.py` | WebSocket on :8765 |
 | | `recorder.py` | Writes sessions (`.jsonl` + markers) |
 | ④ `views/` | `sensors.py` | `live` / `replay` full-screen view (rich) |
@@ -92,18 +93,18 @@ DDS callbacks only store the newest message and count it; all decoding happens o
 
 ```bash
 # Thor
-python -m h2diag preflight --live --iface eth10
-python -m h2diag record    --live --name t1_joints    # type note + Enter = marker; Ctrl-C stops
-python -m h2diag serve     --live --iface eth10       # ws://172.16.68.113:8765
-python -m h2diag live      --iface eth10              # full-screen sensor view, red LIVE banner; Δ° column for T1/T2 (Enter resets)
-python -m h2diag live      --iface eth10 --record t1  # view + record; note + Enter = marker
-python -m h2diag topics    --iface eth10              # discover all topics -> results/discovery/
-python -m h2diag rates     --iface eth10 --set bridge # rates + gaps (bridge | lowstate | all_fast)
+python -m h2_diagnostics preflight --live --iface eth10
+python -m h2_diagnostics record    --live --name t1_joints    # type note + Enter = marker; Ctrl-C stops
+python -m h2_diagnostics serve     --live --iface eth10       # ws://172.16.68.113:8765
+python -m h2_diagnostics live      --iface eth10              # full-screen sensor view, red LIVE banner; Δ° column for T1/T2 (Enter resets)
+python -m h2_diagnostics live      --iface eth10 --record t1  # view + record; note + Enter = marker
+python -m h2_diagnostics topics    --iface eth10              # discover all topics -> results/discovery/
+python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (bridge | lowstate | all_fast)
 # Anywhere
-python -m h2diag replay                              # list recordings (results/sessions + bridge/tests/data), newest first
-python -m h2diag replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
-python -m h2diag preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 44 tests
+python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
+python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
+python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
+cd bridge && python -m pytest                          # 48 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -125,7 +126,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   R same (22-28)
   head pitch/yaw (29-30)
   ```
-  - This matches the SDK2 C++ `H2JointIndex` the user confirmed, and it's what `bridge/h2diag/layout.py` uses.
+  - This matches the SDK2 C++ `H2JointIndex` the user confirmed, and it's what `bridge/h2_diagnostics/layout.py` uses.
   - Unitree's Python `ankle_swing` example, and `examples/.../common.py` which copied it, have **waist and wrists scrambled**. Unitree's H2 joint table (with joint limits, now in `layout.JOINT_LIMITS`) agrees with `layout.py`.
   - **T1 (2026-11-17) confirmed** 12/13/14 waist yaw/roll/pitch and 19/21, 26/28 wrist slots (details in `docs/field_map.md`).
     - The waist was too stiff to move by hand, so it was checked from the relative rotation between the two IMUs: the **main IMU is in the pelvis, `secondary_imu` in the torso**.
@@ -174,6 +175,6 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 ## Conventions
 
 - Python: `_name` = internal helper; trailing `_` in `LowState_` etc. is Unitree's generated-code naming; `_raw` = unconfirmed field.
-- Run the bridge with `python -m h2diag` (relative imports need package context), or the `h2diag` script.
+- Run the bridge with `python -m h2_diagnostics` (relative imports need package context), or the shorter `h2diag` script (same thing).
 - Keep CMake/Python portable across x86_64 and aarch64; no machine-specific paths in code.
 - The old `basic.md` brief (FastAPI/TimescaleDB/Next.js/Docker) and the old `PLAN.md` from 2026-11-12 were dropped. Don't revive them.

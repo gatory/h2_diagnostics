@@ -36,7 +36,7 @@ def _decoded_label(r):
 
 
 def topics_table(results, title):
-    """Discovered topics (data/probe.py summarize_discovery) as a rich table."""
+    """Discovered topics (sources/probe.py summarize_discovery) as a rich table."""
     t = Table(title=title, box=box.SIMPLE_HEAD)
     t.add_column("topic", no_wrap=True)  # the one column that must stay readable
     t.add_column("type", overflow="fold")  # long ROS type names wrap instead
@@ -60,7 +60,7 @@ def topics_text(results):
 
 
 def rates_table(rows, total, title):
-    """Rate probe result (data/probe.py summarize_rates)."""
+    """Rate probe result (sources/probe.py summarize_rates)."""
     t = Table(title=title, box=box.SIMPLE_HEAD)
     for col in ("topic", "Hz", "mean gap ms", "max gap ms"):
         t.add_column(col, justify="left" if col == "topic" else "right")

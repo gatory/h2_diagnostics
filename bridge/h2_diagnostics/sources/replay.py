@@ -6,10 +6,11 @@ time has come, counting every record on the way (same behavior as LiveSource).
 import gzip
 import json
 
+from .base import Source
 from .stats import TopicStats
 
 
-class ReplaySource:
+class ReplaySource(Source):
     """Plays back a .jsonl or .jsonl.gz recording (from stream_sensors.py or h2diag's recorder)."""
 
     live = False
@@ -47,9 +48,6 @@ class ReplaySource:
         self.loops = 0  # completed passes through the file
         self.done = False
 
-    def start(self):
-        return self
-
     def now(self):
         return self._clock
 
@@ -77,6 +75,3 @@ class ReplaySource:
             out[rec["topic"]] = rec["data"]
             self._i += 1
         return list(out.items())
-
-    def close(self):
-        pass

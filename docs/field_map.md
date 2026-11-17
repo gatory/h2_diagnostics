@@ -147,7 +147,7 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 Run these on the gantry, robot powered, in damping or zero-torque mode so the joints can be moved by hand. Record each one with:
 
 ```
-python -m h2diag live --iface eth10 --record t1_waist   # type a note + Enter at each action
+python -m h2_diagnostics live --iface eth10 --record t1_waist   # type a note + Enter at each action
 ```
 
 Drop a marker at each action (type what you did + Enter); markers are saved in the recording.

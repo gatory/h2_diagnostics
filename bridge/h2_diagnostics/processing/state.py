@@ -3,7 +3,7 @@
 Keeps the newest message per role; decoding happens only when a snapshot is built.
 """
 from .. import layout
-from ..data.convert import num
+from ..sources.convert import num
 
 
 class RobotState:

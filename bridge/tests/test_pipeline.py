@@ -5,13 +5,13 @@ from pathlib import Path
 
 from websockets.asyncio.client import connect
 
-from h2diag import layout
-from h2diag.data.replay import ReplaySource
-from h2diag.output import server
-from h2diag.output.recorder import Recorder
-from h2diag.processing.core import H2Diagnostics
+from h2_diagnostics import layout
+from h2_diagnostics.sources.replay import ReplaySource
+from h2_diagnostics.output import server
+from h2_diagnostics.output.recorder import Recorder
+from h2_diagnostics.processing.pipeline import H2Diagnostics
 
-PKG = Path(__file__).resolve().parents[1] / "h2diag"
+PKG = Path(__file__).resolve().parents[1] / "h2_diagnostics"
 
 
 def test_snapshot_shape(recording):

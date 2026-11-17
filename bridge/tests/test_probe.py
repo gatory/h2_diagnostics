@@ -4,9 +4,9 @@ The DDS calls themselves only run on the Thor (see bridge/MIGRATION.md).
 """
 import json
 
-from h2diag.__main__ import main
-from h2diag.data.probe import PROBE_TYPES, RATE_SETS, summarize_discovery, summarize_rates
-from h2diag.views.tables import topics_text
+from h2_diagnostics.__main__ import main
+from h2_diagnostics.sources.probe import PROBE_TYPES, RATE_SETS, summarize_discovery, summarize_rates
+from h2_diagnostics.views.tables import topics_text
 
 from conftest import DATA, TOPICS
 

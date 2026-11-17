@@ -9,10 +9,11 @@ import time
 
 from .. import layout
 from .convert import to_dict
+from .base import Source
 from .stats import TopicStats
 
 
-class LiveSource:
+class LiveSource(Source):
     live = True
     done = False
 

@@ -11,14 +11,14 @@ dependencies = ["websockets>=13", "rich>=13"]
 test = ["pytest>=7"]
 
 [project.scripts]
-h2diag = "h2diag.__main__:main"
+h2diag = "h2_diagnostics.__main__:main"
 
 [build-system]
 requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-include = ["h2diag*"]
+include = ["h2_diagnostics*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

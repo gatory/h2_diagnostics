@@ -1,4 +1,4 @@
-"""③ Session recorder: writes recordings to disk (data/sessions.py reads them back).
+"""③ Session recorder: writes recordings to disk (sources/sessions.py reads them back).
 
 Same .jsonl format stream_sensors.py used, so ReplaySource plays old and new alike:
 

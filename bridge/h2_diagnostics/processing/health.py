@@ -81,11 +81,24 @@ class _Ctx:
             _w(self.out, lvl, wid, subsystem, msg)
 
 
+class HealthMonitor:
+    """Snapshot -> warnings, tick after tick. Remembers last tick's levels so
+    warnings don't flicker at a threshold (hysteresis). One per pipeline."""
+
+    def __init__(self):
+        self._levels = {}  # warning id -> level on the last tick
+
+    def evaluate(self, snap, live):
+        warnings = evaluate(snap, live, prev=self._levels)
+        self._levels = {w["id"]: w["level"] for w in warnings}
+        return warnings
+
+
 def evaluate(snap, live, prev=None):
-    """Snapshot -> list of warnings, most severe first.
+    """Snapshot -> list of warnings, most severe first. Stateless.
 
     `prev` maps warning id -> level from the previous call; pass it to get
-    hysteresis (Bridge does). Without it every call is judged from scratch.
+    hysteresis (HealthMonitor does). Without it every call is judged from scratch.
     """
     ctx = _Ctx(prev)
     out = ctx.out

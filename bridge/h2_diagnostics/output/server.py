@@ -17,7 +17,7 @@ from websockets.asyncio.server import broadcast, serve
 
 from .. import layout
 
-log = logging.getLogger("h2diag.server")
+log = logging.getLogger("h2_diagnostics.server")
 
 
 def _handle_command(bridge, msg):

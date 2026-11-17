@@ -1,11 +1,11 @@
-"""Unit tests for health rules: call evaluate() directly, no replay timing involved."""
+"""Unit tests for health rules: call evaluate() / HealthMonitor directly, no replay timing involved."""
 import copy
 
 import pytest
 
-from h2diag.data.replay import ReplaySource
-from h2diag.processing import health
-from h2diag.processing.core import H2Diagnostics
+from h2_diagnostics.sources.replay import ReplaySource
+from h2_diagnostics.processing import health
+from h2_diagnostics.processing.pipeline import H2Diagnostics
 
 
 @pytest.fixture
@@ -32,6 +32,15 @@ def test_hysteresis_holds_warning_until_value_clears_margin(snap):
     assert levels(with_temp(snap, 12, 69), prev=lv)["temp:waist_yaw"] == "warn"  # held
     assert "temp:waist_yaw" not in levels(with_temp(snap, 12, 69))  # no memory: off
     assert "temp:waist_yaw" not in levels(with_temp(snap, 12, 66), prev=lv)  # cleared
+
+
+def test_health_monitor_remembers_between_ticks(snap):
+    # Same as above, but the HealthMonitor object carries `prev` for us.
+    monitor = health.HealthMonitor()
+    ids = lambda s: {w["id"]: w["level"] for w in monitor.evaluate(s, live=False)}
+    assert ids(with_temp(snap, 12, 71))["temp:waist_yaw"] == "warn"
+    assert ids(with_temp(snap, 12, 69))["temp:waist_yaw"] == "warn"  # held by memory
+    assert "temp:waist_yaw" not in ids(with_temp(snap, 12, 66))  # cleared
 
 
 def test_hysteresis_steps_error_down_to_warn(snap):

@@ -20,9 +20,9 @@ from rich.table import Table
 from rich.text import Text
 
 from .. import layout
-from ..data.sessions import recording_start
+from ..sources.sessions import recording_start
 from ..processing import health
-from ..processing.core import H2Diagnostics
+from ..processing.pipeline import H2Diagnostics
 from .tables import summary_table
 
 MOVED_DEG = 3.0  # Δ column lights up once a joint moved more than this since baseline

@@ -3,7 +3,7 @@
 Returns a report dict; views/report.py turns it into text."""
 import time
 
-from .core import H2Diagnostics
+from .pipeline import H2Diagnostics
 
 WARMUP_S = 1.0  # ignore the first second while subscriptions connect
 LEVELS = {"info": 0, "warn": 1, "error": 2}
