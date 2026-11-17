@@ -82,3 +82,23 @@ def test_hand_error_and_hot_motor(scenario):
 def test_leg_motor_zero_voltage_is_normal(recording):
     # Leg motors 0-3, 6-9 always report vol 0; they must not raise voltage warnings.
     assert not any(i.startswith("vol:") for i in ids(run(recording)))
+
+
+def test_joint_past_limit_and_near_limit(scenario):
+    def f(rec):
+        rec["data"]["motor_state"][3]["q"] = -0.2  # L_knee: 0.11 rad past its -0.087 limit
+        rec["data"]["motor_state"][25]["q"] = 3.05  # R_elbow: 0.02 rad inside its 3.07 limit
+    found = ids(run(scenario("limits", on_topic("rt/lowstate", f))))
+    assert found["limit:L_knee"] == "error"
+    assert found["limit:R_elbow"] == "warn"
+
+
+def test_linkage_joints_skipped_in_ab_mode(scenario):
+    # mode_pr 1 = AB: ankle/waist slots hold raw motor positions, not angles.
+    def f(rec):
+        rec["data"]["mode_pr"] = 1
+        rec["data"]["motor_state"][5]["q"] = 1.5  # L_ankle_pitch: way out as an angle
+        rec["data"]["motor_state"][3]["q"] = -0.2  # L_knee is not a linkage joint
+    found = ids(run(scenario("ab_mode", on_topic("rt/lowstate", f))))
+    assert "limit:L_ankle_pitch" not in found
+    assert found["limit:L_knee"] == "error"

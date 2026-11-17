@@ -5,6 +5,10 @@
     python -m h2diag preflight --live --iface eth10
     python -m h2diag preflight --replay FILE.jsonl
     python -m h2diag snapshot  --replay FILE.jsonl          # print one snapshot as JSON
+
+    python -m h2diag live      --iface eth10                # full-screen sensor view (LIVE)
+    python -m h2diag replay                                 # list recordings, newest first
+    python -m h2diag replay 1                               # replay #1 from that list (or a path)
     python -m h2diag record    --live --name t1_waist       # record; type a note + Enter = marker
 """
 import argparse
@@ -20,6 +24,8 @@ from .sources import LiveSource, ReplaySource
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SESSIONS = REPO_ROOT / "results" / "sessions"  # results/ is gitignored
+# Older recordings from stream_sensors.py. Drop this when examples/ is removed.
+EXAMPLE_RECORDINGS = REPO_ROOT / "examples" / "sensor_reading_example" / "output"
 
 
 def _source(args):
@@ -53,8 +59,27 @@ def main(argv=None):
             p.add_argument("--notes", default="")
             p.add_argument("--seconds", type=float, default=0, help="stop after N s (0 = Ctrl-C)")
             p.add_argument("--sessions-dir", default=str(DEFAULT_SESSIONS))
+
+    # Terminal viewers: their own arguments, so they're set up separately.
+    p = sub.add_parser("live", help="full-screen sensor view of the robot (read-only)")
+    p.add_argument("--iface", default="eth10", help="DDS network interface")
+    p.add_argument("--domain", type=int, default=0)
+    p = sub.add_parser("replay", help="list recordings, or play one in the sensor view")
+    p.add_argument("recording", nargs="?",
+                   help="number from the list, or a .jsonl / .jsonl.gz path; omit to list")
+    p.add_argument("--speed", type=float, default=1.0, help="playback speed factor")
+    p.add_argument("--no-loop", dest="loop", action="store_false",
+                   help="stop at the end instead of looping")
+    p.add_argument("--dir", action="append", metavar="DIR",
+                   help="where to look for recordings (repeatable; default: results/sessions"
+                        " and the examples output folder)")
+
     args = ap.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s: %(message)s")
+
+    if args.cmd in ("live", "replay"):
+        logging.getLogger().setLevel(logging.WARNING)  # log lines would tear the screen
+        return _view(args)
 
     source = _source(args)
     try:
@@ -136,6 +161,49 @@ def _record(source, args):
     rec.stop()
     print(f"saved {path}")
     return 0
+
+
+def _view(args):
+    from . import view
+    from .recorder import list_sessions
+
+    if args.cmd == "live":
+        source = LiveSource(args.iface, args.domain).start()
+    else:
+        sessions = list_sessions(args.dir or [DEFAULT_SESSIONS, EXAMPLE_RECORDINGS])
+        if args.recording is None:
+            _print_sessions(sessions)
+            return 0
+        if args.recording.isdigit():
+            k = int(args.recording)
+            if not 1 <= k <= len(sessions):
+                print(f"no recording #{k}; run `h2diag replay` to see the list")
+                return 1
+            path = sessions[k - 1]["path"]
+        else:
+            path = Path(args.recording)
+        try:
+            source = ReplaySource(path, speed=args.speed, loop=args.loop)
+        except ValueError as e:  # e.g. a recording with a header but no data
+            print(f"can't replay: {e}")
+            return 1
+    try:
+        return view.run(source)
+    finally:
+        source.close()
+
+
+def _print_sessions(sessions):
+    if not sessions:
+        print(f"no recordings found (looked in {DEFAULT_SESSIONS} and {EXAMPLE_RECORDINGS})")
+        return
+    print(f"{'#':>3}  {'recorded':22} {'duration':>9} {'size':>8}  name / file")
+    for k, s in enumerate(sessions, 1):
+        when = f"{s['start']:%a %Y-%m-%d %H:%M}" if s["start"] else "?"
+        dur = "empty" if s["empty"] else "?" if s["duration_s"] is None else f"{s['duration_s']} s"
+        label = f"“{s['name']}”  {s['path'].name}" if s["name"] else s["path"].name
+        print(f"{k:3}  {when:22} {dur:>9} {s['size_mb']:>5} MB  {label}")
+    print("\nplay one with:  python -m h2diag replay <#>")
 
 
 async def _serve(bridge, args):

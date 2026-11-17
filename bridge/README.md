@@ -37,11 +37,14 @@ python3 -m venv .venv && .venv/bin/pip install -e "bridge[test]"
 python -m h2diag preflight --live --iface eth10        # 10 s check -> PASS / WARN / FAIL (exit 0/1/2)
 python -m h2diag serve     --live --iface eth10        # WebSocket on 0.0.0.0:8765
 python -m h2diag snapshot  --live --iface eth10        # print one snapshot as JSON
+python -m h2diag live      --iface eth10               # full-screen sensor view (red LIVE banner)
 
 # Replay, anywhere
 REC=examples/sensor_reading_example/output/sensors_20261112_150110.jsonl
 python -m h2diag preflight --replay $REC
 python -m h2diag serve     --replay $REC               # loops; --speed 2 for double speed
+python -m h2diag replay                                # list recordings, newest first
+python -m h2diag replay 1                              # play #1 (blue REPLAY banner, recording date/time)
 
 # Tests
 cd bridge && python -m pytest

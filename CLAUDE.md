@@ -74,6 +74,7 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 | `core.py` | `Bridge.tick()` at 50 Hz |
 | `server.py` | WebSocket on :8765 |
 | `preflight.py` | Pass/warn/fail report |
+| `view.py` | Terminal sensor view for `live` / `replay` (rich); replaces `examples/stream_sensors.py` |
 | `__main__.py` | CLI |
 
 DDS callbacks only store the newest message and count it; all decoding happens on the main tick, because Python decode throughput is the bottleneck.
@@ -85,9 +86,12 @@ DDS callbacks only store the newest message and count it; all decoding happens o
 python -m h2diag preflight --live --iface eth10
 python -m h2diag record    --live --name t1_joints    # type note + Enter = marker; Ctrl-C stops
 python -m h2diag serve     --live --iface eth10       # ws://172.16.68.113:8765
+python -m h2diag live      --iface eth10              # full-screen sensor view, red LIVE banner; Δ° column for T1/T2 (Enter resets)
+python -m h2diag replay                              # list recordings (results/sessions + examples output), newest first
+python -m h2diag replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 # Anywhere
 python -m h2diag preflight --replay examples/sensor_reading_example/output/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 19 tests
+cd bridge && python -m pytest                          # 35 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -139,7 +143,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   2. Robot tests from `docs/field_map.md`, using `h2diag record`:
      - **T1 joint order** and **T2 finger mapping** first (both needed for the 3D model)
      - then T5 pressure, T6 modes, T3 thermal (10 min rest/hold), T4 charging
-  3. Make `ReplaySource` read `.gz`.
+  3. ~~Make `ReplaySource` read `.gz`.~~ Done.
   4. Fix `common.py` joint labels.
   5. Add the `mode_pr` PR/AB flag to the snapshot.
   6. Find the H2 URDF.

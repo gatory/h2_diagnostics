@@ -10,6 +10,7 @@
 READ-ONLY: LiveSource only ever creates subscribers. tests/test_read_only.py checks it.
 """
 import dataclasses
+import gzip
 import json
 import math
 import threading
@@ -87,7 +88,7 @@ class LiveSource:
 
 
 class ReplaySource:
-    """Plays back a .jsonl recording (from stream_sensors.py or h2diag's recorder)."""
+    """Plays back a .jsonl or .jsonl.gz recording (from stream_sensors.py or h2diag's recorder)."""
 
     live = False
 
@@ -98,7 +99,8 @@ class ReplaySource:
         self.meta = {}
         self.records = []
         self.markers = []
-        with open(path) as f:
+        opener = gzip.open if self.path.endswith(".gz") else open
+        with opener(path, "rt") as f:
             for line in f:
                 line = line.strip()
                 if not line:
@@ -120,6 +122,7 @@ class ReplaySource:
         self._clock = 0.0  # virtual seconds since start, monotonic across loops
         self._offset = 0.0  # added to record times on each loop
         self._i = 0
+        self.loops = 0  # completed passes through the file
         self.done = False
 
     def start(self):
@@ -127,6 +130,11 @@ class ReplaySource:
 
     def now(self):
         return self._clock
+
+    @property
+    def position(self):
+        """Seconds into the recording for the current pass (0 .. duration)."""
+        return max(0.0, min(self._clock - self._offset, self.duration))
 
     def poll(self, dt):
         self._clock += dt * self.speed
@@ -138,6 +146,7 @@ class ReplaySource:
                     break
                 self._offset += self.duration + 0.02
                 self._i = 0
+                self.loops += 1
             rec = self.records[self._i]
             t = rec["t"] - self.t0 + self._offset
             if t > self._clock:
