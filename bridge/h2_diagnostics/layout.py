@@ -47,35 +47,39 @@ JOINTS = [
     ("head_yaw",         -1.7453,         1.7453),         # 30
 ]
 
-# Derived views, so the rest of the code keeps working unchanged.
 BODY_JOINTS = [name for name, lo, hi in JOINTS]
 JOINT_LIMITS = [(lo, hi) for name, lo, hi in JOINTS]
 NUM_BODY = len(JOINTS)  # 31; LowState_ has 35 slots, 31..34 are unused
 
+# TODO: check this yourself later
 # Parallel-linkage joints (two motors via rods). With mode_pr == 1 ("AB") their
 # slots hold raw motor A/B positions, not joint angles, so angle limits don't apply.
 PR_LINKAGE_JOINTS = frozenset({4, 5, 10, 11, 13, 14})
 
+# TODO: check this yourself later
 # Leg motors that report mode 10 and always vol == 0 (a different motor family).
 NO_VOLTAGE_MOTORS = frozenset({0, 1, 2, 3, 6, 7, 8, 9})
 
+# TODO: check this yourself later
 HAND_ACTIVE_MOTORS = 16  # Dex5: slots 0..15 active, 16..19 report q only
 HAND_PRESSURE_CELLS = 6  # of the 12 per pad, only the first 6 carry data
 BMS_CELLS = 18
 
-# Role -> topics that can fill it, in preference order. Live mode subscribes to
-# the first one; replay accepts any (older recordings used the 1 kHz topics).
+# Role -> topics that can fill it, in preference order. 
+# Live mode subscribes to the first one; 
+# Replay accepts any (older recordings used the 1 kHz topics).
 ROLES = {
     "body": ("rt/lf/lowstate", "rt/lowstate"),
-    "imu2": ("rt/lf/secondary_imu", "rt/secondary_imu"),
+    "torso_imu": ("rt/lf/secondary_imu", "rt/secondary_imu"),  # pelvis IMU rides in "body" (lowstate topic)
     "battery": ("rt/lf/bmsstate",),
     "mainboard": ("rt/lf/mainboardstate",),
     "hand_left": ("rt/dex5/left/state",),
     "hand_right": ("rt/dex5/right/state",),
 }
+# Topic -> role
 TOPIC_ROLE = {t: role for role, topics in ROLES.items() for t in topics}
 
-# Live subscriptions: topic -> (unitree_hg type name, expected Hz measured on the Thor)
+# Live Subscription Topics -> (unitree_hg type name, expected Hz measured on the Thor)
 LIVE_TOPICS = {
     "rt/lf/lowstate": ("LowState_", 20.0),
     "rt/lf/secondary_imu": ("IMUState_", 20.0),

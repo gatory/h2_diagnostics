@@ -38,13 +38,6 @@ HYSTERESIS = {
     "joint_margin": 0.02,  # rad
 }
 
-SECTIONS = {
-    "body": "rt/lf/lowstate",
-    "imu2": "rt/lf/secondary_imu",
-    "battery": "rt/lf/bmsstate",
-    "mainboard": "rt/lf/mainboardstate",
-}
-
 
 def _w(out, level, wid, subsystem, msg):
     out.append({"id": wid, "level": level, "subsystem": subsystem, "msg": msg})
@@ -107,6 +100,7 @@ def evaluate(snap, live, prev=None):
     body = snap.get("body")
     if body:
         _body(body, battery, ctx)
+    _imus(snap.get("imu") or {}, out)
     if battery:
         _battery(battery, ctx)
     if snap.get("mainboard"):
@@ -122,9 +116,12 @@ def evaluate(snap, live, prev=None):
 
 
 def _topics(snap, live, out):
-    for section in ("body", "imu2", "battery", "mainboard"):
+    for section in ("body", "battery", "mainboard"):
         if snap.get(section) is None:
             _w(out, "error", f"missing:{section}", "comms", f"No {section} data received")
+    # Pelvis IMU comes with "body", so missing:body already covers it.
+    if (snap.get("imu") or {}).get("torso") is None:
+        _w(out, "error", "missing:torso_imu", "comms", "No torso IMU data received")
     for side in ("left", "right"):
         if (snap.get("hands") or {}).get(side) is None:
             _w(out, "error", f"missing:hand_{side}", "comms", f"No {side} hand data received")
@@ -164,12 +161,17 @@ def _body(body, battery, ctx):
                f"{name} supply {j['vol']:.1f} V vs pack {pack_v:.1f} V")
     if body["spare_slots_active"]:
         _w(out, "info", "spare_slots", "joints", "Unused motor slots 31-34 carry data")
-    imu = body["imu"]
+
+
+def _imus(imus, out):
+    # Gravity sanity check on the pelvis IMU only (the one confirmed ✅ in the field
+    # map). The torso IMU could get the same check once its accel is confirmed.
+    imu = imus.get("pelvis")
     if imu and None not in imu["accel"] and None not in imu["gyro"]:
         g = math.sqrt(sum(a * a for a in imu["accel"]))
         still = max(abs(x) for x in imu["gyro"]) < LIMITS["still_gyro"]
         if still and abs(g - 9.81) > LIMITS["gravity_tol"]:
-            _w(out, "warn", "imu_gravity", "sensors", f"Main IMU reads {g:.2f} m/s² at rest")
+            _w(out, "warn", "imu_gravity", "sensors", f"Pelvis IMU reads {g:.2f} m/s² at rest")
 
 
 def _battery(b, ctx):

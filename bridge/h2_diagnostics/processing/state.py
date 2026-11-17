@@ -20,13 +20,19 @@ class RobotState:
 
     def snapshot(self, now, wall_time, source):
         get = lambda role: self.latest.get(role, (None, None))[1]
+        body = get("body")
         return {
             "t": round(wall_time, 3),
             "source": source,
             "joint_order_verified": layout.JOINT_ORDER_VERIFIED,
             "topics": {t: s.report(now) for t, s in self.stats.items()},
-            "body": _body(get("body")),
-            "imu2": _imu(get("imu2")),
+            "body": _body(body),
+            # Both IMUs side by side, like the hands. The pelvis one arrives inside
+            # LowState_ (rt/lf/lowstate), the torso one on its own topic (T1).
+            "imu": {
+                "pelvis": _imu(body["imu_state"]) if body else None,
+                "torso": _imu(get("torso_imu")),
+            },
             "battery": _battery(get("battery")),
             "mainboard": _mainboard(get("mainboard")),
             "hands": {"left": _hand(get("hand_left")), "right": _hand(get("hand_right"))},
@@ -69,7 +75,6 @@ def _body(d):
     spare = motors[layout.NUM_BODY:]
     return {
         "joints": joints,
-        "imu": _imu(d["imu_state"]),
         "mode_machine": d.get("mode_machine"),
         "mode_pr": d.get("mode_pr"),
         "tick": d.get("tick"),

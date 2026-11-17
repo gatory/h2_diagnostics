@@ -19,6 +19,9 @@ def test_snapshot_shape(recording):
     assert len(snap["body"]["joints"]) == layout.NUM_BODY == 31
     assert snap["body"]["spare_slots_active"] is False
     assert len(snap["battery"]["cells"]) == 18
+    assert set(snap["imu"]) == {"pelvis", "torso"} and "imu" not in snap["body"]
+    for where in ("pelvis", "torso"):
+        assert len(snap["imu"][where]["quat"]) == 4
     for side in ("left", "right"):
         hand = snap["hands"][side]
         assert len(hand["motors"]) == 20

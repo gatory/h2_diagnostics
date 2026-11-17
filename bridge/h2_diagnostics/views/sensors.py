@@ -246,11 +246,12 @@ def _warnings_panel(warnings):
 def render(snap, base, info):
     """Snapshot + baseline + source info -> one screen. Pure: no clock, no terminal."""
     body = snap.get("body")
+    imus = snap.get("imu") or {}
     parts = [_banner(info)]
     top = Table.grid(padding=(0, 2))
     top.add_row(_topic_table(snap),
-                _imu_panel("body IMU (pelvis)", body["imu"] if body else None),
-                _imu_panel("secondary IMU", snap.get("imu2")))
+                _imu_panel("pelvis IMU", imus.get("pelvis")),
+                _imu_panel("torso IMU", imus.get("torso")))
     parts.append(top)
     if body:
         mode = {0: "PR", 1: "AB  (* = raw motor position, not an angle)"}.get(body["mode_pr"], "?")
