@@ -1,5 +1,5 @@
 [project]
-name = "h2diag"
+name = "h2-diagnostics"
 version = "0.1.0"
 description = "Read-only diagnostics bridge for the Unitree H2 EDU"
 requires-python = ">=3.10"

@@ -37,13 +37,15 @@ Progression: **read → collect → dashboard → test suite → movement.**
 
 ## Machines and workflow
 
-- **Code is written on WSL2** (Ubuntu 22.04, x86_64, Python 3.10) at `/home/gatory/dev/unitree/h2_diagnostics`. WSL can't reach the robot, so local runs are compile/replay checks only. **Never claim robot behavior was verified from WSL.**
+- **Code is written on the workstation** (since 2026-11-16; previously WSL2): native Ubuntu 22.04, x86_64, Python 3.10, at `/home/pdol/dev/unitree/h2_diagnostics`, uv venv at `.venv`.
+  - Wired on the lab network: `enp0s31f6` = `172.16.66.95/21`, the same /21 as the Thor's `172.16.68.113`.
+  - It is **not** on the robot's DDS network (192.168.123.x), so local runs are replay/test checks, plus WebSocket clients of a bridge running on the Thor. **Never claim robot behavior was verified unless it came from the Thor's output.**
 - **The user commits and pushes,** then runs `git pull` on the **Thor** (aarch64) at `~/dev/h2_diagnostics` and pastes the output back.
 - **Thor network:** `eth10` has `192.168.123.163` (the robot's internal DDS network) **and** `172.16.68.113/21` (the lab network, reachable from the workstation; ping confirmed). The Thor has no Wi-Fi interface itself.
 - **Thor Python:** a uv venv at `~/dev/h2_diagnostics/.venv` (`source .venv/bin/activate` in each SSH session).
   - `unitree_sdk2_python` is at `~/dev/unitree_sdk2_python`
   - CycloneDDS is at `~/cyclonedds/install`, installed with `CYCLONEDDS_HOME=~/cyclonedds/install uv pip install -e ~/dev/unitree_sdk2_python`
-- **Local SDK clones** on WSL for reference: `~/dev/unitree/{unitree_sdk2,unitree_sdk2_python,unitree_ros2}`.
+- **Local SDK clones** on the workstation for reference: `~/dev/unitree/{unitree_sdk2,unitree_sdk2_python,unitree_ros2}`.
 - **We use `unitree_sdk2_python`, not `unitree_ros2`.** Both read the same DDS topics, and ROS 2 adds setup without adding data. Its H2 message set is identical to the SDK's. The C++ `unitree_sdk2` is reserved for a possible 1 kHz helper.
 
 ## Architecture
@@ -86,7 +88,7 @@ python -m h2diag serve     --live --iface eth10       # ws://172.16.68.113:8765
 # Anywhere
 python -m h2diag preflight --replay examples/sensor_reading_example/output/sensors_20261112_150110.jsonl
 cd bridge && python -m pytest                          # 19 tests
-# WSL setup: python3 -m venv .venv && .venv/bin/pip install -e "bridge[test]"
+# Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
 Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gzip them before copying with scp.
