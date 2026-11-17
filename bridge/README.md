@@ -103,8 +103,8 @@ cd bridge && python -m pytest
 
 **Snapshot fields:**
 - `topics`: rate and age of each topic
-- `body`: 31 joints, IMU, modes
-- `imu2`
+- `body`: 31 joints, modes
+- `imu.pelvis`, `imu.torso`: the two IMUs (pelvis arrives inside `rt/lf/lowstate`, torso on `rt/lf/secondary_imu`)
 - `battery`
 - `mainboard`
 - `hands.left`, `hands.right`: 20 motors (16 active), 16 pads × 6 pressure values
@@ -115,7 +115,7 @@ Fields whose meaning isn't confirmed end in `_raw`; see `docs/field_map.md`.
 
 ## Known limits
 
-- **Joint names for slots 12–14 and the wrists are unverified** (`joint_order_verified: false`) until field-map test T1.
+- **Joint order isn't fully verified** (`joint_order_verified: false`): T1 confirmed the waist (12–14) and wrist slots 19/21 and 26/28, but slots 20/27 haven't been seen moving yet.
 - **Health thresholds in `processing/health.py` are provisional guesses.**
 - **Recording stores the newest message per topic at each 50 Hz tick**, so the 100 Hz hand data is kept at 50 Hz.
 - **Replay rates show the recording's rate**, not the robot's. Rate warnings only run live.

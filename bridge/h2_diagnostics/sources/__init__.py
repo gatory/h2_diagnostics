@@ -1,4 +1,4 @@
-"""① SOURCES: getting messages from the robot (DDS) or from recordings on disk.
+"""1. SOURCES: getting messages from the robot (DDS) or from recordings on disk.
 
 Nothing here interprets messages; that's processing/. Lower layer: must not
 import processing/, output/ or views/ (tests/test_layers.py checks).
