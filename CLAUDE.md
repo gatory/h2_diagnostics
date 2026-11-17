@@ -22,7 +22,7 @@ Progression: **read → collect → dashboard → test suite → movement.**
 
 | Phase | Dates | State |
 |---|---|---|
-| Read | Nov 16–22 | mostly done; robot tests T1–T7 pending |
+| Read | Nov 16–22 | mostly done; T1 mostly done, T2 done (2026-11-17); T3–T7 pending |
 | Collect | Nov 23 – Dec 6 | bridge built early; works live |
 | Dashboard | Dec 7–20 | not started |
 | Test suite | Dec 21–31 | not started |
@@ -127,7 +127,11 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   ```
   - This matches the SDK2 C++ `H2JointIndex` the user confirmed, and it's what `bridge/h2diag/layout.py` uses.
   - Unitree's Python `ankle_swing` example, and `examples/.../common.py` which copied it, have **waist and wrists scrambled**. Unitree's H2 joint table (with joint limits, now in `layout.JOINT_LIMITS`) agrees with `layout.py`.
-  - `JOINT_ORDER_VERIFIED = False` until robot test T1.
+  - **T1 (2026-11-17) confirmed** 12/13/14 waist yaw/roll/pitch and 19/21, 26/28 wrist slots (details in `docs/field_map.md`).
+    - The waist was too stiff to move by hand, so it was checked from the relative rotation between the two IMUs: the **main IMU is in the pelvis, `secondary_imu` in the torso**.
+    - Slot 21/28 (Unitree name "wrist_yaw") is the hand bending toward the palm / back of the hand. We keep Unitree's names.
+    - Slots 20/27 haven't been seen moving yet, so `JOINT_ORDER_VERIFIED` stays `False` until they have.
+    - Waist yaw reached ±2.4 rad by hand, past the table's ±1.75 (probably a software limit).
 - **`LowState_` has 35 motor slots;** 31–34 are unused (zero).
 - **`mode_pr` describes the parallel-linkage joints** (ankles 4/5 and 10/11, waist 13/14: two motors via rods):
   - 0 = PR: slots hold pitch/roll joint angles. This is the default, and both recordings used it.
@@ -136,30 +140,34 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 - **Two motor families:** leg motors 0–3 and 6–9 have `mode` 10 and `vol` always 0, which is normal. The others have `mode` 1 and `vol` ≈ pack voltage.
 - **Battery:** 18 cells in mV that sum to `bmsvoltage[0]` (mV). `current` is probably mA, negative = discharge (unconfirmed).
 - **Hands (Dex5):**
-  - 20 motor slots, 16 active; 16–19 report `q` only
+  - 20 motor slots, four per finger (T2, 2026-11-17): index 0–3, middle 4–7, ring 8–11, pinky 12–15, **thumb 16–19**
+  - The thumb reports `q` only (no temperature or status), so `layout.HAND_ACTIVE_MOTORS = 16` currently leaves it out of the display and checks. Todo.
   - 16 pressure pads, 6 of 12 values used, raw values noisy around 0, so calibration is needed
   - Hand motors run warm: 42–66 °C at rest
 - **Temperatures:** the waist (especially waist_yaw) is consistently the hottest body joint (48–53 °C). Body IMU temperature is a constant 79 (meaning unknown).
 - **Not decodable:** `rt/sportmodestate` / `rt/lf/sportmodestate` (`unitree_hg::SportModeState_`) have no message definition in the SDK. They probably carry the robot's mode/gait; we'd need to write the definition by hand.
 - **No H2 URDF found locally yet.** Fallback for the 3D view: a capsule figure.
 
-## Status (2026-11-16) and next steps
+## Status (2026-11-17) and next steps
 
-- **Live preflight on the Thor works:**
-  - every topic at its exact expected rate
-  - battery 75%, 70.7 V, 6 mV spread
-  - waist_yaw 48 °C; hands 54/51 °C
-  - The false "half rate" startup warnings were a rate-window bug, fixed (now `data/stats.py`) with `tests/test_rates.py`; committed.
+- **The reorganized bridge runs on the Thor:**
+  - 44 tests pass on aarch64
+  - every `bridge/MIGRATION.md` check passed
+  - `rates --set all_fast` without `rt/lowcmd`: max gap 5 ms (the 22 ms gaps came from decoding `rt/lowcmd`)
+- **T1 and T2 recorded** (`results/sessions/20261117_*_t1_joints` / `_t2_fingers.jsonl.gz`, copied to the workstation). Results are in `docs/field_map.md`.
+- **Bug: `live --record` drops messages.** The recorder saves the newest message per topic once per tick, and the screen redraw slows the tick. T1 kept 66% of `rt/lf/*` and 22% of hand messages. Fix: record every message when it arrives.
 - **Next:**
-  1. Re-run preflight on the Thor (expect PASS).
-  2. Robot tests from `docs/field_map.md`, using `h2diag record`:
-     - **T1 joint order** and **T2 finger mapping** first (both needed for the 3D model)
-     - then T5 pressure, T6 modes, T3 thermal (10 min rest/hold), T4 charging
-  3. ~~Make `ReplaySource` read `.gz`.~~ Done.
-  4. Run the Thor checks in `bridge/MIGRATION.md`, then delete `examples/` (this also retires `common.py`'s wrong joint labels). Open decision there: allow `rates` to read `rt/lowcmd` (a command *type*, blocked by the read-only guard).
-  5. Add the `mode_pr` PR/AB flag to the snapshot. (Health and the terminal view already respect it.)
-  6. Find the H2 URDF.
-  7. Start the dashboard app.
+  1. Fix the recorder data loss (above).
+  2. Code follow-ups from T1/T2: finger names + thumb (slots 16–19) in `layout.py`; reconsider the waist_yaw limit.
+  3. Short robot session:
+     - see slots 20/27 move (bend the hand side to side, no forearm twist), then set `JOINT_ORDER_VERIFIED = True`
+     - record the right thumb
+     - type markers *before* each movement
+  4. Then T5 pressure, T6 modes (also watch `rt/arm/action/state`, `rt/rtc/state` as a mode source), T3 thermal, T4 charging.
+  5. Decide whether `rates` may read `rt/lowcmd` (the last open item in `bridge/MIGRATION.md`), then delete `examples/`.
+  6. Add the `mode_pr` PR/AB flag to the snapshot. (Health and the terminal view already respect it.)
+  7. Find the H2 URDF.
+  8. Start the dashboard app.
 - **Open question:** the user asked to "move a finger on the left hand in a fresh test". It's unresolved whether that means moving it by hand while recording (read-only; fine now) or commanding it from software (the first write to the robot, which needs the Movement-phase safety approach and research on the Dex5 command format). Ask before writing any command code.
 - **Safety for hand tests:** never force fingers against powered hand motors. Use an unpowered/damped mode or the remote/app gestures.
 

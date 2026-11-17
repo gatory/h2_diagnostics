@@ -49,6 +49,7 @@ An app on the workstation PC that shows, wirelessly and live, what the H2 EDU is
   - the `motorstate`, `bmsstate` and hand `error` bits
   - the battery current and IMU temperature units
 - [ ] Controlled tests to pin these down: move single joints by hand, warm up motors, compare left and right.
+  - 2026-11-17: T1 (joint order) mostly done, T2 (fingers) done. Results in `docs/field_map.md`.
 - [ ] **Wireless check:** on the Thor, confirm it sees `rt/lf/lowstate` on its wired interface **and** can reach the workstation over Wi-Fi.
 - [ ] Find an H2 URDF/mesh model (Unitree repos), plus a Dex5 one if it exists.
 
@@ -96,5 +97,5 @@ Commanded test motions, on the gantry only, behind a safety gate with the e-stop
 |---|---|
 | No H2 URDF available | Capsule figure from joint offsets |
 | The Thor can't reach the workstation over Wi-Fi | Run the bridge on the workstation over Ethernet (same app) |
-| Python can't keep up with the 1 kHz topics on the Thor | **Measured 2026-11-16 (`rate_probe.py`):** the bridge set (`rt/lf/*` + hands, 281 msg/s) runs at full rate on the Thor. `rt/lowstate` alone holds 1052 Hz. All high-rate topics together (3300 msg/s) keep their rates, but gaps of up to 22 ms appear. So Python handles only the bridge set. If 1 kHz checks (tracking error from `rt/lowcmd`, stall detection) are needed, use a small C++ sidecar (unitree_sdk2). |
+| Python can't keep up with the 1 kHz topics on the Thor | **Measured 2026-11-16 (`rate_probe.py`):** the bridge set (`rt/lf/*` + hands, 281 msg/s) runs at full rate on the Thor. `rt/lowstate` alone holds 1052 Hz. All high-rate topics together (3300 msg/s) keep their rates, but gaps of up to 22 ms appear. So Python handles only the bridge set. **2026-11-17:** without `rt/lowcmd`, the other fast topics (2300 msg/s) show at most 5 ms gaps, so `rt/lowcmd` decoding caused most of that load. If 1 kHz checks (tracking error from `rt/lowcmd`, stall detection) are needed, use a small C++ sidecar (unitree_sdk2). |
 | Field meanings stay unknown | Show the raw value with a "?" and leave it out of warnings |
