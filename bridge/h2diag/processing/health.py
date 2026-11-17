@@ -1,11 +1,11 @@
-"""Rule-based health checks on a snapshot.
+"""② Rule-based health checks: snapshot -> warnings.
 
 Only fields marked ✅/🟡 in docs/field_map.md feed rules. All thresholds are
 PROVISIONAL guesses until we have baselines from real sessions (PLAN phase 4).
 """
 import math
 
-from . import layout
+from .. import layout
 
 LIMITS = {
     "stale_s": 0.5,  # no message for this long -> error

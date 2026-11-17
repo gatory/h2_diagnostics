@@ -1,11 +1,13 @@
-"""The bridge loop: source -> state -> (recorder, snapshot + warnings)."""
+"""② The bridge loop: source -> state -> (recorder, snapshot + warnings).
+
+The one pipeline everything uses: server, preflight, recorder and the terminal views."""
 import time
 
 from . import health
 from .state import RobotState
 
 
-class Bridge:
+class H2Diagnostics:
     def __init__(self, source, recorder=None):
         self.source = source
         self.state = RobotState(source.stats)

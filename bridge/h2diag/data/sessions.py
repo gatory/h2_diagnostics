@@ -1,81 +1,15 @@
-"""Session recorder. Writes the same .jsonl format stream_sensors.py uses, so
-ReplaySource can play back old and new recordings alike:
+"""Finding and inspecting recordings on disk (written by output/recorder.py).
 
-    {"meta": {...}}                                  first line
-    {"t": 1.234, "topic": "rt/lf/lowstate", "data": {...}}
-    {"t": 5.678, "marker": "started gait trial 3"}
-
-Records the newest message per topic at each bridge tick (50 Hz by default), so
-the 100 Hz hand topics are stored at the tick rate.
+Only reads each file's header and tail, so listing stays fast for big recordings.
 """
 import gzip
 import json
 import re
-import time
 from datetime import datetime
 from pathlib import Path
 
 _STAMP = re.compile(r"(\d{8}_\d{6})")  # 20261112_150110 in a file name
 
-
-def _slug(text):
-    return re.sub(r"[^A-Za-z0-9_-]+", "-", text).strip("-")[:40]
-
-
-class Recorder:
-    def __init__(self, sessions_dir):
-        self.dir = Path(sessions_dir)
-        self._f = None
-        self._t0 = None
-        self.path = None
-        self.name = None
-
-    @property
-    def active(self):
-        return self._f is not None
-
-    def start(self, name="", meta=None):
-        if self.active:
-            self.stop()
-        self.dir.mkdir(parents=True, exist_ok=True)
-        stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        self.name = name
-        self.path = self.dir / (f"{stamp}_{_slug(name)}.jsonl" if name else f"{stamp}.jsonl")
-        self._f = open(self.path, "w")
-        self._t0 = time.monotonic()
-        header = {"start": datetime.now().isoformat(timespec="seconds"), "name": name}
-        header.update(meta or {})
-        self._f.write(json.dumps({"meta": header}) + "\n")
-        return self.path
-
-    def _t(self):
-        return round(time.monotonic() - self._t0, 4)
-
-    def write(self, topic, data):
-        if self.active:
-            self._f.write(json.dumps({"t": self._t(), "topic": topic, "data": data}) + "\n")
-
-    def marker(self, text):
-        if self.active:
-            self._f.write(json.dumps({"t": self._t(), "marker": text}) + "\n")
-            self._f.flush()
-
-    def status(self):
-        if not self.active:
-            return {"recording": False}
-        return {"recording": True, "name": self.name, "file": self.path.name,
-                "elapsed_s": round(time.monotonic() - self._t0, 1)}
-
-    def stop(self):
-        path = self.path
-        if self._f:
-            self._f.close()
-        self._f = None
-        self.path = None
-        return path
-
-
-# ---------------------------------------------------------------- reading sessions
 
 def recording_start(meta, path):
     """When a recording began: meta["start"] if present, else the file-name stamp."""

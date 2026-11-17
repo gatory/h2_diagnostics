@@ -2,8 +2,8 @@
 
 What each telemetry field means, how sure we are, and how to confirm the rest.
 
-- **Sources:** the SDK message definitions (`unitree_sdk2py/idl/unitree_hg`), the Unitree H2 examples, and two recordings in `examples/sensor_reading_example/output/`:
-  - `topics.json`: a single sample per topic
+- **Sources:** the SDK message definitions (`unitree_sdk2py/idl/unitree_hg`), the Unitree H2 examples, and two files now in `bridge/tests/data/`:
+  - `topics_20261113.json`: a single sample per topic
   - `sensors_20261112_150110.jsonl`: 2 s of a robot standing still
 - **Confidence:**
   - ✅ confirmed from data
@@ -120,10 +120,10 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 Run these on the gantry, robot powered, in damping or zero-torque mode so the joints can be moved by hand. Record each one with:
 
 ```
-python stream_sensors.py --iface eth10 --log --duration 30
+python -m h2diag live --iface eth10 --record t1_waist   # type a note + Enter at each action
 ```
 
-Write down the timestamp of each action.
+Drop a marker at each action (type what you did + Enter); markers are saved in the recording.
 
 | # | Action | Settles |
 |---|---|---|

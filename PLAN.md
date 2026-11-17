@@ -37,7 +37,7 @@ An app on the workstation PC that shows, wirelessly and live, what the H2 EDU is
 - **Fallback:** the same bridge can run on the workstation over the Ethernet cable. Only the address the app connects to changes.
 
 **Tech choices**
-- Bridge: a Python package (`h2diag`) using `unitree_sdk2py`, the same stack as `examples/`.
+- Bridge: a Python package (`h2diag`) using `unitree_sdk2py`.
 - App: TypeScript + Vite + three.js (3D) + urdf-loader, opened in its own window (Chrome `--app` at first; package it as a desktop app later if wanted). It runs on Windows or Linux.
 
 ## Phases

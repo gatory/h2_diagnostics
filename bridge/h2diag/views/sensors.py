@@ -1,4 +1,4 @@
-"""Full-screen sensor view for the terminal: `h2diag live` and `h2diag replay`.
+"""④ Full-screen sensor view for the terminal: `h2diag live` and `h2diag replay`.
 
 The bridge's version of examples/sensor_reading_example/stream_sensors.py, built
 on the same snapshot as everything else. Live and replay look the same except for
@@ -19,21 +19,27 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from . import health, layout
-from .core import Bridge
-from .recorder import recording_start
+from .. import layout
+from ..data.sessions import recording_start
+from ..processing import health
+from ..processing.core import H2Diagnostics
+from .tables import summary_table
 
 MOVED_DEG = 3.0  # Δ column lights up once a joint moved more than this since baseline
 REFRESH_HZ = 10
+NO_DATA_HINT_S = 3.0  # live: after this long with no messages, show the cable/iface hint
 LIVE_STYLE, REPLAY_STYLE = "red", "blue"
 
 
 # ---------------------------------------------------------------- source info
 
-def describe(source, up_s):
+def describe(source, up_s, recorder=None):
     """What the banner needs to know about the source, as plain data."""
+    rec = recorder.status() if recorder else {"recording": False}
     if source.live:
-        return {"mode": "live", "iface": source.iface, "up_s": up_s}
+        any_data = any(st.count for st in source.stats.values())
+        return {"mode": "live", "iface": source.iface, "up_s": up_s, "rec": rec,
+                "no_data": not any_data and up_s > NO_DATA_HINT_S}
     pos = source.position
     passed = [m for m in source.markers if m["t"] - source.t0 <= pos]
     return {
@@ -47,6 +53,7 @@ def describe(source, up_s):
         "speed": source.speed,
         "marker": passed[-1] if passed else None,
         "t0": source.t0,
+        "rec": rec,
     }
 
 
@@ -82,12 +89,26 @@ def _temp_text(t, limits):
     return Text(str(t), style=style)
 
 
+def _rec_text(info):
+    rec = info.get("rec") or {}
+    if not rec.get("recording"):
+        return Text("")
+    return Text.assemble(("   ⏺ REC ", "bold red"),
+                         f"{rec['file']}  {rec['elapsed_s']:.0f} s",
+                         ("  (type a note + Enter = marker)", "dim"))
+
+
 def _banner(info):
     if info["mode"] == "live":
-        return Text.assemble(
+        lines = [Text.assemble(
             (" ● LIVE ", f"bold white on {LIVE_STYLE}"),
             f"  robot via {info['iface']}   up {info['up_s']:.0f} s",
-            ("   read-only · Enter = reset Δ · Ctrl-C = quit", "dim"))
+            ("   read-only · Enter = reset Δ · Ctrl-C = quit", "dim"), _rec_text(info))]
+        if info.get("no_data"):
+            lines.append(Text(
+                f"  waiting for data: is the robot on and booted, and is {info['iface']} on "
+                "192.168.123.x?  (check: ip -br addr)", "bold red"))
+        return Group(*lines)
     start, pos, dur = info["start"], info["pos"], info["duration"]
     when = f"{start:%a %Y-%m-%d %H:%M:%S}" if start else "unknown time"
     at = f"{start + timedelta(seconds=pos):%H:%M:%S.%f}"[:-5] if start else f"{pos:.1f} s"
@@ -99,7 +120,7 @@ def _banner(info):
     line2 = Text.assemble(
         f"  now showing {at}   ", ("█" * filled + "░" * (30 - filled), REPLAY_STYLE),
         f"  {pos:5.1f} / {dur:.1f} s   pass {info['loops'] + 1}   speed {info['speed']:g}×",
-        ("   Enter = reset Δ · Ctrl-C = quit", "dim"))
+        ("   Enter = reset Δ · Ctrl-C = quit", "dim"), _rec_text(info))
     lines = [line1, line2]
     if info["marker"]:
         m = info["marker"]
@@ -263,17 +284,30 @@ def render(snap, base, info):
 
 # ---------------------------------------------------------------- loop
 
-def run(source, console=None):
-    """Tick the bridge at 50 Hz, redraw at REFRESH_HZ, until Ctrl-C or a replay ends."""
+def run(source, recorder=None, console=None):
+    """Tick the bridge at 50 Hz, redraw at REFRESH_HZ, until Ctrl-C or a replay ends.
+
+    With a started `recorder`, every tick is also written to disk (like the old
+    stream_sensors.py --log). Typed text + Enter drops a marker; a bare Enter
+    resets the Δ baseline.
+    """
     console = console or Console()
-    bridge = Bridge(source)
+    bridge = H2Diagnostics(source, recorder)
     reset = threading.Event()  # set by the stdin thread, read by the main loop
+    notes = []  # marker texts from the stdin thread (list.append is thread-safe)
 
-    def wait_for_enter():  # blocking read, so it lives in its own thread
-        for _ in sys.stdin:
-            reset.set()
+    def read_keyboard():  # blocking read, so it lives in its own thread
+        try:
+            for line in sys.stdin:
+                text = line.strip()
+                if text and recorder:
+                    notes.append(text)
+                else:
+                    reset.set()
+        except (OSError, ValueError):  # no usable stdin (closed, or captured by pytest)
+            pass
 
-    threading.Thread(target=wait_for_enter, daemon=True).start()
+    threading.Thread(target=read_keyboard, daemon=True).start()
     base = {}
     redraw_every = max(1, round(50 / REFRESH_HZ))
     started = last = time.monotonic()
@@ -288,6 +322,8 @@ def run(source, console=None):
                 if reset.is_set():
                     reset.clear()
                     base = {}
+                while notes:
+                    recorder.marker(notes.pop(0))
                 # Fill only missing (or None) baselines: joints that first appear
                 # later get one too, but existing baselines are never overwritten.
                 for key, q in baseline_of(snap).items():
@@ -295,10 +331,17 @@ def run(source, console=None):
                         base[key] = q
                 n += 1
                 if n % redraw_every == 0:
-                    live.update(render(snap, base, describe(source, now - started)),
+                    live.update(render(snap, base, describe(source, now - started, recorder)),
                                 refresh=True)
     except KeyboardInterrupt:
         pass
+    # After the full screen closes: what came in, and where a recording went.
+    console.print(summary_table(source.stats, time.monotonic() - started))
     if source.done:
         console.print("replay finished")
+    if recorder and recorder.active:
+        console.print(f"recording saved to [green]{recorder.stop()}[/]")
+    if source.live and not any(st.count for st in source.stats.values()):
+        console.print(f"[bold red]No data received.[/] Is the robot on, and is "
+                      f"[cyan]{source.iface}[/] on 192.168.123.x?  (check: ip -br addr)")
     return 0

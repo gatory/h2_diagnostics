@@ -11,11 +11,12 @@ import shutil
 import pytest
 from rich.console import Console
 
-from h2diag import layout, view
+from h2diag import layout
 from h2diag.__main__ import main
-from h2diag.core import Bridge
-from h2diag.recorder import list_sessions
-from h2diag.sources import ReplaySource
+from h2diag.data.replay import ReplaySource
+from h2diag.data.sessions import list_sessions
+from h2diag.processing.core import H2Diagnostics
+from h2diag.views import sensors as view
 
 
 def screen(snap, base, info, width=150):
@@ -27,7 +28,7 @@ def screen(snap, base, info, width=150):
 @pytest.fixture
 def replay(recording):
     src = ReplaySource(recording, loop=True)
-    snap = Bridge(src).tick(1.0)
+    snap = H2Diagnostics(src).tick(1.0)
     return src, snap
 
 
@@ -108,3 +109,28 @@ def test_replay_command_lists_and_rejects_bad_numbers(recording, tmp_path, capsy
     assert "Thu 2026-11-12 15:01" in out and recording.name in out
     assert main(["replay", "7", "--dir", str(tmp_path)]) == 1
     assert "no recording #7" in capsys.readouterr().out
+
+
+def test_live_banner_shows_recording_and_no_data_hint(replay):
+    _, snap = replay
+    info = {"mode": "live", "iface": "eth10", "up_s": 5, "no_data": True,
+            "rec": {"recording": True, "file": "20261117_t1.jsonl", "elapsed_s": 12.0}}
+    text = screen(snap, {}, info)
+    assert "⏺ REC" in text and "20261117_t1.jsonl" in text
+    assert "waiting for data" in text and "ip -br addr" in text
+
+
+def test_run_records_while_viewing(recording, tmp_path):
+    # The old stream_sensors.py --log: view and record at once. Replays the 2.2 s
+    # sample at 4x without looping, into a fake console.
+    from h2diag.output.recorder import Recorder
+
+    rec = Recorder(tmp_path)
+    path = rec.start("view test")
+    out = io.StringIO()
+    view.run(ReplaySource(recording, speed=4.0, loop=False), rec, Console(file=out, width=150))
+    assert not rec.active  # run() closed it
+    again = ReplaySource(path)
+    assert len(again.records) > 50 and "rt/lowstate" in again.topics
+    printed = out.getvalue()
+    assert "Summary" in printed and "recording saved to" in printed

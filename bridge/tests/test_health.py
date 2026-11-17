@@ -3,14 +3,14 @@ import copy
 
 import pytest
 
-from h2diag import health
-from h2diag.core import Bridge
-from h2diag.sources import ReplaySource
+from h2diag.data.replay import ReplaySource
+from h2diag.processing import health
+from h2diag.processing.core import H2Diagnostics
 
 
 @pytest.fixture
 def snap(recording):
-    s = Bridge(ReplaySource(recording)).tick(1.0)
+    s = H2Diagnostics(ReplaySource(recording)).tick(1.0)
     s.pop("warnings")
     return s
 
