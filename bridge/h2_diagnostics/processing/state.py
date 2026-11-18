@@ -33,10 +33,23 @@ class RobotState:
                 "pelvis": _imu(body["imu_state"]) if body else None,
                 "torso": _imu(get("torso_imu")),
             },
+            "mode": _mode(),
             "battery": _battery(get("battery")),
             "mainboard": _mainboard(get("mainboard")),
             "hands": {"left": _hand(get("hand_left")), "right": _hand(get("hand_right"))},
         }
+
+
+def _mode():
+    """The robot's locomotion FSM state (damp, stand_up, start, ...; layout.FSM_STATES).
+
+    Placeholder until test T6: switching modes with the remote while recording will
+    show which field tracks the FSM, LowState_.mode_machine (already in "body") or
+    rt/odommodestate's "mode". Until then the id is None rather than a guess, and the
+    `_raw` names mean "unconfirmed: display with ?, never warn on it".
+    """
+    fsm_id = None  # T6: set from the confirmed field
+    return {"fsm_id_raw": fsm_id, "fsm_name_raw": layout.FSM_STATES.get(fsm_id)}
 
 
 def _imu(d):

@@ -90,3 +90,17 @@ LIVE_TOPICS = {
     "rt/dex5/left/state": ("HandState_", 100.0),
     "rt/dex5/right/state": ("HandState_", 100.0),
 }
+
+# Locomotion FSM (finite-state machine) states: id -> name. From the H2 loco client in
+# the C++ SDK (unitree_sdk2/include/unitree/robot/h2/loco/h2_loco_client.hpp:242-252).
+# H2-specific: "start" is 601 here but 500 on the G1. The robot may know more ids
+# (GetAvailableFsmIds, API 7008, would list them, but asking means publishing).
+# Which received field carries the current id is not known yet: test T6 decides.
+FSM_STATES = {
+    0: "zero_torque",
+    1: "damp",
+    2: "squat",
+    3: "sit",
+    4: "stand_up",
+    601: "start",
+}

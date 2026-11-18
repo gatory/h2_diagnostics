@@ -16,3 +16,10 @@ def test_no_topic_fills_two_roles():
     all_topics = [t for topics in layout.ROLES.values() for t in topics]
     assert len(all_topics) == len(set(all_topics))
     assert len(layout.TOPIC_ROLE) == len(all_topics)
+
+
+def test_fsm_states_are_the_h2_ids():
+    # From h2_loco_client.hpp. "start" is the H2-specific one (the G1 uses 500).
+    assert layout.FSM_STATES[1] == "damp"
+    assert layout.FSM_STATES[601] == "start"
+    assert 500 not in layout.FSM_STATES

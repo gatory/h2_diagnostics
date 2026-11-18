@@ -105,6 +105,7 @@ cd bridge && python -m pytest
 - `topics`: rate and age of each topic
 - `body`: 31 joints, modes
 - `imu.pelvis`, `imu.torso`: the two IMUs (pelvis arrives inside `rt/lf/lowstate`, torso on `rt/lf/secondary_imu`)
+- `mode`: `fsm_id_raw`, `fsm_name_raw`, the locomotion FSM state (`None` until test T6 confirms its source)
 - `battery`
 - `mainboard`
 - `hands.left`, `hands.right`: 20 motors (16 active), 16 pads × 6 pressure values

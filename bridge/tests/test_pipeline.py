@@ -20,6 +20,8 @@ def test_snapshot_shape(recording):
     assert snap["body"]["spare_slots_active"] is False
     assert len(snap["battery"]["cells"]) == 18
     assert set(snap["imu"]) == {"pelvis", "torso"} and "imu" not in snap["body"]
+    # FSM source unconfirmed until T6: a None placeholder, never a guess
+    assert snap["mode"] == {"fsm_id_raw": None, "fsm_name_raw": None}
     for where in ("pelvis", "torso"):
         assert len(snap["imu"][where]["quat"]) == 4
     for side in ("left", "right"):

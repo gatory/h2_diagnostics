@@ -69,6 +69,7 @@ def main(argv=None):
             p.add_argument("--notes", default="")
             p.add_argument("--seconds", type=float, default=0, help="stop after N s (0 = Ctrl-C)")
             p.add_argument("--sessions-dir", default=str(DEFAULT_SESSIONS))
+            _extra_arg(p)
 
     # Terminal views.
     p = sub.add_parser("live", help="full-screen sensor view of the robot (read-only)")
@@ -76,6 +77,7 @@ def main(argv=None):
     p.add_argument("--record", metavar="NAME", help="also record the session under this name")
     p.add_argument("--notes", default="", help="notes stored with the recording")
     p.add_argument("--sessions-dir", default=str(DEFAULT_SESSIONS))
+    _extra_arg(p)
     p = sub.add_parser("replay", help="list recordings, or play one in the sensor view")
     p.add_argument("recording", nargs="?",
                    help="number from the list, or a .jsonl / .jsonl.gz path; omit to list")
@@ -147,9 +149,21 @@ def _dds_args(p):
     p.add_argument("--domain", type=int, default=0, help="DDS domain id")
 
 
+def _extra_arg(p):
+    research = [t for t in PROBE_TYPES if t not in layout.LIVE_TOPICS]
+    p.add_argument("--extra", nargs="+", metavar="TOPIC", default=[], choices=research,
+                   help=f"also subscribe to + record these (live only; for robot tests): "
+                        f"{', '.join(research)}")
+
+
+def _extra(args):
+    """--extra topics -> {topic: full type name} for LiveSource."""
+    return {t: PROBE_TYPES[t] for t in getattr(args, "extra", [])}
+
+
 def _source(args):
     if args.live:
-        return LiveSource(args.iface, args.domain).start()
+        return LiveSource(args.iface, args.domain, extra=_extra(args)).start()
     return ReplaySource(args.replay, speed=args.speed, loop=getattr(args, "loop", False))
 
 
@@ -210,7 +224,7 @@ def _view(args):
 
     recorder = None
     if args.cmd == "live":
-        source = LiveSource(args.iface, args.domain).start()
+        source = LiveSource(args.iface, args.domain, extra=_extra(args)).start()
         if args.record:
             recorder = Recorder(args.sessions_dir)
             recorder.start(args.record, _session_meta(source, args.notes))

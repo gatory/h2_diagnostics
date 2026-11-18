@@ -255,8 +255,11 @@ def render(snap, base, info):
     parts.append(top)
     if body:
         mode = {0: "PR", 1: "AB  (* = raw motor position, not an angle)"}.get(body["mode_pr"], "?")
-        order = "verified" if snap.get("joint_order_verified") else "UNVERIFIED until test T1"
-        parts.append(Text(f"tick {body['tick']}   mode_machine {body['mode_machine']}   "
+        order = "verified" if snap.get("joint_order_verified") else "UNVERIFIED (slots 20/27 pending)"
+        fsm = snap.get("mode") or {}
+        fsm_text = ("? (source unknown until T6)" if fsm.get("fsm_id_raw") is None
+                    else f"{fsm.get('fsm_name_raw') or 'unknown'} ({fsm['fsm_id_raw']})?")
+        parts.append(Text(f"tick {body['tick']}   fsm {fsm_text}   mode_machine {body['mode_machine']}   "
                           f"mode_pr {mode}   joint order {order}", "dim"))
         angles_ok = body["mode_pr"] == 0
         joints = Table.grid(padding=(0, 2))

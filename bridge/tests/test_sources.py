@@ -49,6 +49,9 @@ class FakeDDS:
     def hg_type(self, name):
         return name  # a real class isn't needed; just remember which one was asked for
 
+    def lookup_type(self, full_name):
+        return None if "Unknown" in full_name else full_name
+
     def subscribe(self, topic, msg_type, on_message):
         self.handlers[topic] = on_message
         self.types[topic] = msg_type
@@ -67,7 +70,7 @@ class FakeDDS:
 @pytest.fixture
 def fake_dds(monkeypatch):
     fake = FakeDDS()
-    for name in ("init", "hg_type", "subscribe"):
+    for name in ("init", "hg_type", "lookup_type", "subscribe"):
         monkeypatch.setattr(dds, name, getattr(fake, name))
     return fake
 
@@ -93,3 +96,16 @@ def test_live_source_keeps_newest_and_counts_all(fake_dds):
     assert src.stats["rt/lf/lowstate"].count == 3  # every arrival counted, only newest kept
     assert src.poll() == []  # poll() hands each message out once
     src.close()
+
+
+def test_live_source_extra_topics_for_robot_tests(fake_dds):
+    odom = {"rt/odommodestate": "unitree_go.msg.dds_.SportModeState_"}
+    src = LiveSource("eth10", extra=odom).start()
+    assert fake_dds.types["rt/odommodestate"] == odom["rt/odommodestate"]
+    assert "rt/odommodestate" in src.stats  # counted like any topic, so rates show
+    fake_dds.deliver("rt/odommodestate", 5)
+    assert dict(src.poll())["rt/odommodestate"] == {"value": 5}  # so the recorder gets it
+    src.close()
+
+    with pytest.raises(ValueError, match="no message class"):
+        LiveSource("eth10", extra={"rt/x": "unitree_go.msg.dds_.Unknown_"}).start()

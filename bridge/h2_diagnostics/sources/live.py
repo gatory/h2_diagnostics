@@ -19,10 +19,14 @@ class LiveSource(Source):
     live = True
     done = False
 
-    def __init__(self, iface, domain=0):
+    def __init__(self, iface, domain=0, extra=None):
+        """extra: {topic: full DDS type name} to subscribe to as well, for tests on the
+        robot (e.g. T6). They get recorded and counted, but no role reads them, so
+        they never reach the snapshot. Keep them few: every message costs a decode."""
         self.iface = iface
         self.domain = domain
-        self.topics = list(layout.LIVE_TOPICS)
+        self.extra = dict(extra or {})
+        self.topics = list(layout.LIVE_TOPICS) + [t for t in self.extra if t not in layout.LIVE_TOPICS]
         self.stats = {t: TopicStats() for t in self.topics}
         self._lock = threading.Lock()
         self._pending = {}
@@ -33,6 +37,13 @@ class LiveSource(Source):
         for topic, (type_name, _hz) in layout.LIVE_TOPICS.items():
             sub = dds.subscribe(topic, dds.hg_type(type_name), self._handler(topic))
             self._subs.append(sub)
+        for topic, full_type in self.extra.items():
+            if topic in layout.LIVE_TOPICS:
+                continue
+            cls = dds.lookup_type(full_type)
+            if cls is None:
+                raise ValueError(f"{topic}: the SDK has no message class for {full_type}")
+            self._subs.append(dds.subscribe(topic, cls, self._handler(topic)))
         return self
 
     def _handler(self, topic):

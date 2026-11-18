@@ -99,13 +99,14 @@ python -m h2_diagnostics record    --live --name t1_joints    # type note + Ente
 python -m h2_diagnostics serve     --live --iface eth10       # ws://172.16.68.113:8765
 python -m h2_diagnostics live      --iface eth10              # full-screen sensor view, red LIVE banner; Δ° column for T1/T2 (Enter resets)
 python -m h2_diagnostics live      --iface eth10 --record t1  # view + record; note + Enter = marker
+python -m h2_diagnostics live      --iface eth10 --record t6_modes --extra rt/odommodestate  # + research topics (also on `record`)
 python -m h2_diagnostics topics    --iface eth10              # discover all topics -> results/discovery/
 python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (bridge | lowstate | all_fast)
 # Anywhere
 python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
 python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 53 tests
+cd bridge && python -m pytest                          # 56 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -147,6 +148,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   - 16 pressure pads, 6 of 12 values used, raw values noisy around 0, so calibration is needed
   - Hand motors run warm: 42–66 °C at rest
 - **Temperatures:** the waist (especially waist_yaw) is consistently the hottest body joint (48–53 °C). Body IMU temperature is a constant 79 (meaning unknown).
+- **FSM state (2026-11-18):** the H2 loco client (`unitree_sdk2/.../h2/loco/h2_loco_client.hpp:242-252`) numbers the states 0 zero_torque, 1 damp, 2 squat, 3 sit, 4 stand_up, **601 start** (G1: 500), now `layout.FSM_STATES`. Reading it via `GetFsmId` (API 7001) would publish a request, so the user chose **read-only: T6 decides the source** (`mode_machine` vs `rt/odommodestate` `mode`, a `unitree_go` type at ~500 Hz). Until then `snap["mode"]["fsm_id_raw"]` is `None` (set it in `processing/state.py:_mode`).
 - **Not decodable:** `rt/sportmodestate` / `rt/lf/sportmodestate` (`unitree_hg::SportModeState_`) have no message definition in the SDK. They probably carry the robot's mode/gait; we'd need to write the definition by hand.
 - **No H2 URDF found locally yet.** Fallback for the 3D view: a capsule figure.
 

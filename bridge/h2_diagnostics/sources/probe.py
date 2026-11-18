@@ -25,6 +25,9 @@ PROBE_TYPES = {
     **{topic: HG + type_name for topic, (type_name, _hz) in layout.LIVE_TOPICS.items()},
     "rt/lowstate": HG + "LowState_",
     "rt/secondary_imu": HG + "IMUState_",
+    # Research only (test T6, FSM source): a unitree_go (quadruped-family) type the H2
+    # publishes at ~500 Hz. Its "mode" field may be the FSM state. Not a bridge topic.
+    "rt/odommodestate": "unitree_go.msg.dds_.SportModeState_",
 }
 RATE_SETS = {
     "bridge": list(layout.LIVE_TOPICS),  # exactly what LiveSource subscribes to
