@@ -38,6 +38,9 @@ src/
 │               written by bridge/tests/test_contract.py) · fixture.ts (typed; the contract check)
 ├── bridge/     BridgeClient.ts (the only WebSocket: newest snapshot, status
 │               connecting/live/stale/disconnected, reconnect, recorder commands) · useBridge.ts
+├── robot/      jointMap.ts (L_knee -> left_knee_joint) · pose.ts (snapshot -> pose: rules, tested)
+│               RobotScene.ts (three.js class: renderer, camera, own animation loop, pulls
+│               client.latest) · RobotView.tsx (React wrapper + "pose not shown" overlay)
 └── App.tsx     shell: one BridgeClient in a React context; panels plug in here
 public/renders/ H2.urdf + meshes, Dex5 hands (served at /renders/...)
 ```
@@ -46,5 +49,12 @@ Rules: the dashboard only displays. Warnings come from the bridge; if a number i
 missing, add it to the snapshot instead of computing it here. Joints map to the URDF **by
 name** (`L_knee` -> `left_knee_joint`), never by URDF file order. React panels re-render per
 snapshot (`useBridge()`); the 3D view reads `client.latest` each animation frame instead.
+
+3D view facts: the URDF is Z-up, three.js Y-up (the robot sits in a group rotated -90° about
+X; feet lifted to y=0). Pelvis tilt comes from the pelvis IMU's roll/pitch; yaw is dropped (it
+drifts). `mode_pr != 0` freezes the pose (AB slots aren't angles); a null `q` is skipped.
+Checked 2026-11-18 with a doctored replay: +knee bends back, -shoulder_pitch raises the arm
+forward, L_ joints are on the robot's left. Mesh loading is counted by hand: LoadingManager's
+onLoad fires early and is lost when StrictMode loads the same URLs twice.
 
 See `PLAN.md` for scope and schedule.

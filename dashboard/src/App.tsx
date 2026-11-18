@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 import { BridgeClient } from "./bridge/BridgeClient";
 import { BridgeContext, useBridge } from "./bridge/useBridge";
+import { RobotView } from "./robot/RobotView";
 
 const DEFAULT_BRIDGE = "ws://localhost:8765";
 
@@ -22,6 +23,7 @@ export function App() {
 
   return (
     <BridgeContext.Provider value={client}>
+      <RobotView />
       <ConnectionCheck />
     </BridgeContext.Provider>
   );
@@ -31,7 +33,8 @@ export function App() {
 function ConnectionCheck() {
   const { status, latest } = useBridge();
   return (
-    <pre style={{ font: "14px monospace", padding: 16 }}>
+    <pre style={{ position: "absolute", top: 0, left: 0, margin: 0, padding: 16, color: "#cfd6dd",
+                  font: "13px monospace", pointerEvents: "none" }}>
       {`status   ${status}
 source   ${latest?.source ?? "-"}
 joints   ${latest?.body?.joints.length ?? "-"}
