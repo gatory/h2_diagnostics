@@ -24,7 +24,7 @@ Progression: **read → collect → dashboard → test suite → movement.**
 |---|---|---|
 | Read | Nov 16–22 | mostly done; T1 mostly done, T2 done (2026-11-17); T3–T7 pending |
 | Collect | Nov 23 – Dec 6 | bridge built early; works live |
-| Dashboard | Dec 7–20 | not started |
+| Dashboard | Dec 7–20 | prototype started 2026-11-18 (contract + BridgeClient) |
 | Test suite | Dec 21–31 | not started |
 
 ## Ground rules
@@ -106,7 +106,9 @@ python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (br
 python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
 python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 58 tests
+cd bridge && python -m pytest                          # 59 tests
+cd dashboard && npm run dev                            # :5173; ?bridge=ws://172.16.68.113:8765 for the Thor (default ws://localhost:8765)
+cd dashboard && npm test && npm run typecheck          # vitest (6) + tsc incl. the snapshot contract
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -150,7 +152,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 - **Temperatures:** the waist (especially waist_yaw) is consistently the hottest body joint (48–53 °C). Body IMU temperature is a constant 79 (meaning unknown).
 - **FSM state (2026-11-18):** the H2 loco client (`unitree_sdk2/.../h2/loco/h2_loco_client.hpp:242-252`) numbers the states 0 zero_torque, 1 damp, 2 squat, 3 sit, 4 stand_up, **601 start** (G1: 500), now `layout.FSM_STATES`. Reading it via `GetFsmId` (API 7001) would publish a request, so the user chose **read-only: T6 decides the source** (`mode_machine` vs `rt/odommodestate` `mode`, a `unitree_go` type at ~500 Hz). Until then `snap["mode"]["fsm_id_raw"]` is `None` (set it in `processing/state.py:_mode`).
 - **Not decodable:** `rt/sportmodestate` / `rt/lf/sportmodestate` (`unitree_hg::SportModeState_`) have no message definition in the SDK. They probably carry the robot's mode/gait; we'd need to write the definition by hand.
-- **URDF (2026-11-18), `dashboard/h2_renders/`:**
+- **URDF (2026-11-18), `dashboard/public/renders/`:**
   - `h2_description/H2.urdf` (body, STL meshes): 31 revolute joints; names = layout's with `L_`→`left_`, `R_`→`right_`, `+_joint`; limits match (wrist_yaw rounded to ±1.22). File order differs from slot order (head before arms), so **map by name, never by URDF order**. Fixed links `imu_in_pelvis` / `imu_in_torso` confirm T1. Hands end in a placeholder `left_hand_link` / `right_hand_link`. `tests/test_layout.py` checks names, limits and IMU links against `layout.JOINTS`.
   - `dex5_hands/Dex5-URDF-L|R`: 5 fingers × 4 joints. Finger 1 (`Yaw_11`, `Roll_12`, …) looks like the thumb (= slots 16–19); fingers 2–5 probably index→pinky (= slots 0–15). **Unconfirmed:** which of 2–5 is index, and whether hand `q` is a joint angle in rad. Attach at `*_hand_link` (transform not yet checked).
   - `H2_Plus` (Sharpa hands) is a different variant; removed.
@@ -173,7 +175,7 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
   2. Robot session: T6 modes (gantry + e-stop; `--extra rt/odommodestate`) → set `_mode()` source; slots 20/27 → `JOINT_ORDER_VERIFIED = True`; right thumb; T5 pressure (10 s untouched first, for zero offsets); T4 charging (current sign/units). Markers *before* each action.
   3. Maybe fix the recorder first (for T5).
   4. URDF checked (see Key findings). The dashboard's 3D view loads `H2.urdf`, then attaches the Dex5 hands.
-  5. Dashboard (Node not installed on the workstation yet): snapshot contract (TS types + fixture + bridge test) → `BridgeClient` class (the dashboard's one door to the WS) → status strip → hands → 3D → recording/session browser (needs a "list sessions" WS command).
+  5. **Dashboard (started 2026-11-18, React chosen for future features):** done: Vite + React + TS scaffold, snapshot contract (`dashboard/src/contract/`, `bridge/tests/test_contract.py`, `expected_hz` added to `topics`), `BridgeClient` + `useBridge` (6 vitest tests), checked end to end against a local replay bridge (~22 snapshots/s, 12 KB). Next: 3D robot (URDF, joints by name, pelvis IMU tilt; then temp colours, `mode_pr` freeze, verified badge) → status strip + warnings → hands (2D) → recording controls → live check on the Thor. Later: 3D Dex5 hands, session browser (needs `list_sessions` WS command).
   6. Smaller: finger names + thumb in `layout.py`; waist_yaw limit; `mode_pr` flag; `rt/lowcmd` decision then delete `examples/`; maybe split `__main__.py` into `cli/`.
 - **Open question:** the user asked to "move a finger on the left hand in a fresh test". It's unresolved whether that means moving it by hand while recording (read-only; fine now) or commanding it from software (the first write to the robot, which needs the Movement-phase safety approach and research on the Dex5 command format). Ask before writing any command code.
 - **Safety for hand tests:** never force fingers against powered hand motors. Use an unpowered/damped mode or the remote/app gestures.

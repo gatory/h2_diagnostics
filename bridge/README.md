@@ -102,7 +102,7 @@ cd bridge && python -m pytest
   - `{"cmd": "marker", "text": "..."}`
 
 **Snapshot fields:**
-- `topics`: rate and age of each topic
+- `topics`: rate, age, count and `expected_hz` of each topic
 - `body`: 31 joints, modes
 - `imu.pelvis`, `imu.torso`: the two IMUs (pelvis arrives inside `rt/lf/lowstate`, torso on `rt/lf/secondary_imu`)
 - `mode`: `fsm_id_raw`, `fsm_name_raw`, the locomotion FSM state (`None` until test T6 confirms its source)
@@ -113,6 +113,8 @@ cd bridge && python -m pytest
 - `recorder`
 
 Fields whose meaning isn't confirmed end in `_raw`; see `docs/field_map.md`.
+
+**The snapshot is a contract with the dashboard.** `dashboard/src/contract/snapshot.ts` types it, and `dashboard/src/contract/snapshot.fixture.json` is a real message. `tests/test_contract.py` fails when the snapshot's shape changes. If the change is intended, run `UPDATE_FIXTURE=1 python -m pytest tests/test_contract.py`, then update `snapshot.ts` (`npm run typecheck` in `dashboard/` checks it).
 
 ## Known limits
 

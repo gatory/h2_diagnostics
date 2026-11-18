@@ -32,7 +32,7 @@ def test_fsm_states_are_the_h2_ids():
 # The URDF names joints its own way (L_hip_pitch -> left_hip_pitch_joint) and lists
 # them in its own file order (head before arms), so the dashboard maps by NAME.
 # This test catches a renamed joint or a changed limit on either side.
-H2_URDF = Path(__file__).resolve().parents[2] / "dashboard/h2_renders/h2_description/H2.urdf"
+H2_URDF = Path(__file__).resolve().parents[2] / "dashboard/public/renders/h2_description/H2.urdf"
 
 
 def urdf_joint_name(name):

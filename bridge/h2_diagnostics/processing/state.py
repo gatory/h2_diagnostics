@@ -25,7 +25,10 @@ class RobotState:
             "t": round(wall_time, 3),
             "source": source,
             "joint_order_verified": layout.JOINT_ORDER_VERIFIED,
-            "topics": {t: s.report(now) for t, s in self.stats.items()},
+            # expected_hz comes from layout so the dashboard needn't copy the rates
+            # (None for topics outside LIVE_TOPICS, e.g. an old recording's rt/lowstate)
+            "topics": {t: {**s.report(now), "expected_hz": layout.LIVE_TOPICS.get(t, (None, None))[1]}
+                       for t, s in self.stats.items()},
             "body": _body(body),
             # Both IMUs side by side, like the hands. The pelvis one arrives inside
             # LowState_ (rt/lf/lowstate), the torso one on its own topic (T1).
