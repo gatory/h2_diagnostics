@@ -264,7 +264,7 @@ def _topics(args):
     dds.init(args.domain, args.iface)
     dds.type_registry()  # warm up imports before timing anything
     with console.status(f"Listening for publishers for {args.discover_secs:.0f} s..."):
-        topics = probe.discover_publications(args.domain, args.discover_secs)
+        topics = dds.discover_publications(args.domain, args.discover_secs)
     if not topics:
         console.print(f"[bold red]No topics found.[/] Is the robot on and booted, and is "
                       f"[cyan]{args.iface}[/] on 192.168.123.x?  (check: ip -br addr)")

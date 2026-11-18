@@ -36,7 +36,7 @@ Motion over seconds is still clear; the 50 ms-level detail is not. Plain `record
 
 | Example feature | Bridge | Offline | On the Thor |
 |---|---|---|---|
-| Find every published topic (builtin DDS reader) | `python -m h2_diagnostics topics --iface eth10` (`data/probe.py: discover_publications`, code unchanged) | — needs DDS | ☑ 124 topics |
+| Find every published topic (builtin DDS reader) | `python -m h2_diagnostics topics --iface eth10` (`sources/dds.py: discover_publications`, code unchanged) | — needs DDS | ☑ 124 topics |
 | Rate + one decoded sample per topic | `sample_topics` + `summarize_discovery` | ✅ `test_discovery_summary_matches_example_format` | ☑ hands 100 Hz; `rt/lowstate` 671 Hz *under full-discovery load* (1052 Hz alone, via `rates`) |
 | `--discover-secs`, `--sample-secs`, `--no-samples` | same flags | ✅ (`--help`) | — |
 | Saves `topics.json` + `topics.txt` | `results/discovery/topics_<stamp>.json/.txt` (gitignored; not overwritten) | ✅ `test_topics_text_reproduces_the_examples_saved_output`: the 2026-11-13 JSON turns into the identical `topics.txt` | ☑ `topics_20261117_134607.*` |

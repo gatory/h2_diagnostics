@@ -1,15 +1,17 @@
 """LiveSource: reads the robot's DDS topics (run on the Thor, wired to 192.168.123.x).
 
-DDS callbacks run on reader threads and only store the newest message + count it;
-decoding happens in poll() on the main thread (Python decode speed is the limit).
-READ-ONLY: only subscribers are created.
+The SDK decodes each message's bytes into an object on a DDS thread, then calls our
+handler, which only counts it and keeps the newest one per topic. poll() converts
+those to dicts on the main thread, so overwritten messages never pay for to_dict.
+All DDS access goes through dds.py. READ-ONLY: only subscriptions are created.
 """
 import threading
 import time
 
 from .. import layout
-from .convert import to_dict
+from . import dds
 from .base import Source
+from .convert import to_dict
 from .stats import TopicStats
 
 
@@ -27,13 +29,9 @@ class LiveSource(Source):
         self._subs = []
 
     def start(self):
-        from unitree_sdk2py.core.channel import ChannelFactoryInitialize, ChannelSubscriber
-        import unitree_sdk2py.idl.unitree_hg.msg.dds_ as hg
-
-        ChannelFactoryInitialize(self.domain, self.iface)
+        dds.init(self.domain, self.iface)
         for topic, (type_name, _hz) in layout.LIVE_TOPICS.items():
-            sub = ChannelSubscriber(topic, getattr(hg, type_name))
-            sub.Init(self._handler(topic), 0)
+            sub = dds.subscribe(topic, dds.hg_type(type_name), self._handler(topic))
             self._subs.append(sub)
         return self
 
@@ -58,8 +56,4 @@ class LiveSource(Source):
     def close(self):
         # Drop references first so late callbacks have nothing to touch, then close.
         subs, self._subs = self._subs, []
-        for sub in subs:
-            try:
-                sub.Close()
-            except Exception:
-                pass
+        dds.close_all(subs)

@@ -74,7 +74,8 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 | | `live.py` / `replay.py` | `LiveSource` (DDS) / `ReplaySource` (`.jsonl`, `.gz`), both subclass `Source` |
 | | `stats.py` | `TopicStats`: arrival counts, rate, age |
 | | `sessions.py` | List/inspect recordings (header + tail only) |
-| | `dds.py`, `convert.py` | DDS init + type registry; `to_dict`, `num` |
+| | `dds.py` | **The DDS gateway:** the only module that imports the SDK (tested). `init`, `subscribe` → `Subscription` (read-only), `hg_type`, type registry, `discover_publications` |
+| | `convert.py` | `to_dict`, `num` (JSON-safe values) |
 | | `probe.py` | Topic discovery + rate probe (from the examples) |
 | ② `processing/` | `state.py` | `RobotState` → snapshot |
 | | `health.py` | `HealthMonitor` (holds hysteresis memory) wrapping stateless `evaluate()`. `LIMITS` are **provisional guesses.** |
@@ -87,7 +88,7 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 
 Test data (`bridge/tests/data/`): the 2026-11-12 robot recording (2.2 s at rest) and the 2026-11-13 topic discovery (120 topics).
 
-DDS callbacks only store the newest message and count it; all decoding happens on the main tick, because Python decode throughput is the bottleneck.
+The SDK decodes every message's bytes into an object on its DDS thread (unavoidable, so 1 kHz topics cost CPU even when dropped); our callback only counts it and keeps the newest per topic. `to_dict` runs on the main tick for the newest only.
 
 ## Commands
 
@@ -104,7 +105,7 @@ python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (br
 python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
 python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 50 tests
+cd bridge && python -m pytest                          # 53 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 

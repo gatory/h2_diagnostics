@@ -57,6 +57,30 @@ def test_layout_is_the_foundation():
     assert not internal, "layout.py must not import from the package"
 
 
+SDK_PACKAGES = ("unitree_sdk2py", "cyclonedds")
+
+
+def _sdk_imports(py):
+    """SDK modules this file imports, anywhere in it (top level or inside functions)."""
+    found = set()
+    for node in ast.walk(ast.parse(py.read_text())):
+        if isinstance(node, ast.Import):
+            found |= {a.name for a in node.names if a.name.startswith(SDK_PACKAGES)}
+        elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+            if node.module.startswith(SDK_PACKAGES):
+                found.add(node.module)
+    return found
+
+
+def test_only_dds_py_touches_the_sdk():
+    # sources/dds.py is the gateway to DDS. If nothing else imports the SDK, nothing
+    # else can publish to the robot, and LiveSource can be tested with a fake dds.
+    offenders = {str(py.relative_to(PKG)): _sdk_imports(py) for py in PKG.rglob("*.py")
+                 if py != PKG / "sources" / "dds.py" and _sdk_imports(py)}
+    assert not offenders, f"only sources/dds.py may import the SDK: {offenders}"
+    assert _sdk_imports(PKG / "sources" / "dds.py"), "dds.py should be the one that does"
+
+
 def test_detects_a_wrong_way_import(tmp_path, monkeypatch):
     # The checker itself must work: a fake sources/ module importing processing/.
     fake = tmp_path / "h2_diagnostics" / "sources"

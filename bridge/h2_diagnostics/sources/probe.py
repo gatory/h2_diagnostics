@@ -1,15 +1,16 @@
 """Probing the robot's DDS network: which topics exist, and how fast they arrive.
 
 Ported from examples/sensor_reading_example/discover_topics.py and rate_probe.py.
-READ-ONLY: only readers are created. The DDS calls (discover_publications,
-sample_topics, record_arrivals) are kept as they were in the examples, which ran
-on the robot; the math (summarize_*) is pure and tested offline.
+READ-ONLY: all DDS access goes through dds.py (subscriptions only). The DDS-using
+functions (sample_topics, record_arrivals, and dds.discover_publications) keep the
+logic the examples ran on the robot; the math (summarize_*) is pure and tested offline.
 """
 import threading
 import time
 
 from .. import layout
 from .convert import to_dict
+from . import dds
 from .dds import lookup_type, normalize_type_name
 
 HG = "unitree_hg.msg.dds_."
@@ -34,35 +35,11 @@ RATE_SETS = {
 
 # ---------------------------------------------------------------- topic discovery
 
-def discover_publications(domain_id, secs):
-    """Listen for publishers. Returns {topic: {"type", "writers": set, "participants": set}}."""
-    from cyclonedds.builtin import BuiltinDataReader, BuiltinTopicDcpsPublication
-    from cyclonedds.domain import DomainParticipant
-
-    dp = DomainParticipant(domain_id)
-    reader = BuiltinDataReader(dp, BuiltinTopicDcpsPublication)
-    topics = {}
-    deadline = time.monotonic() + secs
-    while time.monotonic() < deadline:
-        for ep in reader.take(N=256):
-            name = getattr(ep, "topic_name", None)
-            if not name:
-                continue
-            entry = topics.setdefault(
-                name, {"type": ep.type_name, "writers": set(), "participants": set()})
-            entry["writers"].add(str(ep.key))
-            entry["participants"].add(str(ep.participant_key))
-        time.sleep(0.1)
-    return topics
-
-
 def sample_topics(topics, secs):
     """Subscribe to every decodable topic at once for `secs`; count and keep one sample.
 
     Returns {topic: {"count", "first", "last", "sample", maybe "error"}}.
     """
-    from unitree_sdk2py.core.channel import ChannelSubscriber
-
     stats, subs = {}, []
     lock = threading.Lock()
 
@@ -84,19 +61,13 @@ def sample_topics(topics, secs):
             continue
         stats[name] = {"count": 0, "first": None, "last": None, "sample": None}
         try:
-            sub = ChannelSubscriber(name, cls)
-            sub.Init(make_handler(name), 0)
-            subs.append(sub)
+            subs.append(dds.subscribe(name, cls, make_handler(name)))
         except Exception as e:  # keep going; report the failure
             stats[name]["error"] = repr(e)
     time.sleep(secs)
     with lock:
         snapshot = {k: dict(v) for k, v in stats.items()}
-    for sub in subs:
-        try:
-            sub.Close()
-        except Exception:
-            pass
+    dds.close_all(subs)
     return snapshot
 
 
@@ -135,8 +106,6 @@ def record_arrivals(topic_types, secs, settle_s=1.0):
     Fewer topics than discovery, so the rates reflect the robot, not Python's
     decode limit on this machine.
     """
-    from unitree_sdk2py.core.channel import ChannelSubscriber
-
     lock = threading.Lock()
     arrivals = {t: [] for t in topic_types}
 
@@ -147,11 +116,8 @@ def record_arrivals(topic_types, secs, settle_s=1.0):
                 arrivals[name].append(now)
         return handler
 
-    subs = []
-    for t, type_name in topic_types.items():
-        sub = ChannelSubscriber(t, lookup_type(type_name))
-        sub.Init(make_handler(t), 0)
-        subs.append(sub)
+    subs = [dds.subscribe(t, lookup_type(type_name), make_handler(t))
+            for t, type_name in topic_types.items()]
     time.sleep(settle_s)  # let discovery settle before counting
     with lock:
         for v in arrivals.values():
@@ -159,11 +125,7 @@ def record_arrivals(topic_types, secs, settle_s=1.0):
     time.sleep(secs)
     with lock:
         result = {k: list(v) for k, v in arrivals.items()}
-    for sub in subs:
-        try:
-            sub.Close()
-        except Exception:
-            pass
+    dds.close_all(subs)
     return result
 
 
