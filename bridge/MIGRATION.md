@@ -11,7 +11,7 @@ ticked.** Commands assume `cd ~/dev/h2_diagnostics/bridge && source ../.venv/bin
 
 | Example feature | Bridge | Offline | On the Thor |
 |---|---|---|---|
-| Live full-screen view (topic health, both IMUs, joints, battery, board, hands) | `python -m h2diag live --iface eth10` | ✅ `test_view.py` renders it from the sample recording | ☑ all 6 topics at 20.2 / 100 Hz |
+| Live full-screen view (topic health, both IMUs, joints, battery, board, hands) | `python -m h2_diagnostics live --iface eth10` | ✅ `test_view.py` renders it from the sample recording | ☑ all 6 topics at 20.2 / 100 Hz |
 | Clear "is this live?" marking | red `● LIVE` banner + red border | ✅ `test_live_screen_says_live` | ☑ ran |
 | "waiting for data: check cable/iface" hint | red line after 3 s with no messages | ✅ `test_live_banner_shows_recording_and_no_data_hint` | ☑ `--iface lo`: no data, hint shown |
 | `--log --duration 60`: record while viewing | `live --record NAME` (note + Enter = marker); or `record --live --name NAME --seconds 60` without the screen | ✅ `test_run_records_while_viewing` | ☑ `m1` recorded and replayed; T1/T2 recordings saved 9 and 9 markers. **But see the data-loss bug below.** |
@@ -36,7 +36,7 @@ Motion over seconds is still clear; the 50 ms-level detail is not. Plain `record
 
 | Example feature | Bridge | Offline | On the Thor |
 |---|---|---|---|
-| Find every published topic (builtin DDS reader) | `python -m h2diag topics --iface eth10` (`data/probe.py: discover_publications`, code unchanged) | — needs DDS | ☑ 124 topics |
+| Find every published topic (builtin DDS reader) | `python -m h2_diagnostics topics --iface eth10` (`sources/dds.py: discover_publications`, code unchanged) | — needs DDS | ☑ 124 topics |
 | Rate + one decoded sample per topic | `sample_topics` + `summarize_discovery` | ✅ `test_discovery_summary_matches_example_format` | ☑ hands 100 Hz; `rt/lowstate` 671 Hz *under full-discovery load* (1052 Hz alone, via `rates`) |
 | `--discover-secs`, `--sample-secs`, `--no-samples` | same flags | ✅ (`--help`) | — |
 | Saves `topics.json` + `topics.txt` | `results/discovery/topics_<stamp>.json/.txt` (gitignored; not overwritten) | ✅ `test_topics_text_reproduces_the_examples_saved_output`: the 2026-11-13 JSON turns into the identical `topics.txt` | ☑ `topics_20261117_134607.*` |
@@ -47,12 +47,12 @@ Motion over seconds is still clear; the 50 ms-level detail is not. Plain `record
 
 | Example feature | Bridge | Offline | On the Thor |
 |---|---|---|---|
-| Sets `bridge`, `lowstate`, `all_fast`; `--topics`; `--secs` | `python -m h2diag rates --iface eth10 --set bridge` | ✅ `test_rate_sets_only_use_known_topics` | ☑ 281.2 msg/s; 1052.1 Hz |
+| Sets `bridge`, `lowstate`, `all_fast`; `--topics`; `--secs` | `python -m h2_diagnostics rates --iface eth10 --set bridge` | ✅ `test_rate_sets_only_use_known_topics` | ☑ 281.2 msg/s; 1052.1 Hz |
 | Hz, mean gap, max gap, total msg/s | `summarize_rates` + `views/tables.py` | ✅ `test_rate_summary_hz_gaps_and_total` | ☑ max gap 5 ms (4 topics, 2303 msg/s). The 22 ms gaps on 2026-11-16 came with `rt/lowcmd` in the set. |
 | 1 s settle before counting | kept | — | — |
 | **`rt/lowcmd` in `all_fast`** | **left out (decision needed):** its type name is a command type, which the read-only guard (`test_bridge_never_writes_to_robot`) forbids anywhere in the package. Subscribing only *reads*, so it's safe, but loosening a safety check is your call. | — | ☐ decide: allow reading command types in `data/probe.py` only, or leave it out |
 
-## `common.py` → `h2diag/data/`
+## `common.py` → `h2_diagnostics/sources/`
 
 | Example feature | Bridge |
 |---|---|

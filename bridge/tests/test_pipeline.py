@@ -5,13 +5,13 @@ from pathlib import Path
 
 from websockets.asyncio.client import connect
 
-from h2diag import layout
-from h2diag.data.replay import ReplaySource
-from h2diag.output import server
-from h2diag.output.recorder import Recorder
-from h2diag.processing.core import H2Diagnostics
+from h2_diagnostics import layout
+from h2_diagnostics.sources.replay import ReplaySource
+from h2_diagnostics.output import server
+from h2_diagnostics.output.recorder import Recorder
+from h2_diagnostics.processing.pipeline import H2Diagnostics
 
-PKG = Path(__file__).resolve().parents[1] / "h2diag"
+PKG = Path(__file__).resolve().parents[1] / "h2_diagnostics"
 
 
 def test_snapshot_shape(recording):
@@ -19,6 +19,11 @@ def test_snapshot_shape(recording):
     assert len(snap["body"]["joints"]) == layout.NUM_BODY == 31
     assert snap["body"]["spare_slots_active"] is False
     assert len(snap["battery"]["cells"]) == 18
+    assert set(snap["imu"]) == {"pelvis", "torso"} and "imu" not in snap["body"]
+    # FSM source unconfirmed until T6: a None placeholder, never a guess
+    assert snap["mode"] == {"fsm_id_raw": None, "fsm_name_raw": None}
+    for where in ("pelvis", "torso"):
+        assert len(snap["imu"][where]["quat"]) == 4
     for side in ("left", "right"):
         hand = snap["hands"][side]
         assert len(hand["motors"]) == 20

@@ -147,7 +147,7 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 Run these on the gantry, robot powered, in damping or zero-torque mode so the joints can be moved by hand. Record each one with:
 
 ```
-python -m h2diag live --iface eth10 --record t1_waist   # type a note + Enter at each action
+python -m h2_diagnostics live --iface eth10 --record t1_waist   # type a note + Enter at each action
 ```
 
 Drop a marker at each action (type what you did + Enter); markers are saved in the recording.
@@ -161,7 +161,7 @@ Drop a marker at each action (type what you did + Enter); markers are saved in t
 | T3 | Record 10 min at rest, then 10 min holding a pose (or walking, if allowed) | Whether `temperature[0]` vs `[1]` behave like winding vs. housing; whether the hot group comes from holding the pose | |
 | T4 | Record the battery while idle, then while charging | The sign and units of `current` | |
 | T5 | Press each fingertip and palm area firmly | Pad layout and pressure scale | |
-| T6 | Switch robot modes with the remote (damping → stand → ...) while recording | `mode_machine`, `mode_pr`, the mode topics (also watch `rt/arm/action/state`, `rt/rtc/state`) | |
+| T6 | Switch robot modes with the remote (damping → stand → ...) while recording: `h2diag live --iface eth10 --record t6_modes --extra rt/odommodestate`, typing the mode name + Enter *before* each switch | **Which field carries the FSM id** (`layout.FSM_STATES`: 0 zero_torque, 1 damp, 2 squat, 3 sit, 4 stand_up, 601 start): `mode_machine` or `rt/odommodestate` `mode`. Also `mode_pr`, `rt/arm/action/state`, `rt/rtc/state` | |
 | T7 | Short slow walk or squat if safe; otherwise skip | `tau_est` scale and the `lowcmd` vs. `lowstate` relationship | |
 
 **Joints too stiff to move by hand:** use the two-IMU method from T1 (the relative rotation between pelvis and torso IMU) for the waist. Another read-only option is to record while the robot performs one of its own built-in actions from the remote/app. Our software only listens.

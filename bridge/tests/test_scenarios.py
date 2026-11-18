@@ -1,6 +1,6 @@
 """Health rules against fake faults injected into a real recording."""
-from h2diag.data.replay import ReplaySource
-from h2diag.processing import preflight
+from h2_diagnostics.sources.replay import ReplaySource
+from h2_diagnostics.processing import preflight
 
 
 def run(path):

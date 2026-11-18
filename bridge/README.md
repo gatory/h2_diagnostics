@@ -13,7 +13,7 @@ It never publishes to the robot. `tests/test_pipeline.py::test_bridge_never_writ
 
 ```
 robot DDS ──► LiveSource ─┐
-                          ├─► Bridge.tick() ─► snapshot + warnings ─► WebSocket :8765 ─► app
+                          ├─► H2Diagnostics.tick() ─► snapshot + warnings ─► WebSocket :8765 ─► app
 .jsonl file ► ReplaySource┘        ├─► Recorder ─► results/sessions/*.jsonl
                                    └─► terminal views (live / replay)
 ```
@@ -21,21 +21,28 @@ robot DDS ──► LiveSource ─┐
 ## Layout: four layers, dependencies point one way
 
 ```
-h2diag/
-├── __main__.py      CLI only: parses arguments, wires the layers together
-├── layout.py        robot facts: joint names + limits, topics, expected rates
-├── data/        ①  DATA IN       dds.py · live.py · replay.py · stats.py · sessions.py · probe.py · convert.py
-├── processing/  ②  MEANING       state.py (→ snapshot) · health.py (→ warnings) · preflight.py · core.py (Bridge.tick)
-├── output/      ③  DATA OUT      server.py (WebSocket) · recorder.py (disk)
-└── views/       ④  TERMINAL      sensors.py (live/replay screen) · report.py · tables.py
+h2_diagnostics/        (read bottom-up: each level only imports the ones above it here)
+├── layout.py        ⓪  ROBOT FACTS   joint names + limits, topics, expected rates. Imports nothing.
+├── sources/     ①  DATA IN       Source (base.py, the interface) ← LiveSource · ReplaySource; TopicStats
+│                                 + sessions.py · probe.py · dds.py · convert.py
+├── processing/  ②  MEANING       RobotState (state.py) · HealthMonitor (health.py) ·
+│                                 H2Diagnostics (pipeline.py: tick()) · preflight.py
+├── output/      ③  DATA OUT      server.py (WebSocket) · Recorder (recorder.py, disk)
+├── views/       ④  TERMINAL      sensors.py (live/replay screen) · report.py · tables.py
+└── __main__.py  ⑤  CLI           parses arguments, wires the layers together
 tests/
 ├── data/            real robot recording (2026-11-12) + topic discovery (2026-11-13)
 └── test_*.py        test_layers.py enforces the arrows below
 ```
 
-`data ← processing ← output, views`: a layer may import the ones to its left, never
-to its right (`tests/test_layers.py` fails otherwise). Each package's `__init__.py`
-says what belongs in it.
+`layout ← sources ← processing ← output, views ← __main__`: a layer may import the
+ones to its left, never to its right (`tests/test_layers.py` fails otherwise). Each
+package's `__init__.py` lists its files and the class each one holds.
+
+Rule of thumb for classes vs functions: **a class when something holds state over
+time** (a source, `TopicStats`, `RobotState`, `HealthMonitor`, `Recorder`, the
+pipeline); **plain functions or constants otherwise** (`layout`, `convert`, the
+view renderers). The CLI command is still `h2diag`; `python -m h2_diagnostics` is the same.
 
 ## Setup
 
@@ -56,22 +63,22 @@ uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 
 ```bash
 # Live, on the Thor (all read-only)
-python -m h2diag live      --iface eth10               # full-screen sensor view (red LIVE banner)
-python -m h2diag live      --iface eth10 --record t1   # ...and record (note + Enter = marker, Enter = reset Δ)
-python -m h2diag record    --live --name t1 --seconds 60   # record without the screen
-python -m h2diag preflight --live --iface eth10        # 10 s check -> PASS / WARN / FAIL (exit 0/1/2)
-python -m h2diag serve     --live --iface eth10        # WebSocket on 0.0.0.0:8765
-python -m h2diag snapshot  --live --iface eth10        # print one snapshot as JSON
-python -m h2diag topics    --iface eth10               # every DDS topic: type, rate, sample -> results/discovery/
-python -m h2diag rates     --iface eth10 --set bridge  # receive rates + gaps (sets: bridge, lowstate, all_fast)
+python -m h2_diagnostics live      --iface eth10               # full-screen sensor view (red LIVE banner)
+python -m h2_diagnostics live      --iface eth10 --record t1   # ...and record (note + Enter = marker, Enter = reset Δ)
+python -m h2_diagnostics record    --live --name t1 --seconds 60   # record without the screen
+python -m h2_diagnostics preflight --live --iface eth10        # 10 s check -> PASS / WARN / FAIL (exit 0/1/2)
+python -m h2_diagnostics serve     --live --iface eth10        # WebSocket on 0.0.0.0:8765
+python -m h2_diagnostics snapshot  --live --iface eth10        # print one snapshot as JSON
+python -m h2_diagnostics topics    --iface eth10               # every DDS topic: type, rate, sample -> results/discovery/
+python -m h2_diagnostics rates     --iface eth10 --set bridge  # receive rates + gaps (sets: bridge, lowstate, all_fast)
 
 # Recordings, anywhere
-python -m h2diag replay                                # list recordings, newest first
-python -m h2diag replay 1                              # play #1 (blue REPLAY banner, recording date/time; .gz ok)
+python -m h2_diagnostics replay                                # list recordings, newest first
+python -m h2_diagnostics replay 1                              # play #1 (blue REPLAY banner, recording date/time; .gz ok)
 REC=bridge/tests/data/sensors_20261112_150110.jsonl
-python -m h2diag preflight --replay $REC
-python -m h2diag serve     --replay $REC               # loops; --speed 2 for double speed
-python -m h2diag topics    --show bridge/tests/data/topics_20261113.json
+python -m h2_diagnostics preflight --replay $REC
+python -m h2_diagnostics serve     --replay $REC               # loops; --speed 2 for double speed
+python -m h2_diagnostics topics    --show bridge/tests/data/topics_20261113.json
 
 # Tests
 cd bridge && python -m pytest
@@ -82,7 +89,7 @@ cd bridge && python -m pytest
 - `ip -br addr`: the interface (`eth10` on the Thor) needs a `192.168.123.x` address.
 - Is the robot powered on and booted (roughly a minute)?
 - Different interface? Pass `--iface <name>`.
-- `python -m h2diag topics --iface eth10` lists everything visible on the network.
+- `python -m h2_diagnostics topics --iface eth10` lists everything visible on the network.
 
 ## WebSocket protocol
 
@@ -96,8 +103,9 @@ cd bridge && python -m pytest
 
 **Snapshot fields:**
 - `topics`: rate and age of each topic
-- `body`: 31 joints, IMU, modes
-- `imu2`
+- `body`: 31 joints, modes
+- `imu.pelvis`, `imu.torso`: the two IMUs (pelvis arrives inside `rt/lf/lowstate`, torso on `rt/lf/secondary_imu`)
+- `mode`: `fsm_id_raw`, `fsm_name_raw`, the locomotion FSM state (`None` until test T6 confirms its source)
 - `battery`
 - `mainboard`
 - `hands.left`, `hands.right`: 20 motors (16 active), 16 pads × 6 pressure values
@@ -108,7 +116,7 @@ Fields whose meaning isn't confirmed end in `_raw`; see `docs/field_map.md`.
 
 ## Known limits
 
-- **Joint names for slots 12–14 and the wrists are unverified** (`joint_order_verified: false`) until field-map test T1.
+- **Joint order isn't fully verified** (`joint_order_verified: false`): T1 confirmed the waist (12–14) and wrist slots 19/21 and 26/28, but slots 20/27 haven't been seen moving yet.
 - **Health thresholds in `processing/health.py` are provisional guesses.**
 - **Recording stores the newest message per topic at each 50 Hz tick**, so the 100 Hz hand data is kept at 50 Hz.
 - **Replay rates show the recording's rate**, not the robot's. Rate warnings only run live.

@@ -4,9 +4,9 @@ The DDS calls themselves only run on the Thor (see bridge/MIGRATION.md).
 """
 import json
 
-from h2diag.__main__ import main
-from h2diag.data.probe import PROBE_TYPES, RATE_SETS, summarize_discovery, summarize_rates
-from h2diag.views.tables import topics_text
+from h2_diagnostics.__main__ import main
+from h2_diagnostics.sources.probe import PROBE_TYPES, RATE_SETS, summarize_discovery, summarize_rates
+from h2_diagnostics.views.tables import topics_text
 
 from conftest import DATA, TOPICS
 
@@ -51,3 +51,9 @@ def test_topics_show_and_rates_validation(capsys):
     assert "120 topics" in out and "rt/lf/lowstate" in out
     assert main(["rates", "--topics", "rt/nope"]) == 2
     assert "no type known" in capsys.readouterr().out
+
+
+def test_extra_only_accepts_known_research_topics(recording):
+    import pytest
+    with pytest.raises(SystemExit):  # argparse rejects it before anything runs
+        main(["record", "--replay", str(recording), "--name", "t", "--extra", "rt/made_up"])

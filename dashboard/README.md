@@ -15,7 +15,7 @@ ws://<thor-ip>:8765                ◄── recorder commands only
   and experiments.
 - **Data contract:** the snapshot and command messages in `bridge/README.md`
   ("WebSocket protocol"). The dashboard must not need anything else from the robot.
-- **Develop without the robot:** `python -m h2diag serve --replay <recording>` on any
+- **Develop without the robot:** `python -m h2_diagnostics serve --replay <recording>` on any
   machine serves recorded data on the same protocol.
 
 See `PLAN.md` for scope and schedule.
