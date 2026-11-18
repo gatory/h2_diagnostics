@@ -65,9 +65,9 @@ HAND_ACTIVE_MOTORS = 16  # Dex5: slots 0..15 active, 16..19 report q only
 HAND_PRESSURE_CELLS = 6  # of the 12 per pad, only the first 6 carry data
 BMS_CELLS = 18
 
-# Role -> topics that can fill it, in preference order. 
-# Live mode subscribes to the first one; 
-# Replay accepts any (older recordings used the 1 kHz topics).
+# Role -> topics that can fill it.
+# The first one is the live topic: it must be in LIVE_TOPICS (tests/test_layout.py checks).
+# Replay accepts any of them (older recordings used the 1 kHz topics).
 ROLES = {
     "body": ("rt/lf/lowstate", "rt/lowstate"),
     "torso_imu": ("rt/lf/secondary_imu", "rt/secondary_imu"),  # pelvis IMU rides in "body" (lowstate topic)
@@ -80,6 +80,8 @@ ROLES = {
 TOPIC_ROLE = {t: role for role, topics in ROLES.items() for t in topics}
 
 # Live Subscription Topics -> (unitree_hg type name, expected Hz measured on the Thor)
+# The master list: LiveSource subscribes to these, health checks their rates, and
+# sources/probe.py builds `rates --set bridge` from it. Add a topic here (and its role above).
 LIVE_TOPICS = {
     "rt/lf/lowstate": ("LowState_", 20.0),
     "rt/lf/secondary_imu": ("IMUState_", 20.0),

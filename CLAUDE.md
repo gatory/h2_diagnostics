@@ -104,7 +104,7 @@ python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (br
 python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
 python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 48 tests
+cd bridge && python -m pytest                          # 50 tests
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 

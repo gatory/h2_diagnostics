@@ -8,28 +8,25 @@ on the robot; the math (summarize_*) is pure and tested offline.
 import threading
 import time
 
+from .. import layout
 from .convert import to_dict
 from .dds import lookup_type, normalize_type_name
 
 HG = "unitree_hg.msg.dds_."
 
-# Topics the rate probe knows how to decode. Note: the examples also probed
-# rt/lowcmd, but its message type is a command type, and the read-only guard in
-# tests/test_pipeline.py forbids command type names anywhere in the package.
-# Reading it is harmless; allowing it is a user decision (see bridge/MIGRATION.md).
+# Topics the rate probe knows how to decode: the bridge's own topics (taken from
+# layout.LIVE_TOPICS, the one master list) plus the 1 kHz copies for comparison.
+# Note: the examples also probed rt/lowcmd, but its message type is a command type,
+# and the read-only guard in tests/test_pipeline.py forbids command type names
+# anywhere in the package. Reading it is harmless; allowing it is a user decision
+# (see bridge/MIGRATION.md).
 PROBE_TYPES = {
-    "rt/lf/lowstate": HG + "LowState_",
-    "rt/lf/secondary_imu": HG + "IMUState_",
-    "rt/lf/bmsstate": HG + "BmsState_",
-    "rt/lf/mainboardstate": HG + "MainBoardState_",
-    "rt/dex5/left/state": HG + "HandState_",
-    "rt/dex5/right/state": HG + "HandState_",
+    **{topic: HG + type_name for topic, (type_name, _hz) in layout.LIVE_TOPICS.items()},
     "rt/lowstate": HG + "LowState_",
     "rt/secondary_imu": HG + "IMUState_",
 }
 RATE_SETS = {
-    "bridge": ["rt/lf/lowstate", "rt/lf/secondary_imu", "rt/lf/bmsstate",
-               "rt/lf/mainboardstate", "rt/dex5/left/state", "rt/dex5/right/state"],
+    "bridge": list(layout.LIVE_TOPICS),  # exactly what LiveSource subscribes to
     "lowstate": ["rt/lowstate"],
     "all_fast": ["rt/lowstate", "rt/secondary_imu", "rt/dex5/left/state", "rt/dex5/right/state"],
 }

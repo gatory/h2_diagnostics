@@ -1,8 +1,3 @@
-"""DDS plumbing shared by LiveSource and the probes (from examples/.../common.py).
-
-READ-ONLY: nothing here creates a writer. The SDK is imported lazily so the rest
-of the bridge (replay, tests) works on machines without unitree_sdk2py/CycloneDDS.
-"""
 import importlib
 import inspect
 import pkgutil
