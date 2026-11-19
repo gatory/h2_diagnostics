@@ -30,7 +30,7 @@ The recorder writes the newest message per topic **once per bridge tick**. In `l
 |---|---|---|
 | `t1_joints` (297 s) | 6014 → 3979 (66%) | 29749 → 6495 (22%) |
 
-Motion over seconds is still clear; the 50 ms-level detail is not. Plain `record` (no screen) is less affected, but it has the same design limit for the 100 Hz hands. **Fix (todo):** record every message when it arrives, independent of the tick.
+Motion over seconds is still clear; the 50 ms-level detail is not. Plain `record` (no screen) is less affected, but it has the same design limit for the 100 Hz hands. **Fixed 2026-11-19 (offline, not yet checked on the Thor):** while recording, the source queues every message with its arrival time (`Source.keep_all`) and the recorder writes them all, stamped on arrival. Tests: `test_recording_live_keeps_every_message_with_arrival_time`, `test_recording_replay_keeps_every_record`. **Thor check:** `live --iface eth10 --record fixcheck` for ~60 s, then compare the `msgs` column with the saved line counts per topic (expect ~100%).
 
 ## `discover_topics.py` → `h2diag topics`
 

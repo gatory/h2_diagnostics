@@ -1,7 +1,8 @@
 """ReplaySource: plays a recording back as if it were live, on a virtual clock.
 
-poll(dt) moves the clock by dt and hands out the newest record per topic whose
-time has come, counting every record on the way (same behavior as LiveSource).
+poll(dt) moves the clock by dt and hands out the records whose time has come,
+counting every one: the newest per topic, or all of them while keep_all is True
+(same behavior as LiveSource).
 """
 import gzip
 import json
@@ -58,7 +59,7 @@ class ReplaySource(Source):
 
     def poll(self, dt):
         self._clock += dt * self.speed
-        out = {}
+        out = []
         while not self.done:
             if self._i >= len(self.records):
                 if not self.loop:
@@ -72,6 +73,9 @@ class ReplaySource(Source):
             if t > self._clock:
                 break
             self.stats[rec["topic"]].hit(t)
-            out[rec["topic"]] = rec["data"]
+            out.append((rec["topic"], rec["data"], t))
             self._i += 1
-        return list(out.items())
+        if self.keep_all:
+            return out
+        newest = {topic: (topic, data, t) for topic, data, t in out}
+        return sorted(newest.values(), key=lambda x: x[2])

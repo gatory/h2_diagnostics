@@ -17,12 +17,17 @@ class Source(ABC):
         done    True once there is nothing more to read (a finished replay)
         topics  topic names this source can deliver
         stats   {topic: TopicStats}, updated as messages arrive
+
+    keep_all: the pipeline sets this True while recording. Then poll() returns every
+    message, in arrival order, instead of only the newest per topic. Off by default
+    because the live view only needs the newest, and converting every message costs CPU.
     """
 
     live: bool
     done: bool = False
     topics: list[str]
     stats: dict[str, TopicStats]
+    keep_all: bool = False
 
     def start(self) -> "Source":
         """Begin receiving. Returns self so you can write `src = LiveSource(...).start()`."""
@@ -33,8 +38,11 @@ class Source(ABC):
         """This source's clock in seconds (monotonic; virtual for replay)."""
 
     @abstractmethod
-    def poll(self, dt: float) -> list[tuple[str, dict]]:
-        """Advance by dt seconds; return [(topic, data)], newest message per topic."""
+    def poll(self, dt: float) -> list[tuple[str, dict, float]]:
+        """Advance by dt seconds; return [(topic, data, t)] in arrival order.
+
+        t is when the message arrived, on this source's clock (comparable to now()).
+        Newest message per topic, or every message while keep_all is True."""
 
     def close(self) -> None:
         """Release resources. Safe to call more than once."""

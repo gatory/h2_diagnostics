@@ -6,8 +6,10 @@ Same .jsonl format stream_sensors.py used, so ReplaySource plays old and new ali
     {"t": 1.234, "topic": "rt/lf/lowstate", "data": {...}}
     {"t": 5.678, "marker": "started gait trial 3"}
 
-Records the newest message per topic at each bridge tick (50 Hz by default), so
-the 100 Hz hand topics are stored at the tick rate.
+Records every message the source received while recording (the pipeline turns
+on the source's keep_all), each stamped with when it arrived, not when it was
+written. Messages that arrive between start() and the next bridge tick (<= 1 tick)
+are still newest-only, because keep_all switches on at that tick.
 """
 import json
 import re
@@ -49,9 +51,11 @@ class Recorder:
     def _t(self):
         return round(time.monotonic() - self._t0, 4)
 
-    def write(self, topic, data):
+    def write(self, topic, data, age=0.0):
+        """age: seconds since the message arrived, so t is the arrival time."""
         if self.active:
-            self._f.write(json.dumps({"t": self._t(), "topic": topic, "data": data}) + "\n")
+            t = max(0.0, round(self._t() - age, 4))  # arrived just before start(): clamp to 0
+            self._f.write(json.dumps({"t": t, "topic": topic, "data": data}) + "\n")
 
     def marker(self, text):
         if self.active:

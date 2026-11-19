@@ -1,7 +1,5 @@
 """Both message sources implement the same Source interface (sources/base.py),
 and LiveSource works end to end against a fake DDS gateway (no robot needed)."""
-from dataclasses import dataclass
-
 import pytest
 
 from h2_diagnostics import layout
@@ -28,53 +26,6 @@ def test_source_is_abstract():
 
 # ------------------------------------------------------------------ LiveSource, fake DDS
 
-@dataclass
-class FakeMsg:  # stands in for a decoded IDL message (those are dataclasses too)
-    value: int
-
-
-class FakeDDS:
-    """Replaces the functions in sources/dds.py. Records what LiveSource asks for and
-    lets the test deliver messages the way a DDS thread would (by calling the handler)."""
-
-    def __init__(self):
-        self.inited = None
-        self.handlers = {}  # topic -> handler LiveSource registered
-        self.types = {}  # topic -> type name it asked for
-        self.closed = []
-
-    def init(self, domain, iface):
-        self.inited = (domain, iface)
-
-    def hg_type(self, name):
-        return name  # a real class isn't needed; just remember which one was asked for
-
-    def lookup_type(self, full_name):
-        return None if "Unknown" in full_name else full_name
-
-    def subscribe(self, topic, msg_type, on_message):
-        self.handlers[topic] = on_message
-        self.types[topic] = msg_type
-        fake = self
-
-        class Sub:
-            def close(self):
-                fake.closed.append(topic)
-
-        return Sub()
-
-    def deliver(self, topic, value):
-        self.handlers[topic](FakeMsg(value))
-
-
-@pytest.fixture
-def fake_dds(monkeypatch):
-    fake = FakeDDS()
-    for name in ("init", "hg_type", "lookup_type", "subscribe"):
-        monkeypatch.setattr(dds, name, getattr(fake, name))
-    return fake
-
-
 def test_live_source_subscribes_to_every_live_topic(fake_dds):
     src = LiveSource("eth10", domain=0).start()
     assert fake_dds.inited == (0, "eth10")
@@ -91,7 +42,7 @@ def test_live_source_keeps_newest_and_counts_all(fake_dds):
         fake_dds.deliver("rt/lf/lowstate", v)
     fake_dds.deliver("rt/dex5/left/state", 7)
 
-    out = dict(src.poll())
+    out = {topic: data for topic, data, _t in src.poll()}
     assert out == {"rt/lf/lowstate": {"value": 3}, "rt/dex5/left/state": {"value": 7}}
     assert src.stats["rt/lf/lowstate"].count == 3  # every arrival counted, only newest kept
     assert src.poll() == []  # poll() hands each message out once
@@ -104,8 +55,54 @@ def test_live_source_extra_topics_for_robot_tests(fake_dds):
     assert fake_dds.types["rt/odommodestate"] == odom["rt/odommodestate"]
     assert "rt/odommodestate" in src.stats  # counted like any topic, so rates show
     fake_dds.deliver("rt/odommodestate", 5)
-    assert dict(src.poll())["rt/odommodestate"] == {"value": 5}  # so the recorder gets it
+    assert src.poll()[0][:2] == ("rt/odommodestate", {"value": 5})  # so the recorder gets it
     src.close()
 
     with pytest.raises(ValueError, match="no message class"):
         LiveSource("eth10", extra={"rt/x": "unitree_go.msg.dds_.Unknown_"}).start()
+
+
+# ------------------------------------------------------------------ keep_all (recording)
+
+def test_live_source_keeps_every_message_while_recording(fake_dds):
+    # The recorder bug: between two ticks the hands send several messages, and the
+    # one-slot-per-topic mailbox kept only the last. With keep_all, none are lost.
+    src = LiveSource("eth10").start()
+    src.keep_all = True
+    for v in range(5):
+        fake_dds.deliver("rt/dex5/left/state", v)
+    fake_dds.deliver("rt/lf/lowstate", 9)
+
+    out = src.poll()
+    assert [(topic, data["value"]) for topic, data, _t in out] == [
+        ("rt/dex5/left/state", 0), ("rt/dex5/left/state", 1), ("rt/dex5/left/state", 2),
+        ("rt/dex5/left/state", 3), ("rt/dex5/left/state", 4), ("rt/lf/lowstate", 9)]
+    times = [t for _topic, _data, t in out]
+    assert times == sorted(times)  # arrival order, each with its own arrival time
+    assert src.poll() == []
+    src.close()
+
+
+def test_live_source_queue_is_capped(fake_dds, caplog):
+    # A stalled main loop must not let the queue eat the Thor's memory.
+    src = LiveSource("eth10").start()
+    src.keep_all = True
+    src.max_queue = 3
+    for v in range(5):
+        fake_dds.deliver("rt/dex5/left/state", v)
+    out = src.poll()
+    assert [data["value"] for _topic, data, _t in out] == [0, 1, 2]
+    assert src.dropped == 2
+    assert "dropped 2" in caplog.text
+    src.close()
+
+
+def test_replay_source_keep_all(recording):
+    newest = ReplaySource(recording).poll(0.5)
+    every = ReplaySource(recording)
+    every.keep_all = True
+    out = every.poll(0.5)
+    assert len({topic for topic, _d, _t in newest}) == len(newest)  # one per topic
+    assert len(out) == sum(s.count for s in every.stats.values()) > len(newest)
+    times = [t for _topic, _data, t in out]
+    assert times == sorted(times) and times[-1] <= every.now()

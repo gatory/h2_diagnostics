@@ -1,11 +1,13 @@
 import asyncio
 import json
 import re
+import time
 from pathlib import Path
 
 from websockets.asyncio.client import connect
 
 from h2_diagnostics import layout
+from h2_diagnostics.sources.live import LiveSource
 from h2_diagnostics.sources.replay import ReplaySource
 from h2_diagnostics.output import server
 from h2_diagnostics.output.recorder import Recorder
@@ -90,3 +92,48 @@ def test_bridge_never_writes_to_robot():
     assert len(files) > 15, "guard found too few files; did the package move?"
     for py in files:
         assert not forbidden.search(py.read_text()), f"{py.relative_to(PKG)} references a DDS writer/command"
+
+
+# ------------------------------------------------------------------ recorder keeps every message
+
+def _topic_rows(path):
+    return [json.loads(l) for l in path.read_text().splitlines()[1:] if '"topic"' in l]
+
+
+def test_recording_live_keeps_every_message_with_arrival_time(fake_dds, tmp_path):
+    odom = {"rt/odommodestate": "unitree_go.msg.dds_.SportModeState_"}  # no role: snapshot ignores it
+    rec = Recorder(tmp_path)
+    bridge = H2Diagnostics(LiveSource("eth10", extra=odom).start(), rec)
+    path = rec.start("every message")
+    bridge.tick(0.02)  # the tick after start() switches the source to keep_all
+    for v in range(5):  # five messages between two ticks
+        fake_dds.deliver("rt/odommodestate", v)
+        time.sleep(0.02)
+    bridge.tick(0.02)
+    rec.stop()
+
+    rows = [r for r in _topic_rows(path) if r["topic"] == "rt/odommodestate"]
+    assert [r["data"]["value"] for r in rows] == [0, 1, 2, 3, 4]
+    ts = [r["t"] for r in rows]
+    # stamped when each message arrived (~20 ms apart), not all at the tick
+    assert all(b - a >= 0.015 for a, b in zip(ts, ts[1:])), ts
+    assert ts[0] >= 0
+
+
+def test_recording_replay_keeps_every_record(recording, tmp_path):
+    src = ReplaySource(recording)
+    rec = Recorder(tmp_path)
+    bridge = H2Diagnostics(src, rec)
+    path = rec.start("replay all")
+    # The sample file is ~45 Hz per topic, so slow 0.1 s ticks pile ~4 records per
+    # topic per tick (like a 100 Hz hand topic against a slow live loop).
+    for _ in range(10):
+        bridge.tick(0.1)
+    rec.stop()
+    assert len(_topic_rows(path)) == sum(s.count for s in src.stats.values())
+
+
+def test_not_recording_keeps_newest_only(recording):
+    src = ReplaySource(recording)
+    H2Diagnostics(src, Recorder("/nonexistent")).tick(0.5)  # recorder exists but is idle
+    assert src.keep_all is False
