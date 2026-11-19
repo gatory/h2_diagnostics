@@ -31,3 +31,19 @@ export function poseFromSnapshot(snap: Snapshot): Pose {
   }
   return { joints, tilt, frozen: null };
 }
+
+/**
+ * What stays still on screen:
+ *  - "ground": the floor. The lowest foot is put on the grid, so the pelvis moves
+ *    up and down as the legs bend (a standing robot crouches toward the floor).
+ *  - "gantry": the pelvis, at standing height. The legs hang and move below it.
+ * "auto" follows the bridge's support_raw estimate (unconfirmed), and falls back to
+ * "gantry" while unknown, which is the safe picture: nothing is pinned to a floor it may not touch.
+ */
+export type FrameChoice = "auto" | "ground" | "gantry";
+export type Frame = "ground" | "gantry";
+
+export function resolveFrame(snap: Snapshot | null, choice: FrameChoice): Frame {
+  if (choice !== "auto") return choice;
+  return snap?.support_raw?.state ?? "gantry";
+}

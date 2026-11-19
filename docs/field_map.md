@@ -133,7 +133,7 @@ Everything else was 25–42 °C. The heat may come from holding the pose against
 |---|---|---|
 | `motor_state[0..15]` | 16 active motors (`mode` 1): four per finger, **index 0–3, middle 4–7, ring 8–11, pinky 12–15** | ✅ (T2, both hands) |
 | `motor_state[16..19]` | **The thumb** (4 joints). `mode` 0 and temperature 0, but `q` follows the thumb. So the thumb reports position only, with no temperature or status. | ✅ left hand (T2) / 🟡 right thumb not recorded |
-| within a finger | Curling moves the 3rd and 4th slot most (~1.6 and ~1.4 rad, ratio ≈ 0.86 every time, so possibly mechanically coupled); the 1st and 2nd move 0.2–0.8 rad. Which of those is base bend and which is sideways spread isn't known yet. | 🟡 |
+| within a finger | Curling moves the 3rd and 4th slot most (~1.6 and ~1.4 rad, ratio ≈ 0.86 every time, so possibly mechanically coupled); the 1st and 2nd move 0.2–0.8 rad. Which of those is base bend and which is sideways spread isn't known yet. **Inferred 2026-11-18 from the Dex5 URDF:** the slots follow the URDF chain, 1st = sideways spread (`Roll_x1`, signed, T2 within ±0.3 vs limit ±0.38), 2nd = base bend (`Pitch_x2`, 0..1.57), 3rd/4th = `Pitch_x3`/`Pitch_x4` (T2 max 1.69 / 1.40 = URDF limits 1.684 / 1.396), so `q` looks like radians. Thumb 16-19 = `Yaw_11`, `Roll_12`, `Pitch_13`, `Pitch_14` (left T2 ranges fit; right slot 17 reads ~2.9, outside 0..1.82). | 🟡 |
 | motor `temperature[0]` | **42–66 °C at rest**, which is warm. `[1]` is always 0. | 🟡 |
 | `press_sensor_state[0..15]` | 16 pads, 6 of 12 values used per pad. Raw, signed, noisy around 0 (−57…+63 at rest), so it needs zero-offset calibration. Units unknown. | 🟡 |
 | pad `temperature`, `lost` | Always 0. `lost` is probably a dropped-packet count. | ❓ / 🟡 |
@@ -163,5 +163,6 @@ Drop a marker at each action (type what you did + Enter); markers are saved in t
 | T5 | Press each fingertip and palm area firmly | Pad layout and pressure scale | |
 | T6 | Switch robot modes with the remote (damping → stand → ...) while recording: `h2diag live --iface eth10 --record t6_modes --extra rt/odommodestate`, typing the mode name + Enter *before* each switch | **Which field carries the FSM id** (`layout.FSM_STATES`: 0 zero_torque, 1 damp, 2 squat, 3 sit, 4 stand_up, 601 start): `mode_machine` or `rt/odommodestate` `mode`. Also `mode_pr`, `rt/arm/action/state`, `rt/rtc/state` | |
 | T7 | Short slow walk or squat if safe; otherwise skip | `tau_est` scale and the `lowcmd` vs. `lowstate` relationship | |
+| T9 | Hang in the gantry, then stand on the ground (still, then shifting weight), marker before each; watch the dashboard's "knees … N·m" readout | Knee-torque thresholds for ground vs gantry (`processing/support.py`, provisional 10 / 5 N·m; all recordings so far are on the gantry at ≤1.5 N·m per knee) | |
 
 **Joints too stiff to move by hand:** use the two-IMU method from T1 (the relative rotation between pelvis and torso IMU) for the waist. Another read-only option is to record while the robot performs one of its own built-in actions from the remote/app. Our software only listens.

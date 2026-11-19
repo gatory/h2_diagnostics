@@ -1,14 +1,19 @@
 /**
- * The dashboard shell. For now: one BridgeClient and a connection check.
- * Panels (3D robot, status strip, hands, warnings) plug in here next.
+ * The dashboard shell: one BridgeClient (in a React context) and the panels.
+ * The 3D robot fills the window; the other panels float over it.
  *
  * Bridge address: ?bridge=ws://172.16.68.113:8765 (Thor), default ws://localhost:8765
  * (a replay bridge on this machine: `h2diag serve --replay <file>`).
  */
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { BridgeClient } from "./bridge/BridgeClient";
-import { BridgeContext, useBridge } from "./bridge/useBridge";
+import { BridgeContext } from "./bridge/useBridge";
+import { HandPanel } from "./panels/HandPanel";
+import { RecorderPanel } from "./panels/RecorderPanel";
+import { STRIP_HEIGHT, StatusStrip } from "./panels/StatusStrip";
+import { WarningsPanel } from "./panels/WarningsPanel";
 import { RobotView } from "./robot/RobotView";
+import { PANEL } from "./ui/theme";
 
 const DEFAULT_BRIDGE = "ws://localhost:8765";
 
@@ -24,22 +29,21 @@ export function App() {
   return (
     <BridgeContext.Provider value={client}>
       <RobotView />
-      <ConnectionCheck />
+      <StatusStrip />
+      <div style={LEFT_COLUMN}>
+        <div style={{ ...PANEL, position: "relative" }}>
+          <RecorderPanel />
+        </div>
+        <WarningsPanel />
+      </div>
+      <HandPanel side="left" />
+      <HandPanel side="right" />
     </BridgeContext.Provider>
   );
 }
 
-/** Temporary: proves data arrives. Replaced by the status strip in step 5. */
-function ConnectionCheck() {
-  const { status, latest } = useBridge();
-  return (
-    <pre style={{ position: "absolute", top: 0, left: 0, margin: 0, padding: 16, color: "#cfd6dd",
-                  font: "13px monospace", pointerEvents: "none" }}>
-      {`status   ${status}
-source   ${latest?.source ?? "-"}
-joints   ${latest?.body?.joints.length ?? "-"}
-battery  ${latest?.battery ? `${latest.battery.soc}%  ${latest.battery.voltage} V` : "-"}
-warnings ${latest ? latest.warnings.map((w) => `${w.level}: ${w.msg}`).join("; ") || "none" : "-"}`}
-    </pre>
-  );
-}
+/** Recorder + warnings stack under the strip, left side (hands own the lower corners). */
+const LEFT_COLUMN: CSSProperties = {
+  position: "absolute", top: STRIP_HEIGHT + 12, left: 16, width: 320,
+  display: "flex", flexDirection: "column", gap: 8,
+};

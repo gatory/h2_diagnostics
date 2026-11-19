@@ -12,6 +12,10 @@ export const fixture: Snapshot = {
   ...raw,
   type: "snapshot",
   source: raw.source === "live" ? "live" : "replay",
+  support_raw: {
+    ...raw.support_raw,
+    state: raw.support_raw.state === "ground" || raw.support_raw.state === "gantry" ? raw.support_raw.state : null,
+  },
   warnings: raw.warnings.map((w) => ({
     ...w,
     level: w.level === "error" || w.level === "warn" ? w.level : "info",

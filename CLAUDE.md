@@ -24,7 +24,7 @@ Progression: **read → collect → dashboard → test suite → movement.**
 |---|---|---|
 | Read | Nov 16–22 | mostly done; T1 mostly done, T2 done (2026-11-17); T3–T7 pending |
 | Collect | Nov 23 – Dec 6 | bridge built early; works live |
-| Dashboard | Dec 7–20 | prototype started 2026-11-18 (contract, BridgeClient, 3D robot) |
+| Dashboard | Dec 7–20 | prototype 2026-11-18: 3D + temps, Dex5 hands, ground/gantry frame, strip, warnings, 2D hands, recorder; live twin works per user, full dashboard not yet seen live |
 | Test suite | Dec 21–31 | not started |
 
 ## Ground rules
@@ -52,9 +52,9 @@ Progression: **read → collect → dashboard → test suite → movement.**
 
 ```
 ROBOT (Thor)                                         WORKSTATION
-robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
-  └─► h2diag bridge (read-only, Python)  Wi-Fi WS     TypeScript + Vite + three.js
-       LiveSource/ReplaySource → H2Diagnostics.tick()  ───►  + urdf-loader, own window)
+robot DDS (wired 192.168.123.x)                      Dashboard (browser app:
+  └─► h2diag bridge (read-only, Python)  Wi-Fi WS     React + TypeScript + Vite,
+       LiveSource/ReplaySource → H2Diagnostics.tick()  ───►  three.js + urdf-loader)
        → snapshot + health warnings + Recorder  ◄───  recorder commands only
 ```
 
@@ -62,7 +62,7 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 - **Sessions are recorded on the robot side** so Wi-Fi dropouts don't leave gaps.
 - **Fallback:** run the bridge on the workstation over the Ethernet cable.
 
-**Repo layout (reorganized 2026-11-17):** `bridge/` runs on the Thor; `dashboard/` (not started, README only) runs on any computer and talks only to the bridge's WebSocket. `examples/` is being retired: `bridge/MIGRATION.md` is the checklist, delete it once the Thor checks pass.
+**Repo layout (reorganized 2026-11-17):** `bridge/` runs on the Thor; `dashboard/` (React prototype, see `dashboard/README.md`) runs on any computer and talks only to the bridge's WebSocket. `examples/` is being retired: `bridge/MIGRATION.md` is the checklist, delete it once the Thor checks pass.
 
 **Bridge layout** (`bridge/h2_diagnostics/`, renamed from `h2diag/` 2026-11-17; the CLI command is still `h2diag`): layers built bottom-up, one job per module. Dependencies point one way, `layout ← sources ← processing ← output, views ← __main__`, and `tests/test_layers.py` enforces it. Classes for things that hold state over time; plain functions/constants otherwise.
 
@@ -81,6 +81,7 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 | | `health.py` | `HealthMonitor` (holds hysteresis memory) wrapping stateless `evaluate()`. `LIMITS` are **provisional guesses.** |
 | | `preflight.py` | Pass/warn/fail verdict (dict) |
 | | `pipeline.py` | `H2Diagnostics.tick()` at 50 Hz: source → state → health (+ recorder) |
+| | `support.py` | `SupportEstimator`: ground/gantry from knee torque (hysteresis; provisional, `support_raw`) |
 | ③ `output/` (out) | `server.py` | WebSocket on :8765 |
 | | `recorder.py` | Writes sessions (`.jsonl` + markers) |
 | ④ `views/` | `sensors.py` | `live` / `replay` full-screen view (rich) |
@@ -88,7 +89,7 @@ robot DDS (wired 192.168.123.x)                      Dashboard app (planned:
 
 Test data (`bridge/tests/data/`): the 2026-11-12 robot recording (2.2 s at rest) and the 2026-11-13 topic discovery (120 topics).
 
-The SDK decodes every message's bytes into an object on its DDS thread (unavoidable, so 1 kHz topics cost CPU even when dropped); our callback only counts it and keeps the newest per topic. `to_dict` runs on the main tick for the newest only.
+The SDK decodes every message's bytes into an object on its DDS thread (unavoidable, so 1 kHz topics cost CPU even when dropped); our callback only counts it and keeps the newest per topic (or, while recording, queues every message with its arrival time: `Source.keep_all`, capped at `LiveSource.max_queue`). `to_dict` runs on the main tick for what was kept.
 
 ## Commands
 
@@ -106,9 +107,9 @@ python -m h2_diagnostics rates     --iface eth10 --set bridge # rates + gaps (br
 python -m h2_diagnostics replay                              # list recordings (results/sessions + bridge/tests/data), newest first
 python -m h2_diagnostics replay 1                            # same view, blue REPLAY banner with recording date/time; .jsonl.gz ok
 python -m h2_diagnostics preflight --replay bridge/tests/data/sensors_20261112_150110.jsonl
-cd bridge && python -m pytest                          # 59 tests
+cd bridge && python -m pytest                          # 68 tests
 cd dashboard && npm run dev                            # :5173; ?bridge=ws://172.16.68.113:8765 for the Thor (default ws://localhost:8765)
-cd dashboard && npm test && npm run typecheck          # vitest (13) + tsc incl. the snapshot contract
+cd dashboard && npm test && npm run typecheck          # vitest (38) + tsc incl. the snapshot contract
 # Workstation setup: uv venv .venv && source .venv/bin/activate && uv pip install -e "bridge[test]"
 ```
 
@@ -154,28 +155,29 @@ Recordings go to `results/sessions/` (gitignored). They're about 0.5 MB/s, so gz
 - **Not decodable:** `rt/sportmodestate` / `rt/lf/sportmodestate` (`unitree_hg::SportModeState_`) have no message definition in the SDK. They probably carry the robot's mode/gait; we'd need to write the definition by hand.
 - **URDF (2026-11-18), `dashboard/public/renders/`:**
   - `h2_description/H2.urdf` (body, STL meshes): 31 revolute joints; names = layout's with `L_`→`left_`, `R_`→`right_`, `+_joint`; limits match (wrist_yaw rounded to ±1.22). File order differs from slot order (head before arms), so **map by name, never by URDF order**. Fixed links `imu_in_pelvis` / `imu_in_torso` confirm T1. Hands end in a placeholder `left_hand_link` / `right_hand_link`. `tests/test_layout.py` checks names, limits and IMU links against `layout.JOINTS`.
-  - `dex5_hands/Dex5-URDF-L|R`: 5 fingers × 4 joints. Finger 1 (`Yaw_11`, `Roll_12`, …) looks like the thumb (= slots 16–19); fingers 2–5 probably index→pinky (= slots 0–15). **Unconfirmed:** which of 2–5 is index, and whether hand `q` is a joint angle in rad. Attach at `*_hand_link` (transform not yet checked).
+  - `dex5_hands/Dex5-URDF-L|R`: 5 fingers × 4 joints. Finger 1 (`Yaw_11`, `Roll_12`, …) looks like the thumb (= slots 16–19); fingers 2–5 probably index→pinky (= slots 0–15). Inferred 2026-11-18 (unconfirmed on the robot): 2 = index … 5 = pinky by geometry; hand `q` is rad in URDF chain order (T2 ranges match the limits). Mounted at `*_hand_link` with a hand-fitted transform (`DEX5_MOUNT` in `RobotScene.ts`). The left URDF misnames joint `Roll_41L` as `Link_41L`.
   - `H2_Plus` (Sharpa hands) is a different variant; removed.
 
-## Status (2026-11-18) and next steps
+## Status (end of 2026-11-18) and next steps
 
-- **Refactor on branch `refactor/bottom-up`, committed (d324da7 and earlier), NOT yet run on the Thor.** 58 tests pass on the workstation. Done 2026-11-17/18:
-  - package `h2diag/` → `h2_diagnostics/` (CLI command still `h2diag`); `data/` → `sources/`; `core.py` → `pipeline.py`
-  - `Source` ABC (`sources/base.py`); `HealthMonitor` class owns hysteresis memory
-  - `layout.JOINTS`: one `(name, min, max)` row per slot; `BODY_JOINTS`/`JOINT_LIMITS` derived
-  - snapshot: `imu: {pelvis, torso}` (was `body.imu` + `imu2`); `mode: {fsm_id_raw, fsm_name_raw}` placeholder (None until T6)
-  - `LIVE_TOPICS` is the master topic list; `probe.PROBE_TYPES`/`RATE_SETS["bridge"]` derived; `tests/test_layout.py` ties `ROLES` to it
-  - `sources/dds.py` is the DDS gateway (`init`, `subscribe` → `Subscription`, `hg_type`, registry, `discover_publications`); `test_only_dds_py_touches_the_sdk`; `LiveSource` tested with a fake dds
-  - `live`/`record --extra rt/odommodestate` for T6 (research topics, recorded, never in the snapshot)
-- **Thor check after commit + pull:** `uv pip install -e "bridge[test]"` (rename!), `pytest` (58), `live`, `rates --set bridge`, `topics`, `preflight --live`; then `serve --live` + receive snapshots on the workstation (ws://172.16.68.113:8765, expect ~25/s, ~10 KB). Not yet done.
-- **T1 and T2 recorded** (`results/sessions/20261117_*_t1_joints` / `_t2_fingers.jsonl.gz`). Results in `docs/field_map.md`.
-- **Bug: `live --record` drops messages.** The recorder sees only `poll()` output (newest per topic per tick). T1 kept 66% of `rt/lf/*`, 22% of hands. Fix: record from the DDS handler side (observer). Matters most for T5.
+**Branch `feat/dashboard`; today's dashboard + bridge work is uncommitted (the user commits).** Checks at end of day: bridge `pytest` 62 passed; dashboard vitest 38, typecheck, lint, build all pass. Everything below was tested on replays (some doctored) in headless Chrome, **not on the Thor**, except where it says "user reported".
+
+- **Bridge:** refactor merged (PR #2). `serve --live` runs on the Thor (the user reported the 3D twin following the robot; no Thor output pasted). The full Thor check (`pytest`, `rates --set bridge`, `topics`, `preflight --live`) hasn't been reported yet.
+  - New today: `expected_hz` in `topics`; `support_raw` (`processing/support.py`, below).
+- **Dashboard built 2026-11-18** (details: `dashboard/README.md`):
+  - scaffold, snapshot contract (`dashboard/src/contract/` ↔ `bridge/tests/test_contract.py`), `BridgeClient` + `useBridge`
+  - 3D H2 from the URDF: joints by name, pelvis roll/pitch from the IMU, `mode_pr` freeze, links coloured by motor temperature (amber/red only from bridge warnings), click a link → joint panel
+  - **Dex5 hands in 3D:** mounted on `*_hand_link` (fitted by eye against the H2 placeholder hand), fingers posed from hand `q`, coloured per finger motor. Slot → joint is inferred from T2 ranges vs the URDF limits (`field_map.md`). A **view panel** toggles Dex5 / H2-URDF hands (both = overlay).
+  - **Ground vs gantry:** the bridge sends `support_raw` (summed |knee tau|, ground above 10 N·m, gantry below 5, PROVISIONAL). The 3D view pins the feet to the floor on the ground and the pelvis on the gantry; view panel override auto / ground / gantry. The IMU can't tell these apart; leg torque can.
+  - status strip, warnings panel, 2D hand panels (temps + raw q, pressure tiles, provisional full-scale 500 raw), recorder panel (record / marker / stop; checked end to end on a replay bridge)
+- **T1 and T2 recorded** (`results/sessions/20261117_*`); results in `docs/field_map.md`.
+- **Recorder bug fixed 2026-11-19 (offline only):** `live --record` kept only the newest message per topic per tick (T1: 66% of `rt/lf/*`, 22% of hands; the `live` loop runs ~22 Hz, not 50). Now `poll()` returns `(topic, data, t)`; while recording the pipeline sets `source.keep_all`, so every message is recorded, stamped with its arrival time. Not yet verified on the Thor (check in `bridge/MIGRATION.md`). Up to one tick right after start is still newest-only.
 - **Next:**
-  1. Commit, Thor check (above).
-  2. Robot session: T6 modes (gantry + e-stop; `--extra rt/odommodestate`) → set `_mode()` source; slots 20/27 → `JOINT_ORDER_VERIFIED = True`; right thumb; T5 pressure (10 s untouched first, for zero offsets); T4 charging (current sign/units). Markers *before* each action.
-  3. Maybe fix the recorder first (for T5).
-  4. URDF checked (see Key findings). The dashboard's 3D view loads `H2.urdf`, then attaches the Dex5 hands.
-  5. **Dashboard (started 2026-11-18, React chosen for future features):** done: Vite + React + TS scaffold, snapshot contract (`dashboard/src/contract/`, `bridge/tests/test_contract.py`, `expected_hz` added to `topics`), `BridgeClient` + `useBridge` (6 vitest tests), checked end to end against a local replay bridge (~22 snapshots/s, 12 KB). **3D robot (step 3) done:** `dashboard/src/robot/` loads H2.urdf, sets joints by name, pelvis roll/pitch from the IMU, `mode_pr` freeze; joint directions checked in a headless-Chrome screenshot of a doctored replay. Next: temp colours, verified badge, joint click-info → status strip + warnings → hands (2D) → recording controls → live check on the Thor. Later: 3D Dex5 hands, session browser (needs `list_sessions` WS command).
+  1. User: commit; on the Thor, `git pull`, `serve --live`, open the **full** dashboard (`?bridge=ws://172.16.68.113:8765`) and check: finger poses vs the real hands (right thumb slot 17 reads ~2.9, outside its URDF range, so it's not drawn), the hand mount, a dashboard recording (record, marker, stop, file in `results/sessions/`).
+  2. Robot session (gantry + e-stop; markers *before* each action): T9 ground vs gantry (sets the `support.py` thresholds); T6 modes (`--extra rt/odommodestate`) → `_mode()` source; slots 20/27 → `JOINT_ORDER_VERIFIED = True`; right thumb; T5 pressure (10 s untouched first); T4 charging.
+  3. Verify the recorder fix on the Thor before T5 (`bridge/MIGRATION.md`).
+  4. Dashboard later: session browser (needs a `list_sessions` WS command), the recording's own start time in replay snapshots, smoothing between 20 Hz updates.
+  5. **Publisher for the test suite** (user, 2026-11-19): planned, not built. Constraints are in `PLAN.md` §5: a separate module, `dds.py` stays read-only, dry-run first, robot test later.
   6. Smaller: finger names + thumb in `layout.py`; waist_yaw limit; `mode_pr` flag; `rt/lowcmd` decision then delete `examples/`; maybe split `__main__.py` into `cli/`.
 - **Open question:** the user asked to "move a finger on the left hand in a fresh test". It's unresolved whether that means moving it by hand while recording (read-only; fine now) or commanding it from software (the first write to the robot, which needs the Movement-phase safety approach and research on the Dex5 command format). Ask before writing any command code.
 - **Safety for hand tests:** never force fingers against powered hand motors. Use an unpowered/damped mode or the remote/app gestures.

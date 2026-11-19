@@ -3,7 +3,7 @@ import h2Urdf from "../../public/renders/h2_description/H2.urdf?raw";
 import { fixture } from "../contract/fixture";
 import type { Snapshot } from "../contract/snapshot";
 import { urdfJointName } from "./jointMap";
-import { poseFromSnapshot } from "./pose";
+import { poseFromSnapshot, resolveFrame } from "./pose";
 
 const movingUrdfJoints = new Set(
   // strip <!-- comments --> first: H2.urdf has a commented-out floating_base_joint
@@ -59,5 +59,24 @@ describe("poseFromSnapshot", () => {
   it("waits for data", () => {
     expect(poseFromSnapshot({ ...fixture, body: null }).frozen).toMatch(/no body/);
     expect(poseFromSnapshot({ ...fixture, imu: { pelvis: null, torso: null } }).tilt).toBeNull();
+  });
+});
+
+describe("frame (what stays still)", () => {
+  const withSupport = (state: "ground" | "gantry" | null): Snapshot => ({
+    ...fixture,
+    support_raw: { state, knee_load_nm: null },
+  });
+
+  it("follows the bridge in auto, and a manual choice always wins", () => {
+    expect(resolveFrame(withSupport("ground"), "auto")).toBe("ground");
+    expect(resolveFrame(withSupport("gantry"), "auto")).toBe("gantry");
+    expect(resolveFrame(withSupport("ground"), "gantry")).toBe("gantry");
+    expect(resolveFrame(withSupport("gantry"), "ground")).toBe("ground");
+  });
+
+  it("falls back to gantry while unknown", () => {
+    expect(resolveFrame(withSupport(null), "auto")).toBe("gantry");
+    expect(resolveFrame(null, "auto")).toBe("gantry");
   });
 });

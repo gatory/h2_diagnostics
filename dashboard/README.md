@@ -39,9 +39,15 @@ src/
 ├── bridge/     BridgeClient.ts (the only WebSocket: newest snapshot, status
 │               connecting/live/stale/disconnected, reconnect, recorder commands) · useBridge.ts
 ├── robot/      jointMap.ts (L_knee -> left_knee_joint) · pose.ts (snapshot -> pose: rules, tested)
-│               RobotScene.ts (three.js class: renderer, camera, own animation loop, pulls
-│               client.latest) · RobotView.tsx (React wrapper + "pose not shown" overlay)
-└── App.tsx     shell: one BridgeClient in a React context; panels plug in here
+│               heat.ts (temperature -> colour, tested) · handPose.ts (Dex5 slot -> URDF link,
+│               finger angles + colours, tested) · RobotScene.ts (three.js class: renderer,
+│               camera, own animation loop, pulls client.latest, colours links, click picking)
+│               RobotView.tsx (React wrapper: notices, legend, clicked-joint panel)
+├── panels/     StatusStrip (connection, LIVE/REPLAY, battery, mode, board, topic dots) ·
+│               WarningsPanel · HandPanel (per-finger temps + raw q, 16 pressure pads) ·
+│               RecorderPanel (record/marker/stop) · status.ts, hands.ts, recorder.ts (logic, tested)
+├── ui/         theme.ts (colours, warning-level colours, panel style, "?" marker)
+└── App.tsx     shell: one BridgeClient in a React context; 3D fills the window, panels float over it
 public/renders/ H2.urdf + meshes, Dex5 hands (served at /renders/...)
 ```
 
@@ -56,5 +62,34 @@ drifts). `mode_pr != 0` freezes the pose (AB slots aren't angles); a null `q` is
 Checked 2026-11-18 with a doctored replay: +knee bends back, -shoulder_pitch raises the arm
 forward, L_ joints are on the robot's left. Mesh loading is counted by hand: LoadingManager's
 onLoad fires early and is lost when StrictMode loads the same URLs twice.
+
+Dex5 hands (2026-11-18): each Dex5 URDF is mounted on H2's `*_hand_link`. A "hands" toggle
+(right column) shows the Dex5 hands, H2.urdf's own static hands, or both overlaid (to compare the
+fit); default Dex5 only, remembered per browser (localStorage). The mount (`DEX5_MOUNT` in RobotScene.ts) was fitted by eye against that
+placeholder (palms overlap, fingers curl to the same side); it is not a Unitree number. Slot ->
+joint is inferred, not confirmed: URDF finger 1 = thumb, 2-5 = index..pinky, and within a finger
+the slots follow the chain (roll, then 3 pitches), because the T2 ranges match the URDF limits.
+Joints are found by child link (`Link_21L`): the left URDF misnames `Roll_41L` as `Link_41L`.
+A q outside its URDF limits is skipped, not clamped (right thumb slot 17 reads ~2.9 vs 0..1.82).
+Finger links take the motor's temperature colour; the thumb is grey (no temperature); fingers
+can't be clicked (the hand panel has the detail).
+
+What stays still (view panel, "fixed"): **ground** puts the lowest foot on the grid each update
+(the body drops as the knees bend); **gantry** keeps the pelvis at standing height (legs hang).
+**auto** follows the bridge's `support_raw` (summed |knee tau| with hysteresis,
+`processing/support.py`; thresholds provisional, no ground recording yet) and falls back to
+gantry while unknown. Only height changes: no odometry, so the robot never walks across the grid.
+The IMU can't tell ground from gantry (same tilt and gravity either way); leg torque can.
+
+Panels follow the same rule as the 3D colours: **every amber/red comes from a bridge warning id**
+(`stale:<topic>`, `rate:<topic>`, `soc`, `cell_spread`, `board_temp:<i>`, `hand_<side>:temp:<i>`, ...;
+see `health.py`), never from a threshold in the dashboard. Unconfirmed values (battery current, fsm,
+`mode_machine`, hand `q`, hand supply, pressure) are shown with "?" and never coloured. Pressure
+tiles use a provisional full-scale of 500 raw (`PRESSURE_FULL_RAW`) until T5. The snapshot's `t` is
+the bridge's clock even in replay, so the strip shows a clock only when live.
+
+Colours: each moving joint colours the link its motor carries (plus fixed children, e.g. the
+camera). The 30–65 °C gradient only shows warmth; amber/red appear only when the
+bridge sends a `temp:<joint>` warning, so the thresholds live in one place (`health.py`).
 
 See `PLAN.md` for scope and schedule.

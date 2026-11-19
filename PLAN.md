@@ -91,6 +91,13 @@ An app on the workstation PC that shows, wirelessly and live, what the H2 EDU is
 ### 5. Movement — January (after this plan)
 Commanded test motions, on the gantry only, behind a safety gate with the e-stop. This is the first phase that sends anything to the robot, and it gets its own plan.
 
+- [ ] **Publisher (noted 2026-11-19, not built yet):** a command publisher the test suite can drive, built now-ish but tested on the robot later. Constraints so it doesn't break the read-only bridge:
+  - Lives in its **own package/module**, not in `sources/` (inputs only) and not reachable from `serve` / `live` / `record`. `test_bridge_never_writes_to_robot` must keep passing.
+  - `dds.py` stays subscribe-only. The publisher gets its own gateway, so "who can write" stays a one-file answer.
+  - It's off by default: an explicit flag or arm step, gantry only, e-stop in reach, user approval before the first real run.
+  - It should be testable without the robot: a dry-run / fake transport that records what would have been sent.
+  - To research first: the `rt/lowcmd` format (CRC, `mode_pr`, gains), the Dex5 hand command topic, and how not to fight Unitree's own controller (the `rt/lowcmd` publisher is already active when a controller runs).
+
 ## Risks
 
 | Risk | Plan B |

@@ -16,7 +16,7 @@
 
 export interface Snapshot {
   type: "snapshot";
-  t: number; // wall time, seconds since epoch (recording time during replay)
+  t: number; // the bridge's clock (time.time()) when built, even during replay (NOT the recording's time)
   source: "live" | "replay";
   joint_order_verified: boolean; // false until slots 20/27 are seen moving
   topics: Record<string, TopicReport>;
@@ -26,8 +26,18 @@ export interface Snapshot {
   battery: Battery | null;
   mainboard: Mainboard | null;
   hands: { left: Hand | null; right: Hand | null };
+  support_raw: SupportRaw; // ground or gantry, from knee torque: UNCONFIRMED, display only
   warnings: Warning[]; // from the bridge's HealthMonitor; the dashboard never invents its own
   recorder?: RecorderStatus; // absent when the bridge runs without a recorder
+}
+
+/**
+ * The bridge's guess whether the robot stands on the ground (processing/support.py):
+ * summed |knee tau| with hysteresis. Thresholds are provisional (no ground recording yet).
+ */
+export interface SupportRaw {
+  state: "ground" | "gantry" | null; // null: no body data / invalid torque
+  knee_load_nm: number | null;
 }
 
 export interface TopicReport {
@@ -107,7 +117,6 @@ export interface Hand {
   power_v_raw: number;
   power_a_raw: number;
 }
-
 export type WarningLevel = "error" | "warn" | "info";
 
 export interface Warning {

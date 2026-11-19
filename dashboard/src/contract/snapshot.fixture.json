@@ -1,6 +1,6 @@
 {
  "type": "snapshot",
- "t": 1795026039.938,
+ "t": 1795036334.04,
  "source": "replay",
  "joint_order_verified": false,
  "topics": {
@@ -1503,6 +1503,10 @@
    "power_a_raw": 0.031
   }
  },
+ "support_raw": {
+  "state": "gantry",
+  "knee_load_nm": 0.67
+ },
  "warnings": [
   {
    "id": "temp:R_knee",
@@ -1514,7 +1518,7 @@
  "recorder": {
   "recording": true,
   "name": "fixture",
-  "file": "20261118_112039_fixture.jsonl",
+  "file": "20261118_141213_fixture.jsonl",
   "elapsed_s": 0.0
  }
 }
