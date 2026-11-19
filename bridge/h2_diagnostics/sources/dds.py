@@ -11,8 +11,11 @@ machines without unitree_sdk2py/CycloneDDS installed.
 """
 import importlib
 import inspect
+import logging
 import pkgutil
 import time
+
+log = logging.getLogger("h2_diagnostics.dds")
 
 HG_MODULE = "unitree_sdk2py.idl.unitree_hg.msg.dds_"
 
@@ -43,8 +46,8 @@ class Subscription:
         if sub is not None:
             try:
                 sub.Close()
-            except Exception:
-                pass
+            except Exception as e:
+                log.warning("Closing %s subscription: %s", self.topic, e)
 
 
 def subscribe(topic, msg_type, on_message):
@@ -78,7 +81,8 @@ def _build_type_registry():
     for mod_info in pkgutil.walk_packages(idl_pkg.__path__, idl_pkg.__name__ + "."):
         try:
             mod = importlib.import_module(mod_info.name)
-        except Exception:
+        except Exception as e:
+            log.warning("Type registry: skipping %s (import failed: %s)", mod_info.name, e)
             continue
         for _, obj in inspect.getmembers(mod, inspect.isclass):
             if issubclass(obj, IdlStruct) and obj is not IdlStruct:
@@ -110,6 +114,10 @@ def discover_publications(domain_id, secs):
     """Listen for publishers. Returns {topic: {"type", "writers": set, "participants": set}}.
 
     Uses DDS's built-in publication topic (a read-only reader), not the SDK channels.
+
+    Call init() first: this DomainParticipant names no interface, so it joins the
+    Domain that init() configured (e.g. eth10). Without init(), CycloneDDS picks an
+    interface itself, possibly the wrong one, and finds nothing.
     """
     from cyclonedds.builtin import BuiltinDataReader, BuiltinTopicDcpsPublication
     from cyclonedds.domain import DomainParticipant
